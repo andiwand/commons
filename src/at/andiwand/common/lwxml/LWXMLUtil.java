@@ -23,6 +23,10 @@ public class LWXMLUtil {
 		while (in.readEvent() != LWXMLEvent.END_DOCUMENT);
 	}
 	
+	public static void flushBranch(LWXMLReader in) throws IOException {
+		flush(new LWXMLBranchReader(in));
+	}
+	
 	public static void flushUntilPath(InputStream in, LWXMLPath path)
 			throws IOException {
 		flushUntilPath(new LWXMLStreamReader(in), path);
