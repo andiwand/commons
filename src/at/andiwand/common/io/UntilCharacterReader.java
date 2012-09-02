@@ -9,7 +9,7 @@ import at.andiwand.common.util.ArrayUtil;
 
 
 // TODO: improve (boxing crap)
-public class UntilCharacterReader extends CharacterwiseFilterReader {
+public class UntilCharacterReader extends CharwiseFilterReader {
 	
 	private boolean closed;
 	

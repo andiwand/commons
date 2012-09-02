@@ -8,7 +8,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import at.andiwand.common.io.CountingReader;
-import at.andiwand.common.io.EmptyReader;
+import at.andiwand.common.io.ClosedReader;
 import at.andiwand.common.lwxml.LWXMLEvent;
 import at.andiwand.common.lwxml.LWXMLIllegalFollowerException;
 
@@ -64,7 +64,7 @@ public class LWXMLPushbackReader extends LWXMLFilterReader<LWXMLReader> {
 					streamReading = true;
 				}
 			} else {
-				valueReader = new EmptyReader();
+				valueReader = ClosedReader.CLOSED_READER;
 			}
 		}
 		

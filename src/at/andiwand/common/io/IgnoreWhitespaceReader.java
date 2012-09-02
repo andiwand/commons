@@ -5,7 +5,7 @@ import java.io.Reader;
 
 
 // TODO: improve
-public class IgnoreWhitespaceReader extends CharacterwiseFilterReader {
+public class IgnoreWhitespaceReader extends CharwiseFilterReader {
 	
 	public IgnoreWhitespaceReader(Reader in) {
 		super(in);

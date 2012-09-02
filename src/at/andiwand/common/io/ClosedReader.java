@@ -5,7 +5,11 @@ import java.io.Reader;
 import java.nio.CharBuffer;
 
 
-public class EmptyReader extends Reader {
+public class ClosedReader extends Reader {
+	
+	public static final ClosedReader CLOSED_READER = new ClosedReader();
+	
+	private ClosedReader() {}
 	
 	@Override
 	public int read() throws IOException {

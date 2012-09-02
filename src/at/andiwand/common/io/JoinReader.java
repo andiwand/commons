@@ -81,7 +81,7 @@ public class JoinReader extends Reader {
 	public long skip(long n) throws IOException {
 		if (!isStreamAvailable()) return 0;
 		
-		return CharacterStreamUtil.skipCharacterwise(this, n);
+		return CharStreamUtil.skipCharacterwise(this, n);
 	}
 	
 	@Override

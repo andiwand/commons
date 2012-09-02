@@ -5,47 +5,35 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-public class CloseableOutputStream extends FilterOutputStream {
-	
-	private boolean closed;
-	
-	public CloseableOutputStream(OutputStream out) {
+public abstract class DelegationOutputStream extends FilterOutputStream {
+
+	public DelegationOutputStream(OutputStream out) {
 		super(out);
 	}
 	
-	public boolean isClosed() {
-		return closed;
-	}
-	
 	@Override
-	public void write(int c) throws IOException {
-		if (closed) return;
-		out.write(c);
+	public void write(int b) throws IOException {
+		out.write(b);
 	}
 	
 	@Override
 	public void write(byte[] b) throws IOException {
-		if (closed) return;
 		out.write(b);
 	}
 	
 	@Override
 	public void write(byte[] b, int off, int len) throws IOException {
-		if (closed) return;
 		out.write(b, off, len);
 	}
 	
 	@Override
 	public void flush() throws IOException {
-		if (closed) return;
 		out.flush();
 	}
 	
 	@Override
 	public void close() throws IOException {
-		if (closed) return;
-		closed = true;
-		out.flush();
+		out.close();
 	}
 	
 }

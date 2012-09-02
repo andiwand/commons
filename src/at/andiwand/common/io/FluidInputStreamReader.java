@@ -95,17 +95,17 @@ public class FluidInputStreamReader extends Reader {
 	
 	@Override
 	public int read(char[] cbuf) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, cbuf);
+		return CharStreamUtil.readCharacterwise(this, cbuf);
 	}
 	
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, cbuf, off, len);
+		return CharStreamUtil.readCharacterwise(this, cbuf, off, len);
 	}
 	
 	@Override
 	public int read(CharBuffer target) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, target);
+		return CharStreamUtil.readCharacterwise(this, target);
 	}
 	
 	@Override

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.Writer;
 
 
-public class ApplyFilterWriter extends CharacterwiseFilterWriter {
+public class ApplyFilterWriter extends CharwiseFilterWriter {
 	
-	private final CharacterFilter filter;
+	private final CharFilter filter;
 	
-	public ApplyFilterWriter(Writer out, CharacterFilter filter) {
+	public ApplyFilterWriter(Writer out, CharFilter filter) {
 		super(out);
 		
 		this.filter = filter;

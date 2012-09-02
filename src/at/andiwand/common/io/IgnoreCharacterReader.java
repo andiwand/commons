@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 // TODO: improve
-public class IgnoreCharacterReader extends CharacterwiseFilterReader {
+public class IgnoreCharacterReader extends CharwiseFilterReader {
 	
 	private Set<Character> characterSet;
 	

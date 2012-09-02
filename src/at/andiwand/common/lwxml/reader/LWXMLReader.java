@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import at.andiwand.common.io.CharacterStreamUtil;
+import at.andiwand.common.io.CharStreamUtil;
 import at.andiwand.common.lwxml.LWXMLEvent;
 
 
@@ -18,7 +18,7 @@ public abstract class LWXMLReader extends Reader {
 	
 	public String readValue() throws IOException {
 		if (!LWXMLEvent.hasValue(getCurrentEvent())) return null;
-		return CharacterStreamUtil.readAsString(this);
+		return CharStreamUtil.readAsString(this);
 	}
 	
 	public String readFollowingValue() throws IOException {
@@ -32,22 +32,22 @@ public abstract class LWXMLReader extends Reader {
 	
 	@Override
 	public int read(char[] cbuf) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, cbuf);
+		return CharStreamUtil.readCharacterwise(this, cbuf);
 	}
 	
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, cbuf, off, len);
+		return CharStreamUtil.readCharacterwise(this, cbuf, off, len);
 	}
 	
 	@Override
 	public int read(CharBuffer target) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, target);
+		return CharStreamUtil.readCharacterwise(this, target);
 	}
 	
 	@Override
 	public long skip(long n) throws IOException {
-		return CharacterStreamUtil.skipCharacterwise(this, n);
+		return CharStreamUtil.skipCharacterwise(this, n);
 	}
 	
 	@Override

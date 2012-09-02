@@ -5,51 +5,60 @@ import java.io.IOException;
 import java.io.Writer;
 
 
-public abstract class CharacterwiseFilterWriter extends FilterWriter {
+public class FlushingWriter extends FilterWriter {
 	
-	public CharacterwiseFilterWriter(Writer out) {
+	public FlushingWriter(Writer out) {
 		super(out);
 	}
 	
 	@Override
-	public abstract void write(int c) throws IOException;
+	public void write(int c) throws IOException {
+		out.write(c);
+		out.flush();
+	}
 	
 	@Override
 	public void write(char[] cbuf) throws IOException {
-		CharacterStreamUtil.writeCharacterwise(this, cbuf);
+		out.write(cbuf);
+		out.flush();
 	}
 	
 	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
-		CharacterStreamUtil.writeCharacterwise(this, cbuf, off, len);
+		out.write(cbuf, off, len);
+		out.flush();
 	}
 	
 	@Override
 	public void write(String str) throws IOException {
-		CharacterStreamUtil.writeCharacterwise(this, str);
+		out.write(str);
+		out.flush();
 	}
 	
-	@Override
 	public void write(String str, int off, int len) throws IOException {
-		CharacterStreamUtil.writeCharacterwise(this, str, off, len);
+		out.write(str, off, len);
+		out.flush();
 	}
 	
 	@Override
 	public Writer append(char c) throws IOException {
-		write(c);
+		out.append(c);
+		out.flush();
 		return this;
 	}
 	
 	@Override
 	public Writer append(CharSequence csq) throws IOException {
-		CharacterStreamUtil.appendCharacterwise(this, csq);
+		out.append(csq);
+		out.flush();
 		return this;
 	}
 	
 	@Override
 	public Writer append(CharSequence csq, int start, int end)
 			throws IOException {
-		CharacterStreamUtil.appendCharacterwise(this, csq, start, end);
+		out.append(csq, start, end);
+		out.flush();
 		return this;
 	}
 	

@@ -7,8 +7,8 @@ import java.io.PushbackReader;
 import java.io.Reader;
 
 import at.andiwand.common.io.ApplyFilterReader;
-import at.andiwand.common.io.CharacterFilter;
-import at.andiwand.common.io.CharacterStreamUtil;
+import at.andiwand.common.io.CharFilter;
+import at.andiwand.common.io.CharStreamUtil;
 import at.andiwand.common.io.ForwardReader;
 import at.andiwand.common.io.UntilCharSequenceReader;
 import at.andiwand.common.io.UntilFilterReader;
@@ -22,38 +22,38 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private static final int PUSHBACK_BUFFER_SIZE = 1;
 	
-	private static final CharacterFilter WHITESPACE_FILTER = new CharacterFilter() {
+	private static final CharFilter WHITESPACE_FILTER = new CharFilter() {
 		public boolean accept(char c) {
 			return !LWXMLConstants.isWhitespace(c);
 		}
 	};
 	
-	private static final CharacterFilter END_ELEMENT_FILTER = new CharacterFilter() {
+	private static final CharFilter END_ELEMENT_FILTER = new CharFilter() {
 		public boolean accept(char c) {
 			return c != '>';
 		}
 	};
 	
-	private static final CharacterFilter ATTRIBUTE_NAME_FILTER = new CharacterFilter() {
+	private static final CharFilter ATTRIBUTE_NAME_FILTER = new CharFilter() {
 		public boolean accept(char c) {
 			if (c == '=') return false;
 			return true;
 		}
 	};
 	
-	private static final CharacterFilter ATTRIBUTE_VALUE_FILTER = new CharacterFilter() {
+	private static final CharFilter ATTRIBUTE_VALUE_FILTER = new CharFilter() {
 		public boolean accept(char c) {
 			return c != '"';
 		}
 	};
 	
-	private static final CharacterFilter CHARACTERS_FILTER = new CharacterFilter() {
+	private static final CharFilter CHARACTERS_FILTER = new CharFilter() {
 		public boolean accept(char c) {
 			return c != '<';
 		}
 	};
 	
-	private final CharacterFilter startElementFilter = new CharacterFilter() {
+	private final CharFilter startElementFilter = new CharFilter() {
 		public boolean accept(char c) {
 			if (LWXMLConstants.isWhitespace(c)) return false;
 			
@@ -105,7 +105,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	private LWXMLEvent readNextEventImpl() throws IOException {
 		if (closed) return LWXMLEvent.END_DOCUMENT;
 		if (eventReader != null)
-			CharacterStreamUtil.flushCharacterwise(eventReader);
+			CharStreamUtil.flushCharacterwise(eventReader);
 		
 		if (lastEvent != null) {
 			switch (lastEvent) {
@@ -213,7 +213,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private void handleProcessingInstructionData() throws IOException {
 		try {
-			CharacterStreamUtil.flushCharacters(in, WHITESPACE_FILTER);
+			CharStreamUtil.flushCharacters(in, WHITESPACE_FILTER);
 		} catch (IllegalStateException e) {
 			throw new LWXMLReaderException("end of stream", e);
 		}
@@ -227,7 +227,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	}
 	
 	private LWXMLEvent handleAttributeList() throws IOException {
-		CharacterStreamUtil.flushCharacters(in, WHITESPACE_FILTER);
+		CharStreamUtil.flushCharacters(in, WHITESPACE_FILTER);
 		int c = fin.read();
 		
 		switch (c) {
@@ -253,7 +253,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	// TODO: handle malformed xml
 	private void handleAttributeValue() throws IOException {
-		CharacterStreamUtil.flushUntilCharacter(in, '"');
+		CharStreamUtil.flushUntilCharacter(in, '"');
 		eventReader = new UntilFilterReader(fin, ATTRIBUTE_VALUE_FILTER);
 	}
 	

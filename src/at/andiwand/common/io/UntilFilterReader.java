@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.Reader;
 
 
-public class UntilFilterReader extends CharacterwiseFilterReader {
+public class UntilFilterReader extends CharwiseFilterReader {
 	
 	private boolean closed;
 	
-	private final CharacterFilter filter;
+	private final CharFilter filter;
 	
-	public UntilFilterReader(Reader in, CharacterFilter filter) {
+	public UntilFilterReader(Reader in, CharFilter filter) {
 		super(in);
 		
 		this.filter = filter;

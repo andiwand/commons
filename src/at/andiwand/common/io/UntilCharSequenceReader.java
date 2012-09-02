@@ -6,7 +6,7 @@ import java.io.Reader;
 import at.andiwand.common.util.collections.CharArrayQueue;
 
 
-public class UntilCharSequenceReader extends CharacterwiseFilterReader {
+public class UntilCharSequenceReader extends CharwiseFilterReader {
 	
 	private boolean closed;
 	

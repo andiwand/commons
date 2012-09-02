@@ -6,9 +6,9 @@ import java.io.Reader;
 import java.nio.CharBuffer;
 
 
-public abstract class CharacterwiseFilterReader extends FilterReader {
+public abstract class CharwiseFilterReader extends FilterReader {
 	
-	public CharacterwiseFilterReader(Reader in) {
+	public CharwiseFilterReader(Reader in) {
 		super(in);
 	}
 	
@@ -17,23 +17,23 @@ public abstract class CharacterwiseFilterReader extends FilterReader {
 	
 	@Override
 	public int read(char[] cbuf) throws IOException {
-		return CharacterStreamUtil
+		return CharStreamUtil
 				.readCharacterwise(this, cbuf, 0, cbuf.length);
 	}
 	
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, cbuf, off, len);
+		return CharStreamUtil.readCharacterwise(this, cbuf, off, len);
 	}
 	
 	@Override
 	public int read(CharBuffer target) throws IOException {
-		return CharacterStreamUtil.readCharacterwise(this, target);
+		return CharStreamUtil.readCharacterwise(this, target);
 	}
 	
 	@Override
 	public long skip(long n) throws IOException {
-		return CharacterStreamUtil.skipCharacterwise(this, n);
+		return CharStreamUtil.skipCharacterwise(this, n);
 	}
 	
 }

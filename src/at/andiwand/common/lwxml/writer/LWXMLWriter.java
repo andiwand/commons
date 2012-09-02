@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import at.andiwand.common.io.CharacterStreamUtil;
+import at.andiwand.common.io.CharStreamUtil;
 import at.andiwand.common.lwxml.LWXMLAttribute;
 import at.andiwand.common.lwxml.LWXMLEvent;
 import at.andiwand.common.lwxml.LWXMLIllegalEventException;
@@ -12,7 +12,7 @@ import at.andiwand.common.lwxml.LWXMLIllegalEventException;
 
 public abstract class LWXMLWriter extends Writer {
 	
-	protected final CharacterStreamUtil streamUtil = new CharacterStreamUtil();
+	protected final CharStreamUtil streamUtil = new CharStreamUtil();
 	
 	public abstract LWXMLEvent getCurrentEvent();
 	
@@ -53,6 +53,11 @@ public abstract class LWXMLWriter extends Writer {
 		
 		writeEvent(LWXMLEvent.START_ELEMENT);
 		write(name);
+	}
+	
+	public void writeEmptyStartElement(String name) throws IOException {
+		writeStartElement(name);
+		writeEvent(LWXMLEvent.END_ATTRIBUTE_LIST);
 	}
 	
 	public void writeAttribute(LWXMLAttribute attribute) throws IOException {
@@ -133,12 +138,12 @@ public abstract class LWXMLWriter extends Writer {
 	
 	@Override
 	public void write(String str) throws IOException {
-		CharacterStreamUtil.writeCharacterwise(this, str);
+		CharStreamUtil.writeCharacterwise(this, str);
 	}
 	
 	@Override
 	public void write(String str, int off, int len) throws IOException {
-		CharacterStreamUtil.writeCharacterwise(this, str, off, len);
+		CharStreamUtil.writeCharacterwise(this, str, off, len);
 	}
 	
 	public int write(Reader in) throws IOException {
@@ -153,14 +158,14 @@ public abstract class LWXMLWriter extends Writer {
 	
 	@Override
 	public LWXMLWriter append(CharSequence csq) throws IOException {
-		CharacterStreamUtil.appendCharacterwise(this, csq);
+		CharStreamUtil.appendCharacterwise(this, csq);
 		return this;
 	}
 	
 	@Override
 	public LWXMLWriter append(CharSequence csq, int start, int end)
 			throws IOException {
-		CharacterStreamUtil.appendCharacterwise(this, csq, start, end);
+		CharStreamUtil.appendCharacterwise(this, csq, start, end);
 		return this;
 	}
 	

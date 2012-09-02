@@ -13,19 +13,19 @@ public class ForwardReader extends FilterReader {
 	
 	@Override
 	public int read() throws IOException {
-		return CharacterStreamUtil.readForward(in);
+		return CharStreamUtil.readForward(in);
 	}
 	
 	public int read(char[] cbuf) throws IOException {
-		return CharacterStreamUtil.readForward(in, cbuf);
+		return CharStreamUtil.readForward(in, cbuf);
 	}
 	
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return CharacterStreamUtil.readForward(in, cbuf, off, len);
+		return CharStreamUtil.readForward(in, cbuf, off, len);
 	}
 	
 	public int read(java.nio.CharBuffer target) throws IOException {
-		return CharacterStreamUtil.readForward(in, target);
+		return CharStreamUtil.readForward(in, target);
 	}
 	
 }

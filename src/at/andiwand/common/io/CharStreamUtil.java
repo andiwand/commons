@@ -13,7 +13,7 @@ import at.andiwand.common.util.CharSequenceUtil;
 import at.andiwand.common.util.collections.CharArrayQueue;
 
 
-public class CharacterStreamUtil {
+public class CharStreamUtil {
 	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
 	
@@ -295,7 +295,7 @@ public class CharacterStreamUtil {
 		}
 	}
 	
-	public static void flushCharacters(PushbackReader in, CharacterFilter filter)
+	public static void flushCharacters(PushbackReader in, CharFilter filter)
 			throws IOException {
 		while (true) {
 			int read = in.read();
@@ -396,19 +396,19 @@ public class CharacterStreamUtil {
 	private final int bufferSize;
 	private char[] cbuf;
 	
-	public CharacterStreamUtil() {
+	public CharStreamUtil() {
 		this(DEFAULT_BUFFER_SIZE);
 	}
 	
-	public CharacterStreamUtil(boolean initBuffer) {
+	public CharStreamUtil(boolean initBuffer) {
 		this(DEFAULT_BUFFER_SIZE, false);
 	}
 	
-	public CharacterStreamUtil(int bufferSize) {
+	public CharStreamUtil(int bufferSize) {
 		this(bufferSize, false);
 	}
 	
-	public CharacterStreamUtil(int bufferSize, boolean initBuffer) {
+	public CharStreamUtil(int bufferSize, boolean initBuffer) {
 		this.bufferSize = bufferSize;
 		
 		if (initBuffer) initBuffer();
