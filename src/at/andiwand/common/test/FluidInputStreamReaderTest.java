@@ -1,8 +1,8 @@
 package at.andiwand.common.test;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 
-import at.andiwand.common.io.FluidInputStreamReader;
 import at.andiwand.common.io.TeeInputStream;
 
 
@@ -15,8 +15,8 @@ public class FluidInputStreamReaderTest {
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
 		TeeInputStream teeInputStream = new TeeInputStream(inputStream,
 				System.out);
-		FluidInputStreamReader reader = new FluidInputStreamReader(
-				teeInputStream, charsetName);
+		InputStreamReader reader = new InputStreamReader(teeInputStream,
+				charsetName);
 		
 		System.out.println((char) reader.read());
 	}

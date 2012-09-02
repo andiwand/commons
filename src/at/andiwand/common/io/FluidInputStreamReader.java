@@ -11,6 +11,7 @@ import java.nio.charset.CoderResult;
 
 
 // TODO: improve
+// TODO: fix for android
 public class FluidInputStreamReader extends Reader {
 	
 	private final InputStream in;

@@ -2,13 +2,13 @@ package at.andiwand.common.lwxml.reader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
 
 import at.andiwand.common.io.ApplyFilterReader;
 import at.andiwand.common.io.CharacterFilter;
 import at.andiwand.common.io.CharacterStreamUtil;
-import at.andiwand.common.io.FluidInputStreamReader;
 import at.andiwand.common.io.ForwardReader;
 import at.andiwand.common.io.UntilCharSequenceReader;
 import at.andiwand.common.io.UntilFilterReader;
@@ -84,7 +84,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	private Reader eventReader;
 	
 	public LWXMLStreamReader(InputStream in) {
-		this(new FluidInputStreamReader(in));
+		this(new InputStreamReader(in));
 	}
 	
 	public LWXMLStreamReader(Reader in) {
