@@ -12,7 +12,7 @@ public class LWXMLNodeIdentifier {
 	public LWXMLNodeIdentifier(String elementName, int index) {
 		if (elementName == null)
 			throw new NullPointerException("elementName cannot be null");
-		if (elementName.isEmpty())
+		if (elementName.length() == 0)
 			throw new IllegalArgumentException("elementName cannot be empty");
 		if (index < 0)
 			throw new IndexOutOfBoundsException("index cannot be less than 0");
