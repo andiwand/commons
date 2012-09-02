@@ -33,6 +33,14 @@ public class LWXMLEventListWriter extends LWXMLWriter {
 		return eventWritten;
 	}
 	
+	public int getEventCount() {
+		return eventList.size();
+	}
+	
+	public int getValueCount() {
+		return valueList.size();
+	}
+	
 	public List<LWXMLEvent> toEventList() {
 		return new ArrayList<LWXMLEvent>(eventList);
 	}

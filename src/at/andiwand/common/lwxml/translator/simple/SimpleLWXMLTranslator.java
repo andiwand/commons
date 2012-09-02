@@ -70,33 +70,32 @@ public class SimpleLWXMLTranslator extends LWXMLTranslator {
 	}
 	
 	@Override
-	public void translate(LWXMLReader reader, LWXMLWriter out)
-			throws IOException {
-		LWXMLPushbackReader in = new LWXMLPushbackReader(reader);
+	public void translate(LWXMLReader in, LWXMLWriter out) throws IOException {
+		LWXMLPushbackReader pin = new LWXMLPushbackReader(in);
 		
 		String elementName = null;
 		SimpleElementTranslator translator = null;
 		
 		while (true) {
-			LWXMLEvent event = in.readEvent();
+			LWXMLEvent event = pin.readEvent();
 			if (event == LWXMLEvent.END_DOCUMENT) break;
 			
 			switch (event) {
 			case START_ELEMENT:
 			case END_ELEMENT:
-				elementName = in.readValue();
+				elementName = pin.readValue();
 				translator = elementTranslatorMap.get(elementName);
 			case END_EMPTY_ELEMENT:
 				if (translator == null) break;
 				
-				in.unreadEvent(elementName);
-				translator.translate(in, out);
+				pin.unreadEvent(elementName);
+				translator.translate(pin, out);
 				
 				elementName = null;
 				break;
 			case CHARACTERS:
 				out.writeEvent(LWXMLEvent.CHARACTERS);
-				out.write(in);
+				out.write(pin);
 				break;
 			}
 		}
