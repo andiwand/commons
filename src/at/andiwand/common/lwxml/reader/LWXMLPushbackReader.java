@@ -73,7 +73,7 @@ public class LWXMLPushbackReader extends LWXMLFilterReader<LWXMLReader> {
 	
 	public void unreadEvent() {
 		eventStack.push(currentEvent);
-		valueStack.push(null);
+		if (currentEvent.hasValue()) valueStack.push(null);
 	}
 	
 	public void unreadEvent(LWXMLEvent event) {

@@ -109,6 +109,11 @@ public class ByteStreamUtil {
 	public static int writeStreamBuffered(InputStream in, OutputStream out,
 			int bufferSize) throws IOException {
 		byte[] b = new byte[bufferSize];
+		return writeStreamBuffered(in, out, b);
+	}
+	
+	public static int writeStreamBuffered(InputStream in, OutputStream out,
+			byte[] b) throws IOException {
 		int count = 0;
 		
 		for (int read; (read = in.read(b)) != -1; count++) {
@@ -161,13 +166,7 @@ public class ByteStreamUtil {
 	
 	public int writeStream(InputStream in, OutputStream out) throws IOException {
 		initBuffer();
-		int count = 0;
-		
-		for (int read; (read = in.read(b)) != -1; count++) {
-			out.write(b, 0, read);
-		}
-		
-		return count;
+		return writeStreamBuffered(in, out, b);
 	}
 	
 	public int writeStreamLimited(InputStream in, OutputStream out, int len)

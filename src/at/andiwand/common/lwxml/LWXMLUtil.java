@@ -231,6 +231,8 @@ public class LWXMLUtil {
 				if (in.readValue().equals(attributeName))
 					return in.readFollowingValue();
 				break;
+			case ATTRIBUTE_VALUE:
+				break;
 			case END_ATTRIBUTE_LIST:
 				return null;
 			default:
@@ -279,19 +281,28 @@ public class LWXMLUtil {
 		}
 	}
 	
+	public static void flushUntilEventValue(LWXMLReader in, LWXMLEvent event,
+			String value) throws IOException {
+		if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
+		
+		while (true) {
+			LWXMLEvent currentEvent = in.readEvent();
+			if (currentEvent == LWXMLEvent.END_DOCUMENT)
+				throw new LWXMLIllegalEventException(event);
+			
+			if ((currentEvent == event) && in.readValue().equals(value))
+				return;
+		}
+	}
+	
 	public static void flushUntilStartElement(LWXMLReader in,
 			String startElement) throws IOException {
-		while (true) {
-			LWXMLEvent event = in.readEvent();
-			
-			switch (event) {
-			case START_ELEMENT:
-				if (in.readValue().equals(startElement)) return;
-				break;
-			case END_DOCUMENT:
-				throw new LWXMLIllegalEventException(event);
-			}
-		}
+		flushUntilEventValue(in, LWXMLEvent.START_ELEMENT, startElement);
+	}
+	
+	public static void flushUntilEndElement(LWXMLReader in, String endElement)
+			throws IOException {
+		flushUntilEventValue(in, LWXMLEvent.END_ELEMENT, endElement);
 	}
 	
 	public static boolean isEmptyElement(LWXMLReader in) throws IOException {
