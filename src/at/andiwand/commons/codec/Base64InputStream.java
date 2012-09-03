@@ -58,6 +58,11 @@ public class Base64InputStream extends InputStream {
 	}
 	
 	@Override
+	public int available() throws IOException {
+		return 3 - index;
+	}
+	
+	@Override
 	public void close() throws IOException {
 		if (closed) return;
 		closed = true;

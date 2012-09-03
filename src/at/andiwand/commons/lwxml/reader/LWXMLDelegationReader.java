@@ -7,25 +7,26 @@ import at.andiwand.commons.lwxml.LWXMLEvent;
 import at.andiwand.commons.lwxml.LWXMLUtil;
 
 
-public class LWXMLBranchDelegationReader extends LWXMLFilterReader<LWXMLReader> {
+public class LWXMLDelegationReader extends LWXMLFilterReader<LWXMLReader> {
 	
 	private LWXMLEvent lastEvent;
-	private LWXMLBranchReader branchReader;
 	
-	public LWXMLBranchDelegationReader(LWXMLReader in) {
+	private LWXMLElementReader ein;
+	
+	public LWXMLDelegationReader(LWXMLReader in) {
 		super(in);
 	}
 	
-	public LWXMLBranchReader getBranchReader() {
-		return (branchReader == null) ? (branchReader = new LWXMLBranchReader(
-				in)) : branchReader;
+	public LWXMLElementReader getElementReader() {
+		if (ein == null) ein = new LWXMLElementReader(in);
+		return ein;
 	}
 	
 	@Override
 	public LWXMLEvent readEvent() throws IOException {
-		if (branchReader != null) {
-			LWXMLUtil.flush(branchReader);
-			branchReader = null;
+		if (ein != null) {
+			LWXMLUtil.flush(ein);
+			ein = null;
 		}
 		
 		return lastEvent = in.readEvent();
@@ -38,32 +39,42 @@ public class LWXMLBranchDelegationReader extends LWXMLFilterReader<LWXMLReader> 
 	
 	@Override
 	public int read() throws IOException {
-		if (branchReader != null) return -1;
+		if (ein != null) throw new IllegalStateException();
 		return in.read();
 	}
 	
 	@Override
 	public int read(char[] cbuf) throws IOException {
-		if (branchReader != null) return -1;
+		if (ein != null) throw new IllegalStateException();
 		return in.read(cbuf);
 	}
 	
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		if (branchReader != null) return -1;
+		if (ein != null) throw new IllegalStateException();
 		return in.read(cbuf, off, len);
 	}
 	
 	@Override
 	public int read(CharBuffer target) throws IOException {
-		if (branchReader != null) return -1;
+		if (ein != null) throw new IllegalStateException();
 		return in.read(target);
 	}
 	
 	@Override
 	public long skip(long n) throws IOException {
-		if (branchReader != null) return 0;
+		if (ein != null) throw new IllegalStateException();
 		return in.skip(n);
+	}
+	
+	@Override
+	public void close() throws IOException {
+		in.close();
+		
+		if (ein != null) {
+			ein.close();
+			ein = null;
+		}
 	}
 	
 }

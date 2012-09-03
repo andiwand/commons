@@ -6,15 +6,16 @@ import java.nio.CharBuffer;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 
 
-public class LWXMLBranchReader extends LWXMLFilterReader<LWXMLReader> {
+public class LWXMLElementReader extends LWXMLFilterReader<LWXMLReader> {
 	
 	private boolean closed;
 	
 	private LWXMLEvent lastEvent;
 	
+	private boolean first = true;
 	private int depth;
 	
-	public LWXMLBranchReader(LWXMLReader in) {
+	public LWXMLElementReader(LWXMLReader in) {
 		super(in);
 	}
 	
@@ -28,11 +29,16 @@ public class LWXMLBranchReader extends LWXMLFilterReader<LWXMLReader> {
 	public LWXMLEvent readEvent() throws IOException {
 		if (closed) return LWXMLEvent.END_DOCUMENT;
 		
+		if (depth < 0) {
+			closed = true;
+			return LWXMLEvent.END_DOCUMENT;
+		}
+		
 		LWXMLEvent event = in.readEvent();
 		
 		switch (event) {
 		case START_ELEMENT:
-			depth++;
+			if (!first) depth++;
 			break;
 		case END_EMPTY_ELEMENT:
 		case END_ELEMENT:
@@ -43,11 +49,7 @@ public class LWXMLBranchReader extends LWXMLFilterReader<LWXMLReader> {
 			return event;
 		}
 		
-		if (depth < 0) {
-			closed = true;
-			return LWXMLEvent.END_DOCUMENT;
-		}
-		
+		first = false;
 		return lastEvent = event;
 	}
 	
