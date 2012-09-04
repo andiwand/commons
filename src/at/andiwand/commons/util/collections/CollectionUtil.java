@@ -2,7 +2,11 @@ package at.andiwand.commons.util.collections;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.RandomAccess;
 
 import at.andiwand.commons.util.iterator.IterableIterator;
 
@@ -275,7 +279,11 @@ public class CollectionUtil {
 		return result;
 	}
 	
-	public static <E extends Comparable<E>> E getGreatest(Collection<E> c) {
+	public static <E extends Comparable<E>> E getGreatest(
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getGreatest((List<? extends E>) c);
+		
 		E result = null;
 		
 		for (E e : c) {
@@ -286,8 +294,24 @@ public class CollectionUtil {
 		return result;
 	}
 	
+	private static <E extends Comparable<E>> E getGreatest(
+			List<? extends E> randomAccessList) {
+		E result = null;
+		
+		for (int i = 0; i < randomAccessList.size(); i++) {
+			E e = randomAccessList.get(i);
+			if (e == null) continue;
+			if ((result == null) || (e.compareTo(result) > 0)) result = e;
+		}
+		
+		return result;
+	}
+	
 	public static <E> E getGreatest(Comparator<? super E> comparator,
-			Collection<E> c) {
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getGreatest(comparator, (List<? extends E>) c);
+		
 		E result = null;
 		
 		for (E e : c) {
@@ -299,7 +323,25 @@ public class CollectionUtil {
 		return result;
 	}
 	
-	public static <E extends Comparable<E>> E getSmallest(Collection<E> c) {
+	private static <E> E getGreatest(Comparator<? super E> comparator,
+			List<? extends E> randomAccessList) {
+		E result = null;
+		
+		for (int i = 0; i < randomAccessList.size(); i++) {
+			E e = randomAccessList.get(i);
+			if (e == null) continue;
+			if ((result == null) || (comparator.compare(e, result) > 0))
+				result = e;
+		}
+		
+		return result;
+	}
+	
+	public static <E extends Comparable<E>> E getSmallest(
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getSmallest((List<? extends E>) c);
+		
 		E result = null;
 		
 		for (E e : c) {
@@ -310,8 +352,24 @@ public class CollectionUtil {
 		return result;
 	}
 	
+	private static <E extends Comparable<E>> E getSmallest(
+			List<? extends E> randomAccessList) {
+		E result = null;
+		
+		for (int i = 0; i < randomAccessList.size(); i++) {
+			E e = randomAccessList.get(i);
+			if (e == null) continue;
+			if ((result == null) || (e.compareTo(result) < 0)) result = e;
+		}
+		
+		return result;
+	}
+	
 	public static <E> E getSmallest(Comparator<? super E> comparator,
-			Collection<E> c) {
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getSmallest(comparator, (List<? extends E>) c);
+		
 		E result = null;
 		
 		for (E e : c) {
@@ -320,6 +378,52 @@ public class CollectionUtil {
 				result = e;
 		}
 		
+		return result;
+	}
+	
+	private static <E> E getSmallest(Comparator<? super E> comparator,
+			List<? extends E> randomAccessList) {
+		E result = null;
+		
+		for (int i = 0; i < randomAccessList.size(); i++) {
+			E e = randomAccessList.get(i);
+			if (e == null) continue;
+			if ((result == null) || (comparator.compare(e, result) < 0))
+				result = e;
+		}
+		
+		return result;
+	}
+	
+	public static <K, V> void putAll(Map<? super K, ? super V> map,
+			KeyGenerator<? extends K, ? super V> keyGenerator,
+			Collection<? extends V> values) {
+		if ((values instanceof List) && (values instanceof RandomAccess)) {
+			putAll(map, keyGenerator, (List<? extends V>) values);
+			return;
+		}
+		
+		for (V value : values) {
+			K key = keyGenerator.generateKey(value);
+			map.put(key, value);
+		}
+	}
+	
+	private static <K, V> void putAll(Map<? super K, ? super V> map,
+			KeyGenerator<? extends K, ? super V> keyGenerator,
+			List<? extends V> randomAccessList) {
+		for (int i = 0; i < randomAccessList.size(); i++) {
+			V value = randomAccessList.get(i);
+			K key = keyGenerator.generateKey(value);
+			map.put(key, value);
+		}
+	}
+	
+	public static <K, V> HashMap<K, V> toHashMap(
+			KeyGenerator<? extends K, ? super V> keyGenerator,
+			Collection<? extends V> values) {
+		HashMap<K, V> result = new HashMap<K, V>();
+		putAll(result, keyGenerator, values);
 		return result;
 	}
 	

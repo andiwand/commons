@@ -3,9 +3,12 @@ package at.andiwand.commons.util;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import at.andiwand.commons.util.collections.CollectionUtil;
+import at.andiwand.commons.util.collections.KeyGenerator;
 
 
 public class ArrayUtil {
@@ -368,6 +371,22 @@ public class ArrayUtil {
 			if (array[i] < result) result = array[i];
 		}
 		
+		return result;
+	}
+	
+	public static <K, V> void putAll(Map<? super K, ? super V> map,
+			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
+		for (int i = 0; i < values.length; i++) {
+			V value = values[i];
+			K key = keyGenerator.generateKey(value);
+			map.put(key, value);
+		}
+	}
+	
+	public static <K, V> HashMap<K, V> toHashMap(
+			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
+		HashMap<K, V> result = new HashMap<K, V>();
+		putAll(result, keyGenerator, values);
 		return result;
 	}
 	
