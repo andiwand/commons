@@ -383,10 +383,27 @@ public class ArrayUtil {
 		}
 	}
 	
+	public static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
+			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
+		for (int i = 0; i < values.length; i++) {
+			V value = values[i];
+			K key = keyGenerator.generateKey(value);
+			if (key == null) continue;
+			map.put(key, value);
+		}
+	}
+	
 	public static <K, V> HashMap<K, V> toHashMap(
 			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
 		HashMap<K, V> result = new HashMap<K, V>();
 		putAll(result, keyGenerator, values);
+		return result;
+	}
+	
+	public static <K, V> HashMap<K, V> toHashMapNotNull(
+			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
+		HashMap<K, V> result = new HashMap<K, V>();
+		putAllNotNull(result, keyGenerator, values);
 		return result;
 	}
 	

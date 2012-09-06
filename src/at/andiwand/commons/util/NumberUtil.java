@@ -26,6 +26,18 @@ public class NumberUtil {
 		return (value == null) ? nullValue : Double.parseDouble(value);
 	}
 	
+	public static boolean isValidUnsignedByte(int value) {
+		return (value & 0xff00) == 0;
+	}
+	
+	public static boolean isValidUnsignedShort(int value) {
+		return (value & 0xffff0000) == 0;
+	}
+	
+	public static boolean isValidUnsignedInt(long value) {
+		return (value & 0xffffffff00000000l) == 0;
+	}
+	
 	private NumberUtil() {}
 	
 }

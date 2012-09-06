@@ -419,11 +419,45 @@ public class CollectionUtil {
 		}
 	}
 	
+	public static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
+			KeyGenerator<? extends K, ? super V> keyGenerator,
+			Collection<? extends V> values) {
+		if ((values instanceof List) && (values instanceof RandomAccess)) {
+			putAllNotNull(map, keyGenerator, (List<? extends V>) values);
+			return;
+		}
+		
+		for (V value : values) {
+			K key = keyGenerator.generateKey(value);
+			if (key == null) continue;
+			map.put(key, value);
+		}
+	}
+	
+	private static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
+			KeyGenerator<? extends K, ? super V> keyGenerator,
+			List<? extends V> randomAccessList) {
+		for (int i = 0; i < randomAccessList.size(); i++) {
+			V value = randomAccessList.get(i);
+			K key = keyGenerator.generateKey(value);
+			if (key == null) continue;
+			map.put(key, value);
+		}
+	}
+	
 	public static <K, V> HashMap<K, V> toHashMap(
 			KeyGenerator<? extends K, ? super V> keyGenerator,
 			Collection<? extends V> values) {
 		HashMap<K, V> result = new HashMap<K, V>();
 		putAll(result, keyGenerator, values);
+		return result;
+	}
+	
+	public static <K, V> HashMap<K, V> toHashMapNotNull(
+			KeyGenerator<? extends K, ? super V> keyGenerator,
+			Collection<? extends V> values) {
+		HashMap<K, V> result = new HashMap<K, V>();
+		putAllNotNull(result, keyGenerator, values);
 		return result;
 	}
 	
