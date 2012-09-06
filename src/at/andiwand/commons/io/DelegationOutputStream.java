@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 
 public abstract class DelegationOutputStream extends FilterOutputStream {
-
+	
 	public DelegationOutputStream(OutputStream out) {
 		super(out);
 	}
