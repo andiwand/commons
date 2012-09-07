@@ -109,28 +109,28 @@ public class Vector2d {
 		return new Vector2d(yx.y, yx.x);
 	}
 	
-	public Vector3b lessThan(Vector2d b) {
-		return new Vector3b(x < b.x, y < b.y);
+	public Vector2b lessThan(Vector2d b) {
+		return new Vector2b(x < b.x, y < b.y);
 	}
 	
-	public Vector3b lessThanOrEqual(Vector2d b) {
-		return new Vector3b(x <= b.x, y <= b.y);
+	public Vector2b lessThanOrEqual(Vector2d b) {
+		return new Vector2b(x <= b.x, y <= b.y);
 	}
 	
-	public Vector3b greaterThan(Vector2d b) {
-		return new Vector3b(x > b.x, y > b.y);
+	public Vector2b greaterThan(Vector2d b) {
+		return new Vector2b(x > b.x, y > b.y);
 	}
 	
-	public Vector3b greaterThanOrEqual(Vector2d b) {
-		return new Vector3b(x >= b.x, y >= b.y);
+	public Vector2b greaterThanOrEqual(Vector2d b) {
+		return new Vector2b(x >= b.x, y >= b.y);
 	}
 	
-	public Vector3b equal(Vector2d b) {
-		return new Vector3b(x == b.x, y == b.y);
+	public Vector2b equal(Vector2d b) {
+		return new Vector2b(x == b.x, y == b.y);
 	}
 	
-	public Vector3b notEqual(Vector2d b) {
-		return new Vector3b(x != b.x, y != b.y);
+	public Vector2b notEqual(Vector2d b) {
+		return new Vector2b(x != b.x, y != b.y);
 	}
 	
 	public double length() {
