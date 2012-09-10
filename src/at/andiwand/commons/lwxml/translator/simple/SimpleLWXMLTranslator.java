@@ -9,14 +9,15 @@ import at.andiwand.commons.lwxml.reader.LWXMLPushbackReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.translator.LWXMLTranslator;
 import at.andiwand.commons.lwxml.writer.LWXMLWriter;
+import at.andiwand.commons.util.collections.OrderedPair;
 
 
-// TODO: implement character matching map
+// TODO: implement remove methods
 public class SimpleLWXMLTranslator extends LWXMLTranslator {
 	
-	private BlockwiseStringMatcher<SimpleElementTranslator> elementTranslatorMap = new BlockwiseStringMatcher<SimpleElementTranslator>();
+	private BlockwiseStringMatcher<SimpleElementTranslator> elementTranslators = new BlockwiseStringMatcher<SimpleElementTranslator>();
 	
-	private BlockwiseStringMatcher<SimpleAttributeTranslator> staticAttributeTranslator = new BlockwiseStringMatcher<SimpleAttributeTranslator>();
+	private BlockwiseStringMatcher<SimpleAttributeTranslator> staticAttributeTranslators = new BlockwiseStringMatcher<SimpleAttributeTranslator>();
 	
 	public void addElementTranslator(String elementName, String newElementName) {
 		addElementTranslator(elementName, new SimpleElementReplacement(
@@ -26,9 +27,9 @@ public class SimpleLWXMLTranslator extends LWXMLTranslator {
 	public void addElementTranslator(String elementName,
 			SimpleElementTranslator translator) {
 		if (elementName == null) throw new NullPointerException();
-		elementTranslatorMap.put(elementName, translator);
+		elementTranslators.put(elementName, translator);
 		
-		for (Map.Entry<String, SimpleAttributeTranslator> entry : staticAttributeTranslator
+		for (Map.Entry<String, SimpleAttributeTranslator> entry : staticAttributeTranslators
 				.entrySet()) {
 			translator.addAttributeTranslator(entry.getKey(), entry.getValue());
 		}
@@ -43,29 +44,11 @@ public class SimpleLWXMLTranslator extends LWXMLTranslator {
 	public void addStaticAttributeTranslator(String attributeName,
 			SimpleAttributeTranslator attributeTranslator) {
 		if (attributeTranslator == null) throw new NullPointerException();
-		staticAttributeTranslator.put(attributeName, attributeTranslator);
+		staticAttributeTranslators.put(attributeName, attributeTranslator);
 		
-		for (SimpleElementTranslator translator : elementTranslatorMap.values()) {
+		for (SimpleElementTranslator translator : elementTranslators.values()) {
 			translator.addAttributeTranslator(attributeName,
 					attributeTranslator);
-		}
-	}
-	
-	public void removeElementTranslator(String elementName) {
-		SimpleElementTranslator translator = elementTranslatorMap
-				.remove(elementName);
-		if (translator == null) return;
-		
-		for (String attributeName : staticAttributeTranslator.keySet()) {
-			translator.removeAttributeTranslator(attributeName);
-		}
-	}
-	
-	public void removeStaticAttributeTranslator(String attributeName) {
-		if (staticAttributeTranslator.remove(attributeName) == null) return;
-		
-		for (SimpleElementTranslator translator : elementTranslatorMap.values()) {
-			translator.removeAttributeTranslator(attributeName);
 		}
 	}
 	
@@ -73,8 +56,7 @@ public class SimpleLWXMLTranslator extends LWXMLTranslator {
 	public void translate(LWXMLReader in, LWXMLWriter out) throws IOException {
 		LWXMLPushbackReader pin = new LWXMLPushbackReader(in);
 		
-		String elementName = null;
-		SimpleElementTranslator translator = null;
+		OrderedPair<String, SimpleElementTranslator> match = null;
 		
 		while (true) {
 			LWXMLEvent event = pin.readEvent();
@@ -83,15 +65,16 @@ public class SimpleLWXMLTranslator extends LWXMLTranslator {
 			switch (event) {
 			case START_ELEMENT:
 			case END_ELEMENT:
-				elementName = pin.readValue();
-				translator = elementTranslatorMap.get(elementName);
+				match = elementTranslators.match(pin);
 			case END_EMPTY_ELEMENT:
-				if (translator == null) break;
+				if (match == null) break;
+				
+				String elementName = match.getElement1();
+				SimpleElementTranslator translator = match.getElement2();
 				
 				pin.unreadEvent(elementName);
 				translator.translate(pin, out);
 				
-				elementName = null;
 				break;
 			case CHARACTERS:
 				out.writeEvent(LWXMLEvent.CHARACTERS);

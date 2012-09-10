@@ -9,11 +9,13 @@ public class SimpleStaticAttributeTranslator implements
 	private final String newAttributeName;
 	
 	public SimpleStaticAttributeTranslator(String newAttributeName) {
+		if (newAttributeName == null) throw new NullPointerException();
+		
 		this.newAttributeName = newAttributeName;
 	}
 	
 	@Override
-	public LWXMLAttribute translateAttribute(String name, String value) {
+	public LWXMLAttribute translate(String name, String value) {
 		return new LWXMLAttribute(newAttributeName, value);
 	}
 	

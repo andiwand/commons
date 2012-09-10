@@ -1,8 +1,10 @@
 package at.andiwand.commons.lwxml.translator.simple;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,8 +15,10 @@ import at.andiwand.commons.lwxml.LWXMLIllegalEventException;
 import at.andiwand.commons.lwxml.reader.LWXMLPushbackReader;
 import at.andiwand.commons.lwxml.translator.LWXMLPushbackTranslator;
 import at.andiwand.commons.lwxml.writer.LWXMLWriter;
+import at.andiwand.commons.util.collections.OrderedPair;
 
 
+// TODO: implement remove methods
 public abstract class SimpleElementTranslator extends LWXMLPushbackTranslator {
 	
 	private final BlockwiseStringMatcher<SimpleAttributeTranslator> attributeTranslatorMap = new BlockwiseStringMatcher<SimpleAttributeTranslator>();
@@ -22,7 +26,7 @@ public abstract class SimpleElementTranslator extends LWXMLPushbackTranslator {
 	private final Set<String> parseAttributes = new HashSet<String>();
 	private final Map<String, String> currentParsedAttributes = new HashMap<String, String>();
 	
-	private final Map<String, String> newAttributes = new HashMap<String, String>();
+	private final List<LWXMLAttribute> newAttributes = new ArrayList<LWXMLAttribute>();
 	
 	public Map<String, String> getCurrentParsedAttributes() {
 		return currentParsedAttributes;
@@ -40,32 +44,28 @@ public abstract class SimpleElementTranslator extends LWXMLPushbackTranslator {
 	
 	public void addAttributeTranslator(String attributeName,
 			SimpleAttributeTranslator translator) {
+		if (attributeName == null) throw new NullPointerException();
+		if (translator == null) throw new NullPointerException();
+		
 		attributeTranslatorMap.put(attributeName, translator);
 	}
 	
 	public void addParseAttribute(String attributeName) {
+		if (attributeName == null) throw new NullPointerException();
+		
 		parseAttributes.add(attributeName);
+		if (!attributeTranslatorMap.containsKey(attributeName))
+			attributeTranslatorMap.put(attributeName, null);
 	}
 	
 	public void addNewAttribute(LWXMLAttribute attribute) {
 		if (attribute == null) throw new NullPointerException();
-		newAttributes.put(attribute.getName(), attribute.getValue());
+		
+		newAttributes.add(attribute);
 	}
 	
 	public void addNewAttribute(String name, String value) {
 		addNewAttribute(new LWXMLAttribute(name, value));
-	}
-	
-	public void removeAttributeTranslator(String attributeName) {
-		attributeTranslatorMap.remove(attributeName);
-	}
-	
-	public void removeParseAttribute(String attributeName) {
-		parseAttributes.remove(attributeName);
-	}
-	
-	public void removeNewAttribute(String name) {
-		newAttributes.remove(name);
 	}
 	
 	@Override
@@ -94,28 +94,25 @@ public abstract class SimpleElementTranslator extends LWXMLPushbackTranslator {
 	
 	public LWXMLAttribute translateAttribute(LWXMLPushbackReader in,
 			LWXMLWriter out) throws IOException {
-		String attributeName = in.readValue();
-		String attributeValue = null;
+		OrderedPair<String, SimpleAttributeTranslator> match = attributeTranslatorMap
+				.match(in);
+		if (match == null) return null;
 		
-		if (parseAttributes.contains(attributeName)) {
-			attributeValue = in.readFollowingValue();
+		String attributeName = match.getElement1();
+		String attributeValue = in.readFollowingValue();
+		
+		if (parseAttributes.contains(attributeName))
 			currentParsedAttributes.put(attributeName, attributeValue);
-		}
 		
-		SimpleAttributeTranslator attributeTranslator = attributeTranslatorMap
-				.get(attributeName);
+		SimpleAttributeTranslator attributeTranslator = match.getElement2();
 		if (attributeTranslator == null) return null;
-		
-		if (attributeValue == null) attributeValue = in.readFollowingValue();
-		LWXMLAttribute result = attributeTranslator.translateAttribute(
-				attributeName, attributeValue);
-		return result;
+		return attributeTranslator.translate(attributeName, attributeValue);
 	}
 	
 	public void translateAttributeList(LWXMLPushbackReader in, LWXMLWriter out)
 			throws IOException {
-		for (Map.Entry<String, String> entry : newAttributes.entrySet()) {
-			out.writeAttribute(entry.getKey(), entry.getValue());
+		for (LWXMLAttribute attribute : newAttributes) {
+			out.writeAttribute(attribute);
 		}
 		
 		loop:
