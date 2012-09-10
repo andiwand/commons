@@ -1,4 +1,4 @@
-package at.andiwand.commons.util.collections.primitive;
+package at.andiwand.commons.util.collection.primitive;
 
 public abstract class AbstractIntIterator implements PrimitiveIterator<Integer> {
 	

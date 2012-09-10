@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import at.andiwand.commons.util.collections.CollectionUtil;
-import at.andiwand.commons.util.collections.KeyGenerator;
+import at.andiwand.commons.util.collection.CollectionUtil;
+import at.andiwand.commons.util.collection.KeyGenerator;
 
 
 public class ArrayUtil {

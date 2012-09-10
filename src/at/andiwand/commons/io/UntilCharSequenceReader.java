@@ -3,7 +3,7 @@ package at.andiwand.commons.io;
 import java.io.IOException;
 import java.io.Reader;
 
-import at.andiwand.commons.util.collections.CharArrayQueue;
+import at.andiwand.commons.util.collection.CharArrayQueue;
 
 
 public class UntilCharSequenceReader extends CharwiseFilterReader {

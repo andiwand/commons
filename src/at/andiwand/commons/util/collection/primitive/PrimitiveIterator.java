@@ -1,4 +1,4 @@
-package at.andiwand.commons.util.collections.primitive;
+package at.andiwand.commons.util.collection.primitive;
 
 import java.util.Iterator;
 

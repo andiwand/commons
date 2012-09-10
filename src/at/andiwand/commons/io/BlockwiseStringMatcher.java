@@ -11,7 +11,7 @@ import java.util.Set;
 
 import at.andiwand.commons.util.CharArrayCharSequence;
 import at.andiwand.commons.util.CharSequenceWraper;
-import at.andiwand.commons.util.collections.OrderedPair;
+import at.andiwand.commons.util.collection.OrderedPair;
 
 
 public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {

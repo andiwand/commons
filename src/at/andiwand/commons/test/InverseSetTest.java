@@ -1,6 +1,6 @@
 package at.andiwand.commons.test;
 
-import at.andiwand.commons.util.collections.InverseSet;
+import at.andiwand.commons.util.collection.InverseSet;
 
 
 public class InverseSetTest {

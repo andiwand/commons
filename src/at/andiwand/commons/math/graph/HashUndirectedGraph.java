@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import at.andiwand.commons.util.collections.HashMultiset;
-import at.andiwand.commons.util.collections.Multiset;
+import at.andiwand.commons.util.collection.HashMultiset;
+import at.andiwand.commons.util.collection.Multiset;
 
 
 public class HashUndirectedGraph<V, E extends AbstractUndirectedEdge> extends

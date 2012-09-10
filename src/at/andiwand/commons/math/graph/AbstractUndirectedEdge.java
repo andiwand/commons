@@ -1,7 +1,7 @@
 package at.andiwand.commons.math.graph;
 
-import at.andiwand.commons.util.collections.HashMultiset;
-import at.andiwand.commons.util.collections.Multiset;
+import at.andiwand.commons.util.collection.HashMultiset;
+import at.andiwand.commons.util.collection.Multiset;
 
 
 public abstract class AbstractUndirectedEdge extends AbstractEdge implements

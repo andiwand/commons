@@ -1,6 +1,6 @@
 package at.andiwand.commons.test;
 
-import at.andiwand.commons.util.collections.CharArrayQueue;
+import at.andiwand.commons.util.collection.CharArrayQueue;
 
 
 public class CharArrayQueueTest {

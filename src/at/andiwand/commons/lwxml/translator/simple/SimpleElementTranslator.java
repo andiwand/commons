@@ -15,7 +15,7 @@ import at.andiwand.commons.lwxml.LWXMLIllegalEventException;
 import at.andiwand.commons.lwxml.reader.LWXMLPushbackReader;
 import at.andiwand.commons.lwxml.translator.LWXMLPushbackTranslator;
 import at.andiwand.commons.lwxml.writer.LWXMLWriter;
-import at.andiwand.commons.util.collections.OrderedPair;
+import at.andiwand.commons.util.collection.OrderedPair;
 
 
 // TODO: implement remove methods

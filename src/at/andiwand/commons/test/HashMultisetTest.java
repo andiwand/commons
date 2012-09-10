@@ -3,8 +3,8 @@ package at.andiwand.commons.test;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import at.andiwand.commons.util.collections.HashMultiset;
-import at.andiwand.commons.util.collections.Multiset;
+import at.andiwand.commons.util.collection.HashMultiset;
+import at.andiwand.commons.util.collection.Multiset;
 
 
 public class HashMultisetTest {

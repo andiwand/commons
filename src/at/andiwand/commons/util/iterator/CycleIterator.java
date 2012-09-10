@@ -1,18 +1,17 @@
 package at.andiwand.commons.util.iterator;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 
-public class CycleIterator<E> implements Iterator<E> {
+public class CycleIterator<E> extends DelegationIterator<E> {
 	
 	private final Collection<? extends E> collection;
-	private Iterator<? extends E> iterator;
 	
 	public CycleIterator(Collection<? extends E> collection) {
+		super(collection.iterator());
+		
 		this.collection = collection;
-		this.iterator = collection.iterator();
 	}
 	
 	@Override

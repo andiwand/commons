@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import at.andiwand.commons.util.CharSequenceUtil;
-import at.andiwand.commons.util.collections.CharArrayQueue;
+import at.andiwand.commons.util.collection.CharArrayQueue;
 
 
 public class CharStreamUtil {

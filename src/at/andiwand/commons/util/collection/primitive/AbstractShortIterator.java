@@ -1,11 +1,11 @@
-package at.andiwand.commons.util.collections.primitive;
+package at.andiwand.commons.util.collection.primitive;
 
-public abstract class AbstractByteIterator implements PrimitiveIterator<Byte> {
+public abstract class AbstractShortIterator implements PrimitiveIterator<Short> {
 	
-	public abstract byte nextValue();
+	public abstract short nextValue();
 	
 	@Override
-	public Byte next() {
+	public Short next() {
 		return nextValue();
 	}
 	

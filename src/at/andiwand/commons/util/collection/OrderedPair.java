@@ -1,4 +1,4 @@
-package at.andiwand.commons.util.collections;
+package at.andiwand.commons.util.collection;
 
 public class OrderedPair<E1, E2> {
 	

@@ -1,7 +1,8 @@
-package at.andiwand.commons.util.collections;
+package at.andiwand.commons.util.collection;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,8 +10,10 @@ import java.util.Map;
 import java.util.RandomAccess;
 
 import at.andiwand.commons.util.iterator.IterableIterator;
+import at.andiwand.commons.util.iterator.IteratorEnumeration;
 
 
+// TODO: improve argument names
 public class CollectionUtil {
 	
 	public static <E> Iterable<E> getIterable(Iterator<E> iterator) {
@@ -459,6 +462,10 @@ public class CollectionUtil {
 		HashMap<K, V> result = new HashMap<K, V>();
 		putAllNotNull(result, keyGenerator, values);
 		return result;
+	}
+	
+	public static <E> Enumeration<E> enumeration(Collection<? extends E> c) {
+		return new IteratorEnumeration<E>(c.iterator());
 	}
 	
 	private CollectionUtil() {}

@@ -1,12 +1,11 @@
-package at.andiwand.commons.util.collections.primitive;
+package at.andiwand.commons.util.collection.primitive;
 
-public abstract class AbstractCharIterator implements
-		PrimitiveIterator<Character> {
+public abstract class AbstractLongIterator implements PrimitiveIterator<Long> {
 	
-	public abstract char nextValue();
+	public abstract long nextValue();
 	
 	@Override
-	public Character next() {
+	public Long next() {
 		return nextValue();
 	}
 	

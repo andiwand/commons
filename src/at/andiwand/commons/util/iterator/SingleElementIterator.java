@@ -1,10 +1,9 @@
 package at.andiwand.commons.util.iterator;
 
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 
-public class SingleElementIterator<E> implements Iterator<E> {
+public class SingleElementIterator<E> extends AbstractIterator<E> {
 	
 	private E element;
 	private boolean hasNext = true;
