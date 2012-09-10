@@ -105,7 +105,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	private LWXMLEvent readNextEventImpl() throws IOException {
 		if (closed) return LWXMLEvent.END_DOCUMENT;
 		if (eventReader != null)
-			CharStreamUtil.flushCharacterwise(eventReader);
+			CharStreamUtil.flushCharwise(eventReader);
 		
 		if (lastEvent != null) {
 			switch (lastEvent) {
@@ -213,7 +213,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private void handleProcessingInstructionData() throws IOException {
 		try {
-			CharStreamUtil.flushCharacters(in, WHITESPACE_FILTER);
+			CharStreamUtil.flushChars(in, WHITESPACE_FILTER);
 		} catch (IllegalStateException e) {
 			throw new LWXMLReaderException("end of stream", e);
 		}
@@ -227,7 +227,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	}
 	
 	private LWXMLEvent handleAttributeList() throws IOException {
-		CharStreamUtil.flushCharacters(in, WHITESPACE_FILTER);
+		CharStreamUtil.flushChars(in, WHITESPACE_FILTER);
 		int c = fin.read();
 		
 		switch (c) {
@@ -253,7 +253,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	// TODO: handle malformed xml
 	private void handleAttributeValue() throws IOException {
-		CharStreamUtil.flushUntilCharacter(in, '"');
+		CharStreamUtil.flushUntilChar(in, '"');
 		eventReader = new UntilFilterReader(fin, ATTRIBUTE_VALUE_FILTER);
 	}
 	

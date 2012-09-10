@@ -1,80 +1,32 @@
 package at.andiwand.commons.lwxml.reader;
 
 import java.io.IOException;
-import java.nio.CharBuffer;
-
-import at.andiwand.commons.lwxml.LWXMLEvent;
-import at.andiwand.commons.lwxml.LWXMLUtil;
 
 
-public class LWXMLDelegationReader extends LWXMLFilterReader<LWXMLReader> {
+public abstract class LWXMLDelegationReader<T extends LWXMLReader> extends
+		LWXMLReader {
 	
-	private LWXMLEvent lastEvent;
+	protected T in;
 	
-	private LWXMLElementReader ein;
-	
-	public LWXMLDelegationReader(LWXMLReader in) {
-		super(in);
-	}
-	
-	public LWXMLElementReader getElementReader() {
-		if (ein == null) ein = new LWXMLElementReader(in);
-		return ein;
-	}
-	
-	@Override
-	public LWXMLEvent readEvent() throws IOException {
-		if (ein != null) {
-			LWXMLUtil.flush(ein);
-			ein = null;
-		}
+	public LWXMLDelegationReader(T in) {
+		if (in == null) throw new NullPointerException();
 		
-		return lastEvent = in.readEvent();
-	}
-	
-	@Override
-	public LWXMLEvent getCurrentEvent() {
-		return lastEvent;
+		this.in = in;
 	}
 	
 	@Override
 	public int read() throws IOException {
-		if (ein != null) throw new IllegalStateException();
 		return in.read();
 	}
 	
 	@Override
-	public int read(char[] cbuf) throws IOException {
-		if (ein != null) throw new IllegalStateException();
-		return in.read(cbuf);
-	}
-	
-	@Override
-	public int read(char[] cbuf, int off, int len) throws IOException {
-		if (ein != null) throw new IllegalStateException();
-		return in.read(cbuf, off, len);
-	}
-	
-	@Override
-	public int read(CharBuffer target) throws IOException {
-		if (ein != null) throw new IllegalStateException();
-		return in.read(target);
-	}
-	
-	@Override
-	public long skip(long n) throws IOException {
-		if (ein != null) throw new IllegalStateException();
-		return in.skip(n);
+	public boolean ready() throws IOException {
+		return in.ready();
 	}
 	
 	@Override
 	public void close() throws IOException {
 		in.close();
-		
-		if (ein != null) {
-			ein.close();
-			ein = null;
-		}
 	}
 	
 }

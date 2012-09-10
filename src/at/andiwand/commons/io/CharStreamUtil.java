@@ -43,49 +43,130 @@ public class CharStreamUtil {
 		return read;
 	}
 	
-	public static int readCharacterwise(Reader in, char[] cbuf)
-			throws IOException {
+	public static int readCharwise(Reader in, char[] cbuf) throws IOException {
 		if (cbuf == null) throw new NullPointerException();
 		if (cbuf.length == 0) return 0;
 		
-		int i = 0;
-		for (int read; (i < cbuf.length) && ((read = in.read()) != -1); i++) {
-			cbuf[i] = (char) read;
+		int result = 0;
+		
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
+			cbuf[result] = (char) read;
+			
+			result++;
+			if (result == cbuf.length) break;
 		}
 		
-		if (i == 0) return -1;
-		return i;
+		if (result == 0) return -1;
+		return result;
 	}
 	
-	public static int readCharacterwise(Reader in, char[] cbuf, int off, int len)
+	public static int readCharwise(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
 		if (cbuf == null) throw new NullPointerException();
 		if ((off < 0) || (len < 0) || (len > (cbuf.length - off)))
 			throw new IndexOutOfBoundsException();
 		if (len == 0) return 0;
 		
-		int i = 0;
-		for (int read; (i < len) && ((read = in.read()) != -1); i++) {
-			cbuf[off + i] = (char) read;
+		int result = 0;
+		
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
+			cbuf[off + result] = (char) read;
+			
+			result++;
+			if (result == cbuf.length) break;
 		}
 		
-		if (i == 0) return -1;
-		return i;
+		if (result == 0) return -1;
+		return result;
 	}
 	
-	public static int readCharacterwise(Reader in, CharBuffer target)
+	public static int readCharwise(Reader in, CharBuffer target)
 			throws IOException {
 		if (target == null) throw new NullPointerException();
+		
 		int len = target.remaining();
 		if (len == 0) return 0;
 		
-		int i = 0;
-		for (int read; (i < len) && ((read = in.read()) != -1); i++) {
+		int result = 0;
+		
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
 			target.put((char) read);
+			
+			result++;
+			if (result == len) break;
 		}
 		
-		if (i == 0) return -1;
-		return i;
+		if (result == 0) return -1;
+		return result;
+	}
+	
+	public static int readFully(Reader in, char[] cbuf) throws IOException {
+		if (cbuf == null) throw new NullPointerException();
+		if (cbuf.length == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(cbuf, result, cbuf.length - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == cbuf.length) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
+	}
+	
+	public static int readFully(Reader in, char[] cbuf, int off, int len)
+			throws IOException {
+		if (cbuf == null) throw new NullPointerException();
+		if ((off < 0) || (len < 0) || (len > (cbuf.length - off)))
+			throw new IndexOutOfBoundsException();
+		if (len == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(cbuf, off + result, len - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == len) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
+	}
+	
+	public static int readFully(Reader in, CharBuffer target)
+			throws IOException {
+		if (target == null) throw new NullPointerException();
+		
+		int len = target.remaining();
+		if (len == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(target);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == len) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static String readLine(PushbackReader in) throws IOException {
@@ -164,7 +245,7 @@ public class CharStreamUtil {
 		return out.toString();
 	}
 	
-	public static void writeCharacterwise(Writer out, char[] cbuf)
+	public static void writeCharwise(Writer out, char[] cbuf)
 			throws IOException {
 		if (cbuf == null) throw new NullPointerException();
 		
@@ -173,8 +254,8 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void writeCharacterwise(Writer out, char[] cbuf, int off,
-			int len) throws IOException {
+	public static void writeCharwise(Writer out, char[] cbuf, int off, int len)
+			throws IOException {
 		if (cbuf == null) throw new NullPointerException();
 		if ((off < 0) || (len < 0) || (len > (cbuf.length - off)))
 			throw new IndexOutOfBoundsException();
@@ -184,8 +265,7 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void writeCharacterwise(Writer out, String str)
-			throws IOException {
+	public static void writeCharwise(Writer out, String str) throws IOException {
 		if (str == null) throw new NullPointerException();
 		
 		for (int i = 0; i < str.length(); i++) {
@@ -193,8 +273,8 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void writeCharacterwise(Writer out, String str, int off,
-			int len) throws IOException {
+	public static void writeCharwise(Writer out, String str, int off, int len)
+			throws IOException {
 		if (str == null) throw new NullPointerException();
 		if ((off < 0) || (len < 0) || (len > (str.length() - off)))
 			throw new IndexOutOfBoundsException();
@@ -206,7 +286,7 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void appendCharacterwise(Writer out, CharSequence csq)
+	public static void appendCharwise(Writer out, CharSequence csq)
 			throws IOException {
 		if (csq == null) csq = "null";
 		
@@ -215,8 +295,8 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void appendCharacterwise(Writer out, CharSequence csq,
-			int start, int end) throws IOException {
+	public static void appendCharwise(Writer out, CharSequence csq, int start,
+			int end) throws IOException {
 		if (start < 0)
 			throw new IndexOutOfBoundsException("start cannot be less than 0");
 		if (end < 0)
@@ -231,7 +311,7 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void flushCharacterwise(Reader in) throws IOException {
+	public static void flushCharwise(Reader in) throws IOException {
 		while (in.read() != -1);
 	}
 	
@@ -269,8 +349,7 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void flushCharacters(PushbackReader in, char c)
-			throws IOException {
+	public static void flushChars(PushbackReader in, char c) throws IOException {
 		while (true) {
 			int read = in.read();
 			if (read == -1) return;
@@ -282,7 +361,7 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void flushCharacters(PushbackReader in, Set<Character> chars)
+	public static void flushChars(PushbackReader in, Set<Character> chars)
 			throws IOException {
 		while (true) {
 			int read = in.read();
@@ -295,7 +374,7 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void flushCharacters(PushbackReader in, CharFilter filter)
+	public static void flushChars(PushbackReader in, CharFilter filter)
 			throws IOException {
 		while (true) {
 			int read = in.read();
@@ -309,8 +388,7 @@ public class CharStreamUtil {
 	}
 	
 	// TODO: improve
-	public static void flushUntilCharacter(Reader in, char c)
-			throws IOException {
+	public static void flushUntilChar(Reader in, char c) throws IOException {
 		while (true) {
 			int read = in.read();
 			if (read == -1) throw new IllegalStateException("end of stream");
@@ -319,7 +397,7 @@ public class CharStreamUtil {
 	}
 	
 	// TODO: improve
-	public static void flushUntilCharacter(Reader in, Set<Character> chars)
+	public static void flushUntilChar(Reader in, Set<Character> chars)
 			throws IOException {
 		while (true) {
 			int read = in.read();
@@ -333,8 +411,10 @@ public class CharStreamUtil {
 			throws IOException {
 		CharArrayQueue queue = new CharArrayQueue(string.length());
 		
-		int read;
-		while ((read = in.read()) != -1) {
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
 			if ((queue.size() >= string.length())
 					&& CharSequenceUtil.equals(queue, string)) return;
 			queue.put((char) read);
@@ -348,8 +428,10 @@ public class CharStreamUtil {
 			throws IOException {
 		StringBuilder builder = new StringBuilder();
 		
-		int read;
-		while ((read = in.read()) != -1) {
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
 			builder.append((char) read);
 			
 			Matcher matcher = pattern.matcher(builder);
@@ -364,8 +446,10 @@ public class CharStreamUtil {
 			throws IOException {
 		StringBuilder builder = new StringBuilder();
 		
-		int read;
-		while ((read = in.read()) != -1) {
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
 			builder.append((char) read);
 			
 			Matcher matcher = pattern.matcher(builder);

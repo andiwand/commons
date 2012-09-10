@@ -16,22 +16,22 @@ public abstract class CharwiseFilterWriter extends FilterWriter {
 	
 	@Override
 	public void write(char[] cbuf) throws IOException {
-		CharStreamUtil.writeCharacterwise(this, cbuf);
+		CharStreamUtil.writeCharwise(this, cbuf);
 	}
 	
 	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
-		CharStreamUtil.writeCharacterwise(this, cbuf, off, len);
+		CharStreamUtil.writeCharwise(this, cbuf, off, len);
 	}
 	
 	@Override
 	public void write(String str) throws IOException {
-		CharStreamUtil.writeCharacterwise(this, str);
+		CharStreamUtil.writeCharwise(this, str);
 	}
 	
 	@Override
 	public void write(String str, int off, int len) throws IOException {
-		CharStreamUtil.writeCharacterwise(this, str, off, len);
+		CharStreamUtil.writeCharwise(this, str, off, len);
 	}
 	
 	@Override
@@ -42,14 +42,14 @@ public abstract class CharwiseFilterWriter extends FilterWriter {
 	
 	@Override
 	public Writer append(CharSequence csq) throws IOException {
-		CharStreamUtil.appendCharacterwise(this, csq);
+		CharStreamUtil.appendCharwise(this, csq);
 		return this;
 	}
 	
 	@Override
 	public Writer append(CharSequence csq, int start, int end)
 			throws IOException {
-		CharStreamUtil.appendCharacterwise(this, csq, start, end);
+		CharStreamUtil.appendCharwise(this, csq, start, end);
 		return this;
 	}
 	

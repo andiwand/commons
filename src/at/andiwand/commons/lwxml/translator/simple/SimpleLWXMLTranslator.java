@@ -1,9 +1,9 @@
 package at.andiwand.commons.lwxml.translator.simple;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
+import at.andiwand.commons.io.BlockwiseStringMatcher;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 import at.andiwand.commons.lwxml.reader.LWXMLPushbackReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
@@ -14,9 +14,9 @@ import at.andiwand.commons.lwxml.writer.LWXMLWriter;
 // TODO: implement character matching map
 public class SimpleLWXMLTranslator extends LWXMLTranslator {
 	
-	private Map<String, SimpleElementTranslator> elementTranslatorMap = new HashMap<String, SimpleElementTranslator>();
+	private BlockwiseStringMatcher<SimpleElementTranslator> elementTranslatorMap = new BlockwiseStringMatcher<SimpleElementTranslator>();
 	
-	private Map<String, SimpleAttributeTranslator> staticAttributeTranslator = new HashMap<String, SimpleAttributeTranslator>();
+	private BlockwiseStringMatcher<SimpleAttributeTranslator> staticAttributeTranslator = new BlockwiseStringMatcher<SimpleAttributeTranslator>();
 	
 	public void addElementTranslator(String elementName, String newElementName) {
 		addElementTranslator(elementName, new SimpleElementReplacement(

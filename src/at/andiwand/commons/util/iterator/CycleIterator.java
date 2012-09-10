@@ -12,7 +12,6 @@ public class CycleIterator<E> implements Iterator<E> {
 	
 	public CycleIterator(Collection<? extends E> collection) {
 		this.collection = collection;
-		iterator = collection.iterator();
 	}
 	
 	@Override

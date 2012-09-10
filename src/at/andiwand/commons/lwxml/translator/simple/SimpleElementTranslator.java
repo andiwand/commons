@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import at.andiwand.commons.io.BlockwiseStringMatcher;
 import at.andiwand.commons.lwxml.LWXMLAttribute;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 import at.andiwand.commons.lwxml.LWXMLIllegalEventException;
@@ -16,7 +17,7 @@ import at.andiwand.commons.lwxml.writer.LWXMLWriter;
 
 public abstract class SimpleElementTranslator extends LWXMLPushbackTranslator {
 	
-	private final Map<String, SimpleAttributeTranslator> attributeTranslatorMap = new HashMap<String, SimpleAttributeTranslator>();
+	private final BlockwiseStringMatcher<SimpleAttributeTranslator> attributeTranslatorMap = new BlockwiseStringMatcher<SimpleAttributeTranslator>();
 	
 	private final Set<String> parseAttributes = new HashSet<String>();
 	private final Map<String, String> currentParsedAttributes = new HashMap<String, String>();

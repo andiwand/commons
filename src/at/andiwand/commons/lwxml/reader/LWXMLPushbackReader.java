@@ -14,7 +14,7 @@ import at.andiwand.commons.lwxml.LWXMLIllegalFollowerException;
 
 
 // TODO: improve exception handling
-public class LWXMLPushbackReader extends LWXMLFilterReader<LWXMLReader> {
+public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 	
 	private Deque<LWXMLEvent> eventStack = new LinkedList<LWXMLEvent>();
 	private Deque<String> valueStack = new LinkedList<String>();

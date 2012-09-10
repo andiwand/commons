@@ -407,6 +407,367 @@ public class ArrayUtil {
 		return result;
 	}
 	
+	// TODO: handle exceptions?
+	public static boolean equals(Object[] array1, int off1, Object[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			Object o1 = array1[i1];
+			Object o2 = array2[i2];
+			if (!((o1 == null) ? (o2 == null) : o1.equals(o2))) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(boolean[] array1, int off1, boolean[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(byte[] array1, int off1, byte[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(char[] array1, int off1, char[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(short[] array1, int off1, short[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(int[] array1, int off1, int[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(long[] array1, int off1, long[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(float[] array1, int off1, float[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(double[] array1, int off1, double[] array2,
+			int off2, int len) {
+		if (array1 == array2) return true;
+		if ((array1 == null) || (array2 == null)) return false;
+		
+		int end1 = off1 + len;
+		
+		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
+			if (array1[i1] != array2[i2]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static int hashCode(Object[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			result = 31 * result
+					+ ((array[i] == null) ? 0 : array[i].hashCode());
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(boolean[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			result = 31 * result + (array[i] ? 1231 : 1237);
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(byte[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(char[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(short[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(int[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(long[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			int elementHash = (int) (array[i] ^ (array[i] >>> 32));
+			result = 31 * result + elementHash;
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(float[] array) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			result = 31 * result + Float.floatToIntBits(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(double array[]) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		
+		for (int i = 0; i < array.length; i++) {
+			long bits = Double.doubleToLongBits(array[i]);
+			result = 31 * result + (int) (bits ^ (bits >>> 32));
+		}
+		
+		return result;
+	}
+	
+	// TODO: handle exception
+	public static int hashCode(Object[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			result = 31 * result
+					+ ((array[i] == null) ? 0 : array[i].hashCode());
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(boolean[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			result = 31 * result + (array[i] ? 1231 : 1237);
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(byte[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(char[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(short[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(int[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			result = 31 * result + array[i];
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(long[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			int elementHash = (int) (array[i] ^ (array[i] >>> 32));
+			result = 31 * result + elementHash;
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(float[] array, int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			result = 31 * result + Float.floatToIntBits(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static int hashCode(double array[], int off, int len) {
+		if (array == null) return 0;
+		
+		int result = 1;
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			long bits = Double.doubleToLongBits(array[i]);
+			result = 31 * result + (int) (bits ^ (bits >>> 32));
+		}
+		
+		return result;
+	}
+	
 	private ArrayUtil() {}
 	
 }

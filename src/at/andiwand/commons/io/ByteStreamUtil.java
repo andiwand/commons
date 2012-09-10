@@ -32,13 +32,20 @@ public class ByteStreamUtil {
 		if (b == null) throw new NullPointerException();
 		if (b.length == 0) return 0;
 		
-		int i = 0;
-		for (int read; (i < b.length) && ((read = in.read()) != -1); i++) {
-			b[i] = (byte) read;
+		int result = 0;
+		
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
+			b[result] = (byte) read;
+			
+			result++;
+			if (result == b.length) break;
 		}
 		
-		if (i == 0) return -1;
-		return i;
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static int readBytewise(InputStream in, byte[] b, int off, int len)
@@ -48,13 +55,59 @@ public class ByteStreamUtil {
 			throw new IndexOutOfBoundsException();
 		if (len == 0) return 0;
 		
-		int i = 0;
-		for (int read; (i < len) && ((read = in.read()) != -1); i++) {
-			b[off + i] = (byte) read;
+		int result = 0;
+		
+		while (true) {
+			int read = in.read();
+			if (read == -1) break;
+			
+			b[off + result] = (byte) read;
+			
+			result++;
+			if (result == len) break;
 		}
 		
-		if (i == 0) return -1;
-		return i;
+		if (result == 0) return -1;
+		return result;
+	}
+	
+	public static int readFully(InputStream in, byte[] b) throws IOException {
+		if (b == null) throw new NullPointerException();
+		if (b.length == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(b, result, b.length - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == b.length) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
+	}
+	
+	public static int readFully(InputStream in, byte[] b, int off, int len)
+			throws IOException {
+		if (b == null) throw new NullPointerException();
+		if ((off < 0) || (len < 0) || (len > (b.length - off)))
+			throw new IndexOutOfBoundsException();
+		if (len == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(b, off + result, len - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == len) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static byte[] readAsByteArray(InputStream in) throws IOException {

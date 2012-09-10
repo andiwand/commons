@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import at.andiwand.commons.lwxml.LWXMLEvent;
-import at.andiwand.commons.lwxml.reader.LWXMLDelegationReader;
+import at.andiwand.commons.lwxml.reader.LWXMLElementDelegationReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 
@@ -15,7 +15,7 @@ public class LWXMLDelegationReaderTest {
 		InputStream inputStream = LWXMLSimpleTranslatorTest.class
 				.getResourceAsStream("test.xml");
 		LWXMLReader lwxmlReader = new LWXMLStreamReader(inputStream);
-		LWXMLDelegationReader in = new LWXMLDelegationReader(lwxmlReader);
+		LWXMLElementDelegationReader in = new LWXMLElementDelegationReader(lwxmlReader);
 		
 		System.out.println(in.readEvent());
 		System.out.println(in.readEvent());

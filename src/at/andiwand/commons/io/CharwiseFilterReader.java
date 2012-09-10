@@ -17,17 +17,17 @@ public abstract class CharwiseFilterReader extends FilterReader {
 	
 	@Override
 	public int read(char[] cbuf) throws IOException {
-		return CharStreamUtil.readCharacterwise(this, cbuf, 0, cbuf.length);
+		return CharStreamUtil.readCharwise(this, cbuf, 0, cbuf.length);
 	}
 	
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return CharStreamUtil.readCharacterwise(this, cbuf, off, len);
+		return CharStreamUtil.readCharwise(this, cbuf, off, len);
 	}
 	
 	@Override
 	public int read(CharBuffer target) throws IOException {
-		return CharStreamUtil.readCharacterwise(this, target);
+		return CharStreamUtil.readCharwise(this, target);
 	}
 	
 	@Override
