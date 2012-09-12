@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
 import at.andiwand.commons.util.iterator.IterableIterator;
@@ -602,14 +603,18 @@ public class CollectionUtil {
 	
 	public static <E extends Comparable<E>> E getGreatest(
 			Collection<? extends E> c) {
+		if (c.isEmpty()) throw new NoSuchElementException();
+		
 		if ((c instanceof List) && (c instanceof RandomAccess))
 			return getGreatest((List<? extends E>) c);
 		
-		E result = null;
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
 		
-		for (E e : c) {
-			if (e == null) continue;
-			if ((result == null) || (e.compareTo(result) > 0)) result = e;
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (element.compareTo(result) > 0) result = element;
 		}
 		
 		return result;
@@ -617,12 +622,11 @@ public class CollectionUtil {
 	
 	private static <E extends Comparable<E>> E getGreatest(
 			List<? extends E> randomAccessList) {
-		E result = null;
+		E result = randomAccessList.get(0);
 		
-		for (int i = 0; i < randomAccessList.size(); i++) {
-			E e = randomAccessList.get(i);
-			if (e == null) continue;
-			if ((result == null) || (e.compareTo(result) > 0)) result = e;
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			E element = randomAccessList.get(i);
+			if (element.compareTo(result) > 0) result = element;
 		}
 		
 		return result;
@@ -630,15 +634,18 @@ public class CollectionUtil {
 	
 	public static <E> E getGreatest(Comparator<? super E> comparator,
 			Collection<? extends E> c) {
+		if (c.isEmpty()) throw new NoSuchElementException();
+		
 		if ((c instanceof List) && (c instanceof RandomAccess))
 			return getGreatest(comparator, (List<? extends E>) c);
 		
-		E result = null;
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
 		
-		for (E e : c) {
-			if (e == null) continue;
-			if ((result == null) || (comparator.compare(e, result) > 0))
-				result = e;
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (comparator.compare(element, result) > 0) result = element;
 		}
 		
 		return result;
@@ -646,18 +653,93 @@ public class CollectionUtil {
 	
 	private static <E> E getGreatest(Comparator<? super E> comparator,
 			List<? extends E> randomAccessList) {
-		E result = null;
+		E result = randomAccessList.get(0);
 		
-		for (int i = 0; i < randomAccessList.size(); i++) {
-			E e = randomAccessList.get(i);
-			if (e == null) continue;
-			if ((result == null) || (comparator.compare(e, result) > 0))
-				result = e;
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			E element = randomAccessList.get(i);
+			if (comparator.compare(element, result) > 0) result = element;
 		}
 		
 		return result;
 	}
 	
+	public static <E extends Comparable<E>> E getGreatestNotNull(
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getGreatestNotNull((List<? extends E>) c);
+		
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
+		
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (element == null) continue;
+			if ((result == null) || (element.compareTo(result) > 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	private static <E extends Comparable<E>> E getGreatestNotNull(
+			List<? extends E> randomAccessList) {
+		E result = null;
+		E element = randomAccessList.get(0);
+		
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			element = randomAccessList.get(i);
+			if (element == null) continue;
+			if ((result == null) || (element.compareTo(result) > 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	public static <E> E getGreatestNotNull(Comparator<? super E> comparator,
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getGreatestNotNull(comparator, (List<? extends E>) c);
+		
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
+		
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (element == null) continue;
+			if ((result == null) || (comparator.compare(element, result) > 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	private static <E> E getGreatestNotNull(Comparator<? super E> comparator,
+			List<? extends E> randomAccessList) {
+		E result = randomAccessList.get(0);
+		E element;
+		
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			element = randomAccessList.get(i);
+			if (element == null) continue;
+			if ((result == null) || (comparator.compare(element, result) > 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	// TODO: fix
 	public static <E extends Comparable<E>> E getSmallest(
 			Collection<? extends E> c) {
 		if ((c instanceof List) && (c instanceof RandomAccess))
