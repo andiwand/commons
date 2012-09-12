@@ -6,6 +6,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.RandomAccess;
 
@@ -13,7 +14,9 @@ import at.andiwand.commons.util.iterator.IterableIterator;
 import at.andiwand.commons.util.iterator.IteratorEnumeration;
 
 
+// TODO: implement swapAll
 // TODO: improve argument names
+// TODO: call method by method, avoid redundant code?
 public class CollectionUtil {
 	
 	public static <E> Iterable<E> getIterable(Iterator<E> iterator) {
@@ -92,6 +95,105 @@ public class CollectionUtil {
 	public static boolean containsAll(Collection<? super Double> c,
 			double... array) {
 		for (int i = 0; i < array.length; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<?> c, Object[] array, int off,
+			int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Boolean> c,
+			boolean[] array, int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Byte> c, byte[] array,
+			int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Character> c,
+			char[] array, int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Short> c,
+			short[] array, int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Integer> c,
+			int[] array, int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Long> c, long[] array,
+			int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Float> c,
+			float[] array, int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			if (!c.contains(array[i])) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean containsAll(Collection<? super Double> c,
+			double[] array, int off, int len) {
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
 			if (!c.contains(array[i])) return false;
 		}
 		
@@ -189,6 +291,114 @@ public class CollectionUtil {
 		return result;
 	}
 	
+	public static <E> boolean addAll(Collection<? super E> c, E[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Boolean> c,
+			boolean[] array, int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Byte> c, byte[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Character> c, char[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Short> c, short[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Integer> c, int[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Long> c, long[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Float> c, float[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean addAll(Collection<? super Double> c, double[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.add(array[i]);
+		}
+		
+		return result;
+	}
+	
 	public static boolean removeAll(Collection<?> c, Object... array) {
 		boolean result = false;
 		
@@ -276,6 +486,114 @@ public class CollectionUtil {
 		boolean result = false;
 		
 		for (int i = 0; i < array.length; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<?> c, Object[] array, int off,
+			int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Byte> c,
+			boolean[] array, int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Byte> c, byte[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Character> c,
+			char[] array, int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Short> c, short[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Integer> c, int[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Long> c, long[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Float> c, float[] array,
+			int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
+			result |= c.remove(array[i]);
+		}
+		
+		return result;
+	}
+	
+	public static boolean removeAll(Collection<? super Double> c,
+			double[] array, int off, int len) {
+		int end = off + len;
+		boolean result = false;
+		
+		for (int i = off; i < end; i++) {
 			result |= c.remove(array[i]);
 		}
 		
@@ -467,6 +785,18 @@ public class CollectionUtil {
 	public static <E> Enumeration<E> enumeration(Collection<? extends E> c) {
 		return new IteratorEnumeration<E>(c.iterator());
 	}
+	
+	public static <E> void swap(List<E> list, int i, int j) {
+		if (list instanceof RandomAccess) {
+			list.set(i, list.set(j, list.get(i)));
+		} else {
+			ListIterator<E> iterator = list.listIterator(i);
+			iterator.set(list.set(j, iterator.next()));
+		}
+	}
+	
+	// TODO: implement swapAll
+	// TODO: implement reverseComperator
 	
 	private CollectionUtil() {}
 	

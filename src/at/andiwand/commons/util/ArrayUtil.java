@@ -6,35 +6,152 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import at.andiwand.commons.util.collection.CollectionUtil;
 import at.andiwand.commons.util.collection.KeyGenerator;
 
 
+// TODO: improve attribute names
+// TODO: implement array methods with offset and length
+// TODO: call method by method, avoid redundant code?
 public class ArrayUtil {
 	
-	public static <T> T getFirstNotNull(T... objects) {
-		for (T object : objects) {
-			if (object != null) return object;
+	public static <E> E getFirstNotNull(E... array) {
+		E element;
+		
+		for (int i = 0; i < array.length; i++) {
+			element = array[i];
+			if (element != null) return element;
 		}
 		
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <T> T[] getNotNullArray(T... objects) {
-		int elements = 0;
+	public static <E> E getFirstNotNull(E[] array, int off, int len) {
+		int end = off + len;
+		E element;
 		
-		for (T object : objects) {
-			if (object != null) elements++;
+		for (int i = off; i < end; i++) {
+			element = array[i];
+			if (element != null) return element;
 		}
 		
-		T[] result = (T[]) Array.newInstance(objects.getClass()
-				.getComponentType(), elements);
+		return null;
+	}
+	
+	public static int getEqualCount(Object object, Object... array) {
+		int result = 0;
 		
-		int i = 0;
-		for (T object : objects) {
-			if (object != null) result[i++] = object;
+		for (int i = 0; i < array.length; i++) {
+			if (object.equals(array[i])) result++;
+		}
+		
+		return result;
+	}
+	
+	public static int getEqualCount(Object object, Object[] array, int off,
+			int len) {
+		int end = off + len;
+		int result = 0;
+		
+		for (int i = off; i < end; i++) {
+			if (object.equals(array[i])) result++;
+		}
+		
+		return result;
+	}
+	
+	public static int getReferenceCount(Object object, Object... array) {
+		int result = 0;
+		
+		for (int i = 0; i < array.length; i++) {
+			if (object == array[i]) result++;
+		}
+		
+		return result;
+	}
+	
+	public static int getReferenceCount(Object object, Object[] array, int off,
+			int len) {
+		int end = off + len;
+		int result = 0;
+		
+		for (int i = off; i < end; i++) {
+			if (object == array[i]) result++;
+		}
+		
+		return result;
+	}
+	
+	public static int getNullCount(Object... array) {
+		int result = 0;
+		
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == null) result++;
+		}
+		
+		return result;
+	}
+	
+	public static int getNullCount(Object[] array, int off, int len) {
+		int end = off + len;
+		int result = 0;
+		
+		for (int i = off; i < end; i++) {
+			if (array[i] == null) result++;
+		}
+		
+		return result;
+	}
+	
+	public static int getNotNullCount(Object... array) {
+		int result = 0;
+		
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] != null) result++;
+		}
+		
+		return result;
+	}
+	
+	public static int getNotNullCount(Object[] array, int off, int len) {
+		int end = off + len;
+		int result = 0;
+		
+		for (int i = off; i < end; i++) {
+			if (array[i] != null) result++;
+		}
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <E> E[] getNotNullArray(E... array) {
+		int resultLength = getNotNullCount(array);
+		E[] result = (E[]) Array.newInstance(array.getClass()
+				.getComponentType(), resultLength);
+		E element;
+		
+		for (int i = 0, j = 0; i < array.length; i++) {
+			element = array[i];
+			if (element != null) result[j++] = element;
+		}
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <E> E[] getNotNullArray(E[] array, int off, int len) {
+		int end = off + len;
+		int resultLength = getNotNullCount(array, off, len);
+		E[] result = (E[]) Array.newInstance(array.getClass()
+				.getComponentType(), resultLength);
+		E element;
+		
+		for (int i = off, j = 0; i < end; i++) {
+			element = array[i];
+			if (element != null) result[j++] = element;
 		}
 		
 		return result;
@@ -94,6 +211,60 @@ public class ArrayUtil {
 		return result;
 	}
 	
+	public static <E> HashSet<E> toHashSet(E[] array, int off, int len) {
+		HashSet<E> result = new HashSet<E>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Boolean> toHashSet(boolean[] array, int off, int len) {
+		HashSet<Boolean> result = new HashSet<Boolean>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Byte> toHashSet(byte[] array, int off, int len) {
+		HashSet<Byte> result = new HashSet<Byte>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Character> toHashSet(char[] array, int off, int len) {
+		HashSet<Character> result = new HashSet<Character>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Short> toHashSet(short[] array, int off, int len) {
+		HashSet<Short> result = new HashSet<Short>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Integer> toHashSet(int[] array, int off, int len) {
+		HashSet<Integer> result = new HashSet<Integer>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Long> toHashSet(long[] array, int off, int len) {
+		HashSet<Long> result = new HashSet<Long>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Float> toHashSet(float[] array, int off, int len) {
+		HashSet<Float> result = new HashSet<Float>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static HashSet<Double> toHashSet(double[] array, int off, int len) {
+		HashSet<Double> result = new HashSet<Double>(len);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
 	public static <E> ArrayList<E> toArrayList(E... array) {
 		ArrayList<E> result = new ArrayList<E>(array.length);
 		CollectionUtil.addAll(result, array);
@@ -148,14 +319,71 @@ public class ArrayUtil {
 		return result;
 	}
 	
+	public static <E> ArrayList<E> toArrayList(E[] array, int off, int len) {
+		ArrayList<E> result = new ArrayList<E>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Boolean> toArrayList(boolean[] array, int off,
+			int len) {
+		ArrayList<Boolean> result = new ArrayList<Boolean>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Byte> toArrayList(byte[] array, int off, int len) {
+		ArrayList<Byte> result = new ArrayList<Byte>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Character> toArrayList(char[] array, int off,
+			int len) {
+		ArrayList<Character> result = new ArrayList<Character>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Short> toArrayList(short[] array, int off, int len) {
+		ArrayList<Short> result = new ArrayList<Short>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Integer> toArrayList(int[] array, int off, int len) {
+		ArrayList<Integer> result = new ArrayList<Integer>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Long> toArrayList(long[] array, int off, int len) {
+		ArrayList<Long> result = new ArrayList<Long>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Float> toArrayList(float[] array, int off, int len) {
+		ArrayList<Float> result = new ArrayList<Float>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
+	public static ArrayList<Double> toArrayList(double[] array, int off, int len) {
+		ArrayList<Double> result = new ArrayList<Double>(array.length);
+		CollectionUtil.addAll(result, array, off, len);
+		return result;
+	}
+	
 	public static <E extends Comparable<E>> E getGreatest(E... array) {
-		E result = null;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			E e = array[i];
-			
-			if (e == null) continue;
-			if ((result == null) || (e.compareTo(result) > 0)) result = e;
+		E result = array[0];
+		E element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element.compareTo(result) > 0) result = element;
 		}
 		
 		return result;
@@ -163,20 +391,55 @@ public class ArrayUtil {
 	
 	public static <E> E getGreatest(Comparator<? super E> comparator,
 			E... array) {
-		E result = null;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			E e = array[i];
-			
-			if (e == null) continue;
-			if ((result == null) || (comparator.compare(e, result) > 0))
-				result = e;
+		E result = array[0];
+		E element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (comparator.compare(element, result) > 0) result = element;
 		}
 		
 		return result;
 	}
 	
+	public static <E extends Comparable<E>> E getGreatestNotNull(E... array) {
+		E result = null;
+		E element;
+		
+		for (int i = 0; i < array.length; i++) {
+			element = array[i];
+			if (element == null) continue;
+			if ((result == null) || (element.compareTo(result) > 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	public static <E> E getGreatestNotNull(Comparator<? super E> comparator,
+			E... array) {
+		E result = null;
+		E element;
+		
+		for (int i = 0; i < array.length; i++) {
+			element = array[i];
+			if (element == null) continue;
+			if ((result == null) || (comparator.compare(element, result) > 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
 	public static boolean getGreatest(boolean... array) {
+		if (array.length == 0) throw new NoSuchElementException();
+		
 		for (int i = 0; i < array.length; i++) {
 			if (array[i]) return true;
 		}
@@ -185,90 +448,112 @@ public class ArrayUtil {
 	}
 	
 	public static byte getGreatest(byte... array) {
-		byte result = Byte.MIN_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Byte.MAX_VALUE) return Byte.MAX_VALUE;
-			if (array[i] > result) result = array[i];
+		byte result = array[0];
+		byte element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element > result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static char getGreatest(char... array) {
-		char result = Character.MIN_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Character.MAX_VALUE) return Character.MAX_VALUE;
-			if (array[i] > result) result = array[i];
+		char result = array[0];
+		char element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element > result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static short getGreatest(short... array) {
-		short result = Short.MIN_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Short.MAX_VALUE) return Short.MAX_VALUE;
-			if (array[i] > result) result = array[i];
+		short result = array[0];
+		short element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element > result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static int getGreatest(int... array) {
-		int result = Integer.MIN_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Integer.MAX_VALUE) return Integer.MAX_VALUE;
-			if (array[i] > result) result = array[i];
+		int result = array[0];
+		int element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element > result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static long getGreatest(long... array) {
-		long result = Long.MIN_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Long.MAX_VALUE) return Long.MAX_VALUE;
-			if (array[i] > result) result = array[i];
+		long result = array[0];
+		long element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element > result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static float getGreatest(float... array) {
-		float result = Float.MIN_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Float.MAX_VALUE) return Float.MAX_VALUE;
-			if (array[i] > result) result = array[i];
+		float result = array[0];
+		float element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element > result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static double getGreatest(double... array) {
-		double result = Double.MIN_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Double.MAX_VALUE) return Double.MAX_VALUE;
-			if (array[i] > result) result = array[i];
+		double result = array[0];
+		double element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element > result) result = element;
 		}
 		
 		return result;
 	}
 	
-	public static <E extends Comparable<E>> E getSmallest(E... array) {
-		E result = null;
+	public static <E extends Comparable<? super E>> E getSmallest(E... array) {
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			E e = array[i];
-			
-			if (e == null) continue;
-			if ((result == null) || (e.compareTo(result) < 0)) result = e;
+		E result = array[0];
+		E element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element.compareTo(result) < 0) result = element;
 		}
 		
 		return result;
@@ -276,20 +561,56 @@ public class ArrayUtil {
 	
 	public static <E> E getSmallest(Comparator<? super E> comparator,
 			E... array) {
-		E result = null;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			E e = array[i];
-			
-			if (e == null) continue;
-			if ((result == null) || (comparator.compare(e, result) < 0))
-				result = e;
+		E result = array[0];
+		E element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (comparator.compare(element, result) < 0) result = element;
 		}
 		
 		return result;
 	}
 	
+	public static <E extends Comparable<? super E>> E getSmallestNotNull(
+			E... array) {
+		E result = null;
+		E element;
+		
+		for (int i = 0; i < array.length; i++) {
+			element = array[i];
+			if (element == null) continue;
+			if ((result == null) || (element.compareTo(result) < 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	public static <E> E getSmallestNotNull(Comparator<? super E> comparator,
+			E... array) {
+		E result = null;
+		E element;
+		
+		for (int i = 0; i < array.length; i++) {
+			element = array[i];
+			if (element == null) continue;
+			if ((result == null) || (comparator.compare(element, result) < 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
 	public static boolean getSmallest(boolean... array) {
+		if (array.length == 0) throw new NoSuchElementException();
+		
 		for (int i = 0; i < array.length; i++) {
 			if (!array[i]) return false;
 		}
@@ -298,77 +619,105 @@ public class ArrayUtil {
 	}
 	
 	public static byte getSmallest(byte... array) {
-		byte result = Byte.MAX_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Byte.MIN_VALUE) return Byte.MIN_VALUE;
-			if (array[i] < result) result = array[i];
+		byte result = array[0];
+		byte element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element == Byte.MIN_VALUE) return Byte.MIN_VALUE;
+			if (element < result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static char getSmallest(char... array) {
-		char result = Character.MAX_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Character.MIN_VALUE) return Character.MIN_VALUE;
-			if (array[i] < result) result = array[i];
+		char result = array[0];
+		char element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element == Character.MIN_VALUE) return Character.MIN_VALUE;
+			if (element < result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static short getSmallest(short... array) {
-		short result = Short.MAX_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Short.MIN_VALUE) return Short.MIN_VALUE;
-			if (array[i] < result) result = array[i];
+		short result = array[0];
+		short element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element == Short.MIN_VALUE) return Short.MIN_VALUE;
+			if (element < result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static int getSmallest(int... array) {
-		int result = Integer.MAX_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Integer.MIN_VALUE) return Integer.MIN_VALUE;
-			if (array[i] < result) result = array[i];
+		int result = array[0];
+		int element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+			if (element < result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static long getSmallest(long... array) {
-		long result = Long.MAX_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Long.MIN_VALUE) return Long.MIN_VALUE;
-			if (array[i] < result) result = array[i];
+		long result = array[0];
+		long element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element == Long.MIN_VALUE) return Long.MIN_VALUE;
+			if (element < result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static float getSmallest(float... array) {
-		float result = Float.MAX_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Float.MIN_VALUE) return Float.MIN_VALUE;
-			if (array[i] < result) result = array[i];
+		float result = array[0];
+		float element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element == Float.MIN_VALUE) return Float.MIN_VALUE;
+			if (element < result) result = element;
 		}
 		
 		return result;
 	}
 	
 	public static double getSmallest(double... array) {
-		double result = Double.MAX_VALUE;
+		if (array.length == 0) throw new NoSuchElementException();
 		
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == Double.MIN_VALUE) return Double.MIN_VALUE;
-			if (array[i] < result) result = array[i];
+		double result = array[0];
+		double element;
+		
+		for (int i = 1; i < array.length; i++) {
+			element = array[i];
+			if (element == Double.MIN_VALUE) return Double.MIN_VALUE;
+			if (element < result) result = element;
 		}
 		
 		return result;
@@ -376,18 +725,24 @@ public class ArrayUtil {
 	
 	public static <K, V> void putAll(Map<? super K, ? super V> map,
 			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
+		V value;
+		K key;
+		
 		for (int i = 0; i < values.length; i++) {
-			V value = values[i];
-			K key = keyGenerator.generateKey(value);
+			value = values[i];
+			key = keyGenerator.generateKey(value);
 			map.put(key, value);
 		}
 	}
 	
 	public static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
 			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
+		V value;
+		K key;
+		
 		for (int i = 0; i < values.length; i++) {
-			V value = values[i];
-			K key = keyGenerator.generateKey(value);
+			value = values[i];
+			key = keyGenerator.generateKey(value);
 			if (key == null) continue;
 			map.put(key, value);
 		}
@@ -414,11 +769,14 @@ public class ArrayUtil {
 		if ((array1 == null) || (array2 == null)) return false;
 		
 		int end1 = off1 + len;
+		Object element1;
+		Object element2;
 		
 		for (int i1 = off1, i2 = off2; i2 < end1; i1++, i2++) {
-			Object o1 = array1[i1];
-			Object o2 = array2[i2];
-			if (!((o1 == null) ? (o2 == null) : o1.equals(o2))) return false;
+			element1 = array1[i1];
+			element2 = array2[i2];
+			if (!((element1 == null) ? (element2 == null) : element1
+					.equals(element2))) return false;
 		}
 		
 		return true;
@@ -536,20 +894,21 @@ public class ArrayUtil {
 		return true;
 	}
 	
-	public static int hashCode(Object[] array) {
+	public static int hashCode(Object... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
+		Object element;
 		
 		for (int i = 0; i < array.length; i++) {
-			result = 31 * result
-					+ ((array[i] == null) ? 0 : array[i].hashCode());
+			element = array[i];
+			result = 31 * result + ((element == null) ? 0 : element.hashCode());
 		}
 		
 		return result;
 	}
 	
-	public static int hashCode(boolean[] array) {
+	public static int hashCode(boolean... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
@@ -561,7 +920,7 @@ public class ArrayUtil {
 		return result;
 	}
 	
-	public static int hashCode(byte[] array) {
+	public static int hashCode(byte... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
@@ -573,7 +932,7 @@ public class ArrayUtil {
 		return result;
 	}
 	
-	public static int hashCode(char[] array) {
+	public static int hashCode(char... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
@@ -585,7 +944,7 @@ public class ArrayUtil {
 		return result;
 	}
 	
-	public static int hashCode(short[] array) {
+	public static int hashCode(short... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
@@ -597,7 +956,7 @@ public class ArrayUtil {
 		return result;
 	}
 	
-	public static int hashCode(int[] array) {
+	public static int hashCode(int... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
@@ -609,20 +968,21 @@ public class ArrayUtil {
 		return result;
 	}
 	
-	public static int hashCode(long[] array) {
+	public static int hashCode(long... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
+		long element;
 		
 		for (int i = 0; i < array.length; i++) {
-			int elementHash = (int) (array[i] ^ (array[i] >>> 32));
-			result = 31 * result + elementHash;
+			element = array[i];
+			result = 31 * result + (int) (element ^ (element >>> 32));
 		}
 		
 		return result;
 	}
 	
-	public static int hashCode(float[] array) {
+	public static int hashCode(float... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
@@ -634,13 +994,14 @@ public class ArrayUtil {
 		return result;
 	}
 	
-	public static int hashCode(double array[]) {
+	public static int hashCode(double... array) {
 		if (array == null) return 0;
 		
 		int result = 1;
+		long bits;
 		
 		for (int i = 0; i < array.length; i++) {
-			long bits = Double.doubleToLongBits(array[i]);
+			bits = Double.doubleToLongBits(array[i]);
 			result = 31 * result + (int) (bits ^ (bits >>> 32));
 		}
 		
@@ -653,10 +1014,11 @@ public class ArrayUtil {
 		
 		int result = 1;
 		int end = off + len;
+		Object element;
 		
 		for (int i = off; i < end; i++) {
-			result = 31 * result
-					+ ((array[i] == null) ? 0 : array[i].hashCode());
+			element = array[i];
+			result = 31 * result + ((element == null) ? 0 : element.hashCode());
 		}
 		
 		return result;
@@ -732,10 +1094,11 @@ public class ArrayUtil {
 		
 		int result = 1;
 		int end = off + len;
+		long element;
 		
 		for (int i = off; i < end; i++) {
-			int elementHash = (int) (array[i] ^ (array[i] >>> 32));
-			result = 31 * result + elementHash;
+			element = array[i];
+			result = 31 * result + (int) (element ^ (element >>> 32));
 		}
 		
 		return result;
@@ -754,18 +1117,262 @@ public class ArrayUtil {
 		return result;
 	}
 	
-	public static int hashCode(double array[], int off, int len) {
+	public static int hashCode(double[] array, int off, int len) {
 		if (array == null) return 0;
 		
 		int result = 1;
 		int end = off + len;
+		long bits;
 		
 		for (int i = off; i < end; i++) {
-			long bits = Double.doubleToLongBits(array[i]);
+			bits = Double.doubleToLongBits(array[i]);
 			result = 31 * result + (int) (bits ^ (bits >>> 32));
 		}
 		
 		return result;
+	}
+	
+	public static void swap(Object[] array, int i, int j) {
+		Object tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(boolean[] array, int i, int j) {
+		boolean tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(byte[] array, int i, int j) {
+		byte tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(char[] array, int i, int j) {
+		char tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(short[] array, int i, int j) {
+		short tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(int[] array, int i, int j) {
+		int tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(long[] array, int i, int j) {
+		long tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(float[] array, int i, int j) {
+		float tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swap(double[] array, int i, int j) {
+		double tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+	
+	public static void swapAll(Object[] array) {
+		Object tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(boolean[] array) {
+		boolean tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(byte[] array) {
+		byte tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(char[] array) {
+		char tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(short[] array) {
+		short tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(int[] array) {
+		int tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(long[] array) {
+		long tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(float[] array) {
+		float tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(double[] array) {
+		double tmp;
+		
+		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(Object[] array, int off, int len) {
+		int last = off + len - 1;
+		Object tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(boolean[] array, int off, int len) {
+		int last = off + len - 1;
+		boolean tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(byte[] array, int off, int len) {
+		int last = off + len - 1;
+		byte tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(char[] array, int off, int len) {
+		int last = off + len - 1;
+		char tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(short[] array, int off, int len) {
+		int last = off + len - 1;
+		short tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(int[] array, int off, int len) {
+		int last = off + len - 1;
+		int tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(long[] array, int off, int len) {
+		int last = off + len - 1;
+		long tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(float[] array, int off, int len) {
+		int last = off + len - 1;
+		float tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	public static void swapAll(double[] array, int off, int len) {
+		int last = off + len - 1;
+		double tmp;
+		
+		for (int i = off, j = last; i < j; i++, j--) {
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
 	}
 	
 	private ArrayUtil() {}
