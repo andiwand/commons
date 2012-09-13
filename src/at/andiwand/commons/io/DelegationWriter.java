@@ -1,14 +1,15 @@
 package at.andiwand.commons.io;
 
-import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
 
-public abstract class DelegationWriter extends FilterWriter {
+public abstract class DelegationWriter extends Writer {
+	
+	protected Writer out;
 	
 	public DelegationWriter(Writer out) {
-		super(out);
+		this.out = out;
 	}
 	
 	@Override

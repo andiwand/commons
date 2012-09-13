@@ -1,6 +1,5 @@
 package at.andiwand.commons.io;
 
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 

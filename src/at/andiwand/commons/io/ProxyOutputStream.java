@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
+// TODO: make use of
 public abstract class ProxyOutputStream extends DelegationOutputStream {
 	
 	public ProxyOutputStream(OutputStream out) {

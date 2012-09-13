@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 
-public class UncloseableReader extends DelegationReader {
+public class UncloseableReader extends FilterReader {
 	
 	public UncloseableReader(Reader in) {
 		super(in);

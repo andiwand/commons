@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-public class UncloseableOutputStream extends DelegationOutputStream {
+public class UncloseableOutputStream extends FilterOutputStream {
 	
 	public UncloseableOutputStream(OutputStream out) {
 		super(out);

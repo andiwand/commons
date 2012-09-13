@@ -104,8 +104,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private LWXMLEvent readNextEventImpl() throws IOException {
 		if (closed) return LWXMLEvent.END_DOCUMENT;
-		if (eventReader != null)
-			CharStreamUtil.flushCharwise(eventReader);
+		if (eventReader != null) CharStreamUtil.flushCharwise(eventReader);
 		
 		if (lastEvent != null) {
 			switch (lastEvent) {

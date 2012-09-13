@@ -1,5 +1,6 @@
 package at.andiwand.commons.io;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,25 +12,24 @@ public class ByteStreamUtil {
 	
 	public static byte readForward(InputStream in) throws IOException {
 		int read = in.read();
-		if (read == -1) throw new IllegalStateException("end of stream");
+		if (read == -1) throw new EOFException();
 		return (byte) read;
 	}
 	
 	public static int readForward(InputStream in, byte[] b) throws IOException {
-		int read = in.read(b);
-		if (read == -1) throw new IllegalStateException("end of stream");
+		int read = readFully(in, b);
+		if (read < b.length) throw new EOFException();
 		return read;
 	}
 	
 	public static int readForward(InputStream in, byte[] b, int off, int len)
 			throws IOException {
-		int read = in.read(b, off, len);
-		if (read == -1) throw new IllegalStateException("end of stream");
+		int read = readFully(in, b, off, len);
+		if (read < len) throw new EOFException();
 		return read;
 	}
 	
 	public static int readBytewise(InputStream in, byte[] b) throws IOException {
-		if (b == null) throw new NullPointerException();
 		if (b.length == 0) return 0;
 		
 		int result = 0;
@@ -50,9 +50,6 @@ public class ByteStreamUtil {
 	
 	public static int readBytewise(InputStream in, byte[] b, int off, int len)
 			throws IOException {
-		if (b == null) throw new NullPointerException();
-		if ((off < 0) || (len < 0) || (len > (b.length - off)))
-			throw new IndexOutOfBoundsException();
 		if (len == 0) return 0;
 		
 		int result = 0;
@@ -72,7 +69,6 @@ public class ByteStreamUtil {
 	}
 	
 	public static int readFully(InputStream in, byte[] b) throws IOException {
-		if (b == null) throw new NullPointerException();
 		if (b.length == 0) return 0;
 		
 		int result = 0;
@@ -91,9 +87,6 @@ public class ByteStreamUtil {
 	
 	public static int readFully(InputStream in, byte[] b, int off, int len)
 			throws IOException {
-		if (b == null) throw new NullPointerException();
-		if ((off < 0) || (len < 0) || (len > (b.length - off)))
-			throw new IndexOutOfBoundsException();
 		if (len == 0) return 0;
 		
 		int result = 0;
@@ -127,10 +120,6 @@ public class ByteStreamUtil {
 	
 	public static void writeBytewise(OutputStream out, byte[] b, int off,
 			int len) throws IOException {
-		if (b == null) throw new NullPointerException();
-		if ((off < 0) || (len < 0) || (len > (b.length - off)))
-			throw new IndexOutOfBoundsException();
-		
 		for (int i = 0; i < len; i++) {
 			out.write(b[off + i]);
 		}

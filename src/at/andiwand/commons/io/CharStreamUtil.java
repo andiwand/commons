@@ -1,5 +1,6 @@
 package at.andiwand.commons.io;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
@@ -19,32 +20,32 @@ public class CharStreamUtil {
 	
 	public static char readForward(Reader in) throws IOException {
 		int read = in.read();
-		if (read == -1) throw new IllegalStateException("end of stream");
+		if (read == -1) throw new EOFException();
 		return (char) read;
 	}
 	
 	public static int readForward(Reader in, char[] cbuf) throws IOException {
-		int read = in.read(cbuf);
-		if (read == -1) throw new IllegalStateException("end of stream");
+		int read = readFully(in, cbuf);
+		if (read < cbuf.length) throw new EOFException();
 		return read;
 	}
 	
 	public static int readForward(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		int read = in.read(cbuf, off, len);
-		if (read == -1) throw new IllegalStateException("end of stream");
+		int read = readFully(in, cbuf, off, len);
+		if (read < len) throw new EOFException();
 		return read;
 	}
 	
 	public static int readForward(Reader in, CharBuffer target)
 			throws IOException {
-		int read = in.read(target);
-		if (read == -1) throw new IllegalStateException("end of stream");
+		int remaining = target.remaining();
+		int read = readFully(in, target);
+		if (read < remaining) throw new EOFException();
 		return read;
 	}
 	
 	public static int readCharwise(Reader in, char[] cbuf) throws IOException {
-		if (cbuf == null) throw new NullPointerException();
 		if (cbuf.length == 0) return 0;
 		
 		int result = 0;
@@ -65,11 +66,6 @@ public class CharStreamUtil {
 	
 	public static int readCharwise(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		if (cbuf == null) throw new NullPointerException();
-		if ((off < 0) || (len < 0) || (len > (cbuf.length - off)))
-			throw new IndexOutOfBoundsException();
-		if (len == 0) return 0;
-		
 		int result = 0;
 		
 		while (true) {
@@ -88,8 +84,6 @@ public class CharStreamUtil {
 	
 	public static int readCharwise(Reader in, CharBuffer target)
 			throws IOException {
-		if (target == null) throw new NullPointerException();
-		
 		int len = target.remaining();
 		if (len == 0) return 0;
 		
@@ -110,9 +104,6 @@ public class CharStreamUtil {
 	}
 	
 	public static int readFully(Reader in, char[] cbuf) throws IOException {
-		if (cbuf == null) throw new NullPointerException();
-		if (cbuf.length == 0) return 0;
-		
 		int result = 0;
 		
 		while (true) {
@@ -129,11 +120,6 @@ public class CharStreamUtil {
 	
 	public static int readFully(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		if (cbuf == null) throw new NullPointerException();
-		if ((off < 0) || (len < 0) || (len > (cbuf.length - off)))
-			throw new IndexOutOfBoundsException();
-		if (len == 0) return 0;
-		
 		int result = 0;
 		
 		while (true) {
@@ -150,8 +136,6 @@ public class CharStreamUtil {
 	
 	public static int readFully(Reader in, CharBuffer target)
 			throws IOException {
-		if (target == null) throw new NullPointerException();
-		
 		int len = target.remaining();
 		if (len == 0) return 0;
 		
@@ -247,8 +231,6 @@ public class CharStreamUtil {
 	
 	public static void writeCharwise(Writer out, char[] cbuf)
 			throws IOException {
-		if (cbuf == null) throw new NullPointerException();
-		
 		for (int i = 0; i < cbuf.length; i++) {
 			out.write(cbuf[i]);
 		}
@@ -256,18 +238,12 @@ public class CharStreamUtil {
 	
 	public static void writeCharwise(Writer out, char[] cbuf, int off, int len)
 			throws IOException {
-		if (cbuf == null) throw new NullPointerException();
-		if ((off < 0) || (len < 0) || (len > (cbuf.length - off)))
-			throw new IndexOutOfBoundsException();
-		
 		for (int i = 0; i < len; i++) {
 			out.write(cbuf[off + i]);
 		}
 	}
 	
 	public static void writeCharwise(Writer out, String str) throws IOException {
-		if (str == null) throw new NullPointerException();
-		
 		for (int i = 0; i < str.length(); i++) {
 			out.write(str.charAt(i));
 		}
@@ -275,12 +251,6 @@ public class CharStreamUtil {
 	
 	public static void writeCharwise(Writer out, String str, int off, int len)
 			throws IOException {
-		if (str == null) throw new NullPointerException();
-		if ((off < 0) || (len < 0) || (len > (str.length() - off)))
-			throw new IndexOutOfBoundsException();
-		
-		if (len < 0) throw new IllegalArgumentException("len is negativ");
-		
 		for (int i = 0; i < len; i++) {
 			out.write(str.charAt(off + i));
 		}
@@ -297,13 +267,6 @@ public class CharStreamUtil {
 	
 	public static void appendCharwise(Writer out, CharSequence csq, int start,
 			int end) throws IOException {
-		if (start < 0)
-			throw new IndexOutOfBoundsException("start cannot be less than 0");
-		if (end < 0)
-			throw new IndexOutOfBoundsException("end cannot be less than 0");
-		if (start > end)
-			throw new IndexOutOfBoundsException(
-					"start cannot be greater than end");
 		if (csq == null) csq = "null";
 		
 		for (int i = start; i < end; i++) {

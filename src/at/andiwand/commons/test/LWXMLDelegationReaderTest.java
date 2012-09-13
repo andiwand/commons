@@ -15,7 +15,8 @@ public class LWXMLDelegationReaderTest {
 		InputStream inputStream = LWXMLSimpleTranslatorTest.class
 				.getResourceAsStream("test.xml");
 		LWXMLReader lwxmlReader = new LWXMLStreamReader(inputStream);
-		LWXMLElementDelegationReader in = new LWXMLElementDelegationReader(lwxmlReader);
+		LWXMLElementDelegationReader in = new LWXMLElementDelegationReader(
+				lwxmlReader);
 		
 		System.out.println(in.readEvent());
 		System.out.println(in.readEvent());

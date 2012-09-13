@@ -1,14 +1,15 @@
 package at.andiwand.commons.io;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 
-public abstract class DelegationInputStream extends FilterInputStream {
+public abstract class DelegationInputStream extends InputStream {
+	
+	protected InputStream in;
 	
 	public DelegationInputStream(InputStream in) {
-		super(in);
+		this.in = in;
 	}
 	
 	@Override

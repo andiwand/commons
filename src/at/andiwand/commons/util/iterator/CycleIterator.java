@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 
 
-public class CycleIterator<E> extends DelegationIterator<E> {
+public class CycleIterator<E> extends SimpleDelegationIterator<E> {
 	
 	private final Collection<? extends E> collection;
 	
