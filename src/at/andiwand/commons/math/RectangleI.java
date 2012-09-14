@@ -1,13 +1,13 @@
 package at.andiwand.commons.math;
 
-public class RectangeI {
+public class RectangleI {
 	
 	private final int left;
 	private final int top;
 	private final int right;
 	private final int bottom;
 	
-	public RectangeI(int left, int top, int right, int bottom) {
+	public RectangleI(int left, int top, int right, int bottom) {
 		this.left = left;
 		this.top = top;
 		this.right = right;
@@ -30,7 +30,7 @@ public class RectangeI {
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		RectangeI other = (RectangeI) obj;
+		RectangleI other = (RectangleI) obj;
 		if (bottom != other.bottom) return false;
 		if (left != other.left) return false;
 		if (right != other.right) return false;
