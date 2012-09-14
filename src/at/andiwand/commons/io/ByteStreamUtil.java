@@ -6,27 +6,44 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
+// TODO: rename readForward(...)
 public class ByteStreamUtil {
 	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
 	
-	public static byte readForward(InputStream in) throws IOException {
-		int read = in.read();
-		if (read == -1) throw new EOFException();
-		return (byte) read;
-	}
-	
 	public static int readForward(InputStream in, byte[] b) throws IOException {
-		int read = readFully(in, b);
-		if (read < b.length) throw new EOFException();
-		return read;
+		if (b.length == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(b, result, b.length - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == b.length) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static int readForward(InputStream in, byte[] b, int off, int len)
 			throws IOException {
-		int read = readFully(in, b, off, len);
-		if (read < len) throw new EOFException();
-		return read;
+		if (len == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(b, off + result, len - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == len) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static int readBytewise(InputStream in, byte[] b) throws IOException {
@@ -68,42 +85,32 @@ public class ByteStreamUtil {
 		return result;
 	}
 	
+	public static byte readFully(InputStream in) throws IOException {
+		int read = in.read();
+		if (read == -1) throw new EOFException();
+		return (byte) read;
+	}
+	
+	public static byte[] readFully(InputStream in, int len) throws IOException {
+		byte[] b = new byte[len];
+		readFully(in, b);
+		return b;
+	}
+	
 	public static int readFully(InputStream in, byte[] b) throws IOException {
-		if (b.length == 0) return 0;
-		
-		int result = 0;
-		
-		while (true) {
-			int read = in.read(b, result, b.length - result);
-			if (read == -1) break;
-			
-			result += read;
-			if (result == b.length) break;
-		}
-		
-		if (result == 0) return -1;
-		return result;
+		int read = readForward(in, b);
+		if (read < b.length) throw new EOFException();
+		return read;
 	}
 	
 	public static int readFully(InputStream in, byte[] b, int off, int len)
 			throws IOException {
-		if (len == 0) return 0;
-		
-		int result = 0;
-		
-		while (true) {
-			int read = in.read(b, off + result, len - result);
-			if (read == -1) break;
-			
-			result += read;
-			if (result == len) break;
-		}
-		
-		if (result == 0) return -1;
-		return result;
+		int read = readForward(in, b, off, len);
+		if (read < len) throw new EOFException();
+		return read;
 	}
 	
-	public static byte[] readAsByteArray(InputStream in) throws IOException {
+	public static byte[] readBytes(InputStream in) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		out.write(in);
 		return out.toByteArray();

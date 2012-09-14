@@ -12,6 +12,11 @@ public class FullyReader extends DelegationReader {
 	}
 	
 	@Override
+	public int read() throws IOException {
+		return CharStreamUtil.readFully(in);
+	}
+	
+	@Override
 	public int read(char[] cbuf) throws IOException {
 		return CharStreamUtil.readFully(in, cbuf);
 	}

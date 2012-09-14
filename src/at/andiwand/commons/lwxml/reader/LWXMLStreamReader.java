@@ -9,7 +9,7 @@ import java.io.Reader;
 import at.andiwand.commons.io.ApplyFilterReader;
 import at.andiwand.commons.io.CharFilter;
 import at.andiwand.commons.io.CharStreamUtil;
-import at.andiwand.commons.io.ForwardReader;
+import at.andiwand.commons.io.FullyReader;
 import at.andiwand.commons.io.UntilCharSequenceReader;
 import at.andiwand.commons.io.UntilFilterReader;
 import at.andiwand.commons.lwxml.LWXMLConstants;
@@ -74,7 +74,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private boolean closed;
 	private final PushbackReader in;
-	private final ForwardReader fin;
+	private final FullyReader fin;
 	
 	private LWXMLEvent lastEvent;
 	
@@ -89,7 +89,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	public LWXMLStreamReader(Reader in) {
 		this.in = new PushbackReader(in, PUSHBACK_BUFFER_SIZE);
-		this.fin = new ForwardReader(this.in);
+		this.fin = new FullyReader(this.in);
 	}
 	
 	@Override

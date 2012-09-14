@@ -14,35 +14,59 @@ import at.andiwand.commons.util.CharSequenceUtil;
 import at.andiwand.commons.util.collection.CharArrayQueue;
 
 
+// TODO: rename readForward(...)
 public class CharStreamUtil {
 	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
 	
-	public static char readForward(Reader in) throws IOException {
-		int read = in.read();
-		if (read == -1) throw new EOFException();
-		return (char) read;
-	}
-	
 	public static int readForward(Reader in, char[] cbuf) throws IOException {
-		int read = readFully(in, cbuf);
-		if (read < cbuf.length) throw new EOFException();
-		return read;
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(cbuf, result, cbuf.length - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == cbuf.length) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static int readForward(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		int read = readFully(in, cbuf, off, len);
-		if (read < len) throw new EOFException();
-		return read;
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(cbuf, off + result, len - result);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == len) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static int readForward(Reader in, CharBuffer target)
 			throws IOException {
-		int remaining = target.remaining();
-		int read = readFully(in, target);
-		if (read < remaining) throw new EOFException();
-		return read;
+		int len = target.remaining();
+		if (len == 0) return 0;
+		
+		int result = 0;
+		
+		while (true) {
+			int read = in.read(target);
+			if (read == -1) break;
+			
+			result += read;
+			if (result == len) break;
+		}
+		
+		if (result == 0) return -1;
+		return result;
 	}
 	
 	public static int readCharwise(Reader in, char[] cbuf) throws IOException {
@@ -103,54 +127,37 @@ public class CharStreamUtil {
 		return result;
 	}
 	
+	public static char readFully(Reader in) throws IOException {
+		int read = in.read();
+		if (read == -1) throw new EOFException();
+		return (char) read;
+	}
+	
+	public static char[] readFully(Reader in, int len) throws IOException {
+		char[] cbuf = new char[len];
+		readFully(in, cbuf);
+		return cbuf;
+	}
+	
 	public static int readFully(Reader in, char[] cbuf) throws IOException {
-		int result = 0;
-		
-		while (true) {
-			int read = in.read(cbuf, result, cbuf.length - result);
-			if (read == -1) break;
-			
-			result += read;
-			if (result == cbuf.length) break;
-		}
-		
-		if (result == 0) return -1;
-		return result;
+		int read = readForward(in, cbuf);
+		if (read < cbuf.length) throw new EOFException();
+		return read;
 	}
 	
 	public static int readFully(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		int result = 0;
-		
-		while (true) {
-			int read = in.read(cbuf, off + result, len - result);
-			if (read == -1) break;
-			
-			result += read;
-			if (result == len) break;
-		}
-		
-		if (result == 0) return -1;
-		return result;
+		int read = readForward(in, cbuf, off, len);
+		if (read < len) throw new EOFException();
+		return read;
 	}
 	
 	public static int readFully(Reader in, CharBuffer target)
 			throws IOException {
-		int len = target.remaining();
-		if (len == 0) return 0;
-		
-		int result = 0;
-		
-		while (true) {
-			int read = in.read(target);
-			if (read == -1) break;
-			
-			result += read;
-			if (result == len) break;
-		}
-		
-		if (result == 0) return -1;
-		return result;
+		int remaining = target.remaining();
+		int read = readForward(in, target);
+		if (read < remaining) throw new EOFException();
+		return read;
 	}
 	
 	public static String readLine(PushbackReader in) throws IOException {

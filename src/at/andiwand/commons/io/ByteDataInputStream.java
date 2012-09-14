@@ -31,19 +31,20 @@ public class ByteDataInputStream extends DelegationInputStream {
 		this.endian = endian;
 	}
 	
+	public byte[] readFully(int len) throws IOException {
+		return ByteStreamUtil.readFully(in, len);
+	}
+	
 	public void readFully(byte[] b) throws IOException {
-		if (ByteStreamUtil.readFully(in, b) < b.length)
-			throw new EOFException();
+		ByteStreamUtil.readFully(in, b);
 	}
 	
 	public void readFully(byte[] b, int off, int len) throws IOException {
-		if (ByteStreamUtil.readFully(in, b, off, len) < len)
-			throw new EOFException();
+		ByteStreamUtil.readFully(in, b, off, len);
 	}
 	
 	private void readDataUnit(int size) throws IOException {
-		if (ByteStreamUtil.readForward(in, maxDataUnit, 0, size) < size)
-			throw new EOFException();
+		ByteStreamUtil.readFully(in, maxDataUnit, 0, size);
 	}
 	
 	public boolean readBoolean() throws IOException {

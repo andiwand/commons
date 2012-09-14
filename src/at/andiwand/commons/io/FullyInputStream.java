@@ -11,6 +11,11 @@ public class FullyInputStream extends DelegationInputStream {
 	}
 	
 	@Override
+	public int read() throws IOException {
+		return ByteStreamUtil.readFully(in);
+	}
+	
+	@Override
 	public int read(byte[] b) throws IOException {
 		return ByteStreamUtil.readFully(in, b);
 	}
