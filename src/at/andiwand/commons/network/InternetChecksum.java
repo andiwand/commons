@@ -6,17 +6,18 @@ public class InternetChecksum {
 		return calculateChecksum(buffer, 0, buffer.length);
 	}
 	
-	public static short calculateChecksum(byte[] buffer, int length) {
-		return calculateChecksum(buffer, 0, length);
+	public static short calculateChecksum(byte[] buffer, int len) {
+		return calculateChecksum(buffer, 0, len);
 	}
 	
-	public static short calculateChecksum(byte[] buffer, int offset, int length) {
-		if ((length & 1) != 0)
-			throw new IllegalArgumentException("Illegal length");
+	public static short calculateChecksum(byte[] buffer, int off, int len) {
+		if ((len & 0x01) != 0)
+			throw new IllegalArgumentException("illegal length");
 		
 		int result = 0;
+		int end = off + len;
 		
-		for (int i = offset; i < offset + length;) {
+		for (int i = off; i < end;) {
 			result += ((buffer[i++] & 0xff) << 8) | ((buffer[i++] & 0xff) << 0);
 		}
 		
