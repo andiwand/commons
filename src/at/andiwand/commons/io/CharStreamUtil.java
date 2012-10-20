@@ -135,7 +135,8 @@ public class CharStreamUtil {
 	
 	public static char[] readFully(Reader in, int len) throws IOException {
 		char[] cbuf = new char[len];
-		readFully(in, cbuf);
+		int read = readFully(in, cbuf);
+		if (read < len) throw new EOFException();
 		return cbuf;
 	}
 	

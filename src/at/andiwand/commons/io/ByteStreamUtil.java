@@ -93,7 +93,8 @@ public class ByteStreamUtil {
 	
 	public static byte[] readFully(InputStream in, int len) throws IOException {
 		byte[] b = new byte[len];
-		readFully(in, b);
+		int read = readFully(in, b);
+		if (read < len) throw new EOFException();
 		return b;
 	}
 	

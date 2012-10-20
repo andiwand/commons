@@ -85,8 +85,8 @@ public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 	}
 	
 	public void unreadEvent(LWXMLEvent event, String value) {
-		if (event.hasValue() != (value != null))
-			throw new IllegalArgumentException("illegal value");
+		if (event.hasValue() && (value == null))
+			throw new IllegalArgumentException("value necessary");
 		if (!eventStack.isEmpty() && !event.isFollowingEvent(eventStack.peek()))
 			throw new LWXMLIllegalFollowerException(eventStack.peek(), event);
 		
