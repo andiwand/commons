@@ -37,7 +37,7 @@ public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 	
 	@Override
 	public LWXMLEvent readEvent() throws IOException {
-		streamReading = eventStack.isEmpty();
+		streamReading = eventStack.size() == 0;
 		
 		if (streamReading) {
 			currentValue = null;
@@ -87,7 +87,8 @@ public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 	public void unreadEvent(LWXMLEvent event, String value) {
 		if (event.hasValue() && (value == null))
 			throw new IllegalArgumentException("value necessary");
-		if (!eventStack.isEmpty() && !event.isFollowingEvent(eventStack.peek()))
+		if ((eventStack.size() != 0)
+				&& !event.isFollowingEvent(eventStack.peek()))
 			throw new LWXMLIllegalFollowerException(eventStack.peek(), event);
 		
 		eventStack.push(event);
