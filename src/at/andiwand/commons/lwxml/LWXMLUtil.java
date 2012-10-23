@@ -13,6 +13,7 @@ import java.util.Set;
 import at.andiwand.commons.lwxml.path.LWXMLNodeIdentifier;
 import at.andiwand.commons.lwxml.path.LWXMLPath;
 import at.andiwand.commons.lwxml.reader.LWXMLBranchReader;
+import at.andiwand.commons.lwxml.reader.LWXMLElementReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 
@@ -25,6 +26,10 @@ public class LWXMLUtil {
 	
 	public static void flushBranch(LWXMLReader in) throws IOException {
 		flush(new LWXMLBranchReader(in));
+	}
+	
+	public static void flushElement(LWXMLReader in) throws IOException {
+		flush(new LWXMLElementReader(in));
 	}
 	
 	public static void flushUntilPath(InputStream in, LWXMLPath path)
