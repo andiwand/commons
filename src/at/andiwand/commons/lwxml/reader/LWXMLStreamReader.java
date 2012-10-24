@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
+import java.util.regex.Pattern;
 
 import at.andiwand.commons.io.ApplyFilterReader;
 import at.andiwand.commons.io.CharFilter;
@@ -192,6 +193,17 @@ public class LWXMLStreamReader extends LWXMLReader {
 			
 			handleCDATA();
 			return LWXMLEvent.CDATA;
+		case 'D':
+			// TODO: remove quick fix
+			char[] buffer2 = new char[6];
+			fin.read(buffer2);
+			if (!"OCTYPE".equals(new String(buffer2)))
+				throw new LWXMLReaderException(
+						"malformed tag: doctype was expected");
+			CharStreamUtil.flushUntilMatch(in, Pattern
+					.compile(".*?(\\[.*\\])?.*>"));
+			
+			return readNextEventImpl();
 		default:
 			throw new LWXMLReaderException(
 					"malformed tag: comment or cdata was expected");
