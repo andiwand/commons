@@ -78,6 +78,8 @@ public class LWXMLUtil {
 				if (matchingIndex > depth) return;
 				
 				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -123,6 +125,8 @@ public class LWXMLUtil {
 				break;
 			case END_ATTRIBUTE_LIST:
 				return null;
+			default:
+				break;
 			}
 		}
 	}
@@ -148,6 +152,8 @@ public class LWXMLUtil {
 				return in.readFollowingValue();
 			case END_DOCUMENT:
 				return null;
+			default:
+				break;
 			}
 		}
 	}
@@ -176,6 +182,8 @@ public class LWXMLUtil {
 				break;
 			case END_DOCUMENT:
 				return result;
+			default:
+				break;
 			}
 		}
 	}
@@ -318,6 +326,8 @@ public class LWXMLUtil {
 		case END_EMPTY_ELEMENT:
 		case END_ELEMENT:
 			return true;
+		default:
+			break;
 		}
 		
 		return false;

@@ -30,6 +30,8 @@ public abstract class LWXMLWriter extends Writer {
 		case START_ELEMENT:
 		case ATTRIBUTE_VALUE:
 			writeEvent(LWXMLEvent.END_ATTRIBUTE_LIST);
+		default:
+			break;
 		}
 	}
 	

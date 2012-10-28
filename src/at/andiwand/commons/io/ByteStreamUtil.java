@@ -114,6 +114,7 @@ public class ByteStreamUtil {
 	public static byte[] readBytes(InputStream in) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		out.write(in);
+		out.close();
 		return out.toByteArray();
 	}
 	

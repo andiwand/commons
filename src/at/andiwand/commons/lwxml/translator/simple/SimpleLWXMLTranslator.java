@@ -80,6 +80,8 @@ public class SimpleLWXMLTranslator extends LWXMLTranslator {
 				out.writeEvent(LWXMLEvent.CHARACTERS);
 				out.write(pin);
 				break;
+			default:
+				break;
 			}
 		}
 	}

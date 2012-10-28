@@ -117,6 +117,8 @@ public class LWXMLStreamReader extends LWXMLReader {
 				return LWXMLEvent.ATTRIBUTE_VALUE;
 			case CHARACTERS:
 				return handleElement();
+			default:
+				break;
 			}
 		}
 		

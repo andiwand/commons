@@ -51,6 +51,8 @@ public class LWXMLStreamReaderTest {
 			case CHARACTERS:
 				System.out.println("characters: " + in.readValue());
 				break;
+			default:
+				break;
 			}
 			
 			System.out.println();
@@ -58,6 +60,8 @@ public class LWXMLStreamReaderTest {
 		
 		long end = System.nanoTime();
 		System.out.println("time: " + ((end - start) / 1000000000d));
+		
+		in.close();
 	}
 	
 }

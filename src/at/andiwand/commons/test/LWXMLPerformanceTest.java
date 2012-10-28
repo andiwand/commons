@@ -42,6 +42,7 @@ public class LWXMLPerformanceTest {
 		}
 		
 		end = System.nanoTime();
+		lwxmlReader.close();
 		System.out.println("my time: " + (end - start) / 1000000000d);
 		System.out.println(eventCount);
 		

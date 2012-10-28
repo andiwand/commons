@@ -234,6 +234,7 @@ public class CharStreamUtil {
 	public static String readAsString(Reader in) throws IOException {
 		CharArrayWriter out = new CharArrayWriter();
 		out.write(in);
+		out.close();
 		return out.toString();
 	}
 	

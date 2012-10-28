@@ -19,6 +19,8 @@ public class FluidInputStreamReaderTest {
 				charsetName);
 		
 		System.out.println((char) reader.read());
+		
+		reader.close();
 	}
 	
 }

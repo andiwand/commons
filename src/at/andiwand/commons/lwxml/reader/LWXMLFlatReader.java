@@ -51,6 +51,8 @@ public class LWXMLFlatReader extends LWXMLDelegationReader<LWXMLReader> {
 				}
 				
 				break;
+			default:
+				break;
 			}
 			
 			if (depth <= 0) break;

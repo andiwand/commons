@@ -58,6 +58,8 @@ public class LWXMLStreamWriter extends LWXMLWriter {
 		case CDATA:
 			out.write("]]>");
 			break;
+		default:
+			break;
 		}
 		
 		eventWritten = true;
