@@ -3,14 +3,15 @@ package at.andiwand.commons.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
-import java.util.Deque;
 import java.util.LinkedList;
 
 
 // TODO: optimize
 public class UnlimitedPushbackInputStream extends PushbackInputStream {
 	
-	private Deque<Byte> buffer = new LinkedList<Byte>();
+	// removed Deque because of Android 1.6
+	//	private Deque<Byte> buffer = new LinkedList<Byte>();
+	private LinkedList<Byte> buffer = new LinkedList<Byte>();
 	
 	public UnlimitedPushbackInputStream(InputStream in) {
 		super(in);
@@ -19,7 +20,7 @@ public class UnlimitedPushbackInputStream extends PushbackInputStream {
 	@Override
 	public int read() throws IOException {
 		if (buffer.isEmpty()) return super.read();
-		else return buffer.remove();
+		else return buffer.removeFirst();
 	}
 	
 	@Override
@@ -42,20 +43,20 @@ public class UnlimitedPushbackInputStream extends PushbackInputStream {
 	
 	@Override
 	public void unread(int b) throws IOException {
-		buffer.offer((byte) b);
+		buffer.addLast((byte) b);
 	}
 	
 	@Override
 	public void unread(byte[] b) throws IOException {
 		for (byte i : b) {
-			buffer.offer(i);
+			buffer.addLast(i);
 		}
 	}
 	
 	@Override
 	public void unread(byte[] b, int off, int len) throws IOException {
 		for (int i = off; i < (off + len); i++) {
-			buffer.offer(b[i]);
+			buffer.addLast(b[i]);
 		}
 	}
 	

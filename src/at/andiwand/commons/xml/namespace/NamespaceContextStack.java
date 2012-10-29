@@ -1,6 +1,5 @@
 package at.andiwand.commons.xml.namespace;
 
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -8,14 +7,16 @@ import java.util.LinkedList;
 // TODO: improve
 public class NamespaceContextStack implements NamespaceContext {
 	
-	private Deque<NamespaceContextMap> contextStack = new LinkedList<NamespaceContextMap>();
+	// removed Deque because of Android 1.6
+	//	private Deque<NamespaceContextMap> contextStack = new LinkedList<NamespaceContextMap>();
+	private LinkedList<NamespaceContextMap> contextStack = new LinkedList<NamespaceContextMap>();
 	
 	public NamespaceContextStack() {
 		push();
 	}
 	
 	private NamespaceContextMap peek() {
-		return contextStack.peekFirst();
+		return contextStack.getFirst();
 	}
 	
 	@Override
@@ -46,14 +47,14 @@ public class NamespaceContextStack implements NamespaceContext {
 	}
 	
 	public void push() {
-		contextStack.push(new NamespaceContextMap(peek()));
+		contextStack.addFirst(new NamespaceContextMap(peek()));
 	}
 	
 	public void pop() {
 		if (contextStack.size() == 1)
 			throw new IllegalStateException("removing root is illegal");
 		
-		contextStack.pop();
+		contextStack.removeFirst();
 	}
 	
 }

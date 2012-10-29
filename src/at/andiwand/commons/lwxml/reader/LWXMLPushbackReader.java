@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.CharBuffer;
-import java.util.Deque;
 import java.util.LinkedList;
 
 import at.andiwand.commons.io.ClosedReader;
@@ -16,8 +15,11 @@ import at.andiwand.commons.lwxml.LWXMLIllegalFollowerException;
 // TODO: improve exception handling
 public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 	
-	private Deque<LWXMLEvent> eventStack = new LinkedList<LWXMLEvent>();
-	private Deque<String> valueStack = new LinkedList<String>();
+	// removed Deque because of Android 1.6
+	//	private Deque<LWXMLEvent> eventStack = new LinkedList<LWXMLEvent>();
+	//	private Deque<String> valueStack = new LinkedList<String>();
+	private LinkedList<LWXMLEvent> eventStack = new LinkedList<LWXMLEvent>();
+	private LinkedList<String> valueStack = new LinkedList<String>();
 	
 	private LWXMLEvent currentEvent;
 	private String currentValue;
@@ -50,10 +52,10 @@ public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 			currentEvent = tmp;
 			valueReader = in;
 		} else {
-			currentEvent = eventStack.pop();
+			currentEvent = eventStack.removeFirst();
 			
 			if (currentEvent.hasValue()) {
-				currentValue = valueStack.pop();
+				currentValue = valueStack.removeFirst();
 				
 				if (currentValue != null) {
 					valueReader = new StringReader(currentValue);
@@ -72,8 +74,8 @@ public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 	}
 	
 	public void unreadEvent() {
-		eventStack.push(currentEvent);
-		if (currentEvent.hasValue()) valueStack.push(null);
+		eventStack.addFirst(currentEvent);
+		if (currentEvent.hasValue()) valueStack.addFirst(null);
 	}
 	
 	public void unreadEvent(LWXMLEvent event) {
@@ -88,11 +90,12 @@ public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
 		if (event.hasValue() && (value == null))
 			throw new IllegalArgumentException("value necessary");
 		if ((eventStack.size() != 0)
-				&& !event.isFollowingEvent(eventStack.peek()))
-			throw new LWXMLIllegalFollowerException(eventStack.peek(), event);
+				&& !event.isFollowingEvent(eventStack.getFirst()))
+			throw new LWXMLIllegalFollowerException(eventStack.getFirst(),
+					event);
 		
-		eventStack.push(event);
-		if (event.hasValue()) valueStack.push(value);
+		eventStack.addFirst(event);
+		if (event.hasValue()) valueStack.addFirst(value);
 	}
 	
 	public LWXMLEvent touchEvent() throws IOException {
