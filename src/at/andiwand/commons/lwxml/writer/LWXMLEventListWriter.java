@@ -2,7 +2,6 @@ package at.andiwand.commons.lwxml.writer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,8 +15,11 @@ import at.andiwand.commons.lwxml.reader.LWXMLReader;
 // TODO: implement reader
 public class LWXMLEventListWriter extends LWXMLWriter {
 	
-	private Deque<LWXMLEvent> eventList = new LinkedList<LWXMLEvent>();
-	private Deque<String> valueList = new LinkedList<String>();
+	// removed Deque because of Android 1.6
+	//	private Deque<LWXMLEvent> eventList = new LinkedList<LWXMLEvent>();
+	//	private Deque<String> valueList = new LinkedList<String>();
+	private LinkedList<LWXMLEvent> eventList = new LinkedList<LWXMLEvent>();
+	private LinkedList<String> valueList = new LinkedList<String>();
 	private CharArrayWriter valueWriter = new CharArrayWriter();
 	
 	private LWXMLEvent lastEvent;

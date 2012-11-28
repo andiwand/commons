@@ -3,11 +3,11 @@ package at.andiwand.commons.util.iterator;
 import java.util.Iterator;
 
 
-public abstract class DelegationIterator<E> extends AbstractIterator<E> {
+public abstract class DelegationIterator<E1, E2> extends AbstractIterator<E2> {
 	
-	protected Iterator<? extends E> iterator;
+	protected Iterator<? extends E1> iterator;
 	
-	public DelegationIterator(Iterator<? extends E> iterator) {
+	public DelegationIterator(Iterator<? extends E1> iterator) {
 		this.iterator = iterator;
 	}
 	
@@ -17,9 +17,7 @@ public abstract class DelegationIterator<E> extends AbstractIterator<E> {
 	}
 	
 	@Override
-	public E next() {
-		return iterator.next();
-	}
+	public abstract E2 next();
 	
 	public void remove() {
 		iterator.remove();

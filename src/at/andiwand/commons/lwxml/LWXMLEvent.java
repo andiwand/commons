@@ -7,42 +7,52 @@ import at.andiwand.commons.util.ArrayUtil;
 
 public enum LWXMLEvent {
 	
+	START_DOCUMENT(false),
+	END_DOCUMENT(false),
+	
 	PROCESSING_INSTRUCTION_TARGET(true),
 	PROCESSING_INSTRUCTION_DATA(true),
+	
 	COMMENT(true),
+	CDATA(true),
+	
+	CHARACTERS(true),
+	
 	START_ELEMENT(true),
 	END_EMPTY_ELEMENT(false),
 	END_ELEMENT(true),
+	
 	ATTRIBUTE_NAME(true),
 	ATTRIBUTE_VALUE(true),
-	END_ATTRIBUTE_LIST(false),
-	CHARACTERS(true),
-	CDATA(true),
-	START_DOCUMENT(false),
-	END_DOCUMENT(false);
+	END_ATTRIBUTE_LIST(false);
 	
 	static {
-		Set<LWXMLEvent> tmp = ArrayUtil.toHashSet(
+		Set<LWXMLEvent> defaultFollowers = ArrayUtil.toHashSet(
 				PROCESSING_INSTRUCTION_TARGET, COMMENT, START_ELEMENT,
 				END_ELEMENT, CHARACTERS, CDATA, END_DOCUMENT);
 		
+		START_DOCUMENT.setFollowingEvents(PROCESSING_INSTRUCTION_TARGET,
+				COMMENT, START_ELEMENT, CHARACTERS, CDATA, END_DOCUMENT);
+		END_DOCUMENT.setFollowingEvents();
+		
 		PROCESSING_INSTRUCTION_TARGET
 				.setFollowingEvents(PROCESSING_INSTRUCTION_DATA);
-		PROCESSING_INSTRUCTION_DATA.setFollowingEvents(tmp);
-		COMMENT.setFollowingEvents(tmp);
+		PROCESSING_INSTRUCTION_DATA.setFollowingEvents(defaultFollowers);
+		
+		CHARACTERS.setFollowingEvents(defaultFollowers);
+		
+		COMMENT.setFollowingEvents(defaultFollowers);
+		CDATA.setFollowingEvents(defaultFollowers);
+		
 		START_ELEMENT.setFollowingEvents(ATTRIBUTE_NAME, END_ATTRIBUTE_LIST);
-		END_EMPTY_ELEMENT.setFollowingEvents(tmp);
-		END_ELEMENT.setFollowingEvents(tmp);
+		END_EMPTY_ELEMENT.setFollowingEvents(defaultFollowers);
+		END_ELEMENT.setFollowingEvents(defaultFollowers);
+		
 		ATTRIBUTE_NAME.setFollowingEvents(ATTRIBUTE_VALUE);
 		ATTRIBUTE_VALUE.setFollowingEvents(ATTRIBUTE_NAME, END_ATTRIBUTE_LIST);
 		END_ATTRIBUTE_LIST.setFollowingEvents(PROCESSING_INSTRUCTION_TARGET,
 				COMMENT, START_ELEMENT, END_EMPTY_ELEMENT, END_ELEMENT,
 				CHARACTERS, CDATA, END_DOCUMENT);
-		CHARACTERS.setFollowingEvents(tmp);
-		CDATA.setFollowingEvents(tmp);
-		START_DOCUMENT.setFollowingEvents(PROCESSING_INSTRUCTION_TARGET,
-				COMMENT, START_ELEMENT, CHARACTERS, CDATA, END_DOCUMENT);
-		END_DOCUMENT.setFollowingEvents();
 		
 		for (LWXMLEvent event : values()) {
 			if (event.followingEvents.size() != 1) continue;

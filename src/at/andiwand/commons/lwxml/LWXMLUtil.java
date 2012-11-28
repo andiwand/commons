@@ -13,6 +13,7 @@ import java.util.Set;
 import at.andiwand.commons.lwxml.path.LWXMLNodeIdentifier;
 import at.andiwand.commons.lwxml.path.LWXMLPath;
 import at.andiwand.commons.lwxml.reader.LWXMLBranchReader;
+import at.andiwand.commons.lwxml.reader.LWXMLElementReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 
@@ -25,6 +26,10 @@ public class LWXMLUtil {
 	
 	public static void flushBranch(LWXMLReader in) throws IOException {
 		flush(new LWXMLBranchReader(in));
+	}
+	
+	public static void flushElement(LWXMLReader in) throws IOException {
+		flush(new LWXMLElementReader(in));
 	}
 	
 	public static void flushUntilPath(InputStream in, LWXMLPath path)
@@ -73,6 +78,8 @@ public class LWXMLUtil {
 				if (matchingIndex > depth) return;
 				
 				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -118,6 +125,8 @@ public class LWXMLUtil {
 				break;
 			case END_ATTRIBUTE_LIST:
 				return null;
+			default:
+				break;
 			}
 		}
 	}
@@ -143,6 +152,8 @@ public class LWXMLUtil {
 				return in.readFollowingValue();
 			case END_DOCUMENT:
 				return null;
+			default:
+				break;
 			}
 		}
 	}
@@ -171,6 +182,8 @@ public class LWXMLUtil {
 				break;
 			case END_DOCUMENT:
 				return result;
+			default:
+				break;
 			}
 		}
 	}
@@ -313,6 +326,8 @@ public class LWXMLUtil {
 		case END_EMPTY_ELEMENT:
 		case END_ELEMENT:
 			return true;
+		default:
+			break;
 		}
 		
 		return false;

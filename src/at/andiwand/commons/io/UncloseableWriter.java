@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 
-public class UncloseableWriter extends DelegationWriter {
+public class UncloseableWriter extends FilterWriter {
 	
 	public UncloseableWriter(Writer out) {
 		super(out);

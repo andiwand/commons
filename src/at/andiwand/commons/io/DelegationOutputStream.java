@@ -1,14 +1,15 @@
 package at.andiwand.commons.io;
 
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 
-public abstract class DelegationOutputStream extends FilterOutputStream {
+public abstract class DelegationOutputStream extends OutputStream {
+	
+	protected OutputStream out;
 	
 	public DelegationOutputStream(OutputStream out) {
-		super(out);
+		this.out = out;
 	}
 	
 	@Override

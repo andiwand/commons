@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.nio.CharBuffer;
 
 
+// TODO: make use of
 public class ProxyReader extends DelegationReader {
 	
 	public ProxyReader(Reader in) {

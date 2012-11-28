@@ -14,6 +14,8 @@ public class TeeInputStreamTest {
 				System.out);
 		
 		teeInputStream.read(new byte[array.length]);
+		
+		teeInputStream.close();
 	}
 	
 }

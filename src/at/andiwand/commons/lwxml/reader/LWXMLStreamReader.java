@@ -5,11 +5,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
+import java.util.regex.Pattern;
 
 import at.andiwand.commons.io.ApplyFilterReader;
 import at.andiwand.commons.io.CharFilter;
 import at.andiwand.commons.io.CharStreamUtil;
-import at.andiwand.commons.io.ForwardReader;
+import at.andiwand.commons.io.FullyReader;
 import at.andiwand.commons.io.UntilCharSequenceReader;
 import at.andiwand.commons.io.UntilFilterReader;
 import at.andiwand.commons.lwxml.LWXMLConstants;
@@ -74,7 +75,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private boolean closed;
 	private final PushbackReader in;
-	private final ForwardReader fin;
+	private final FullyReader fin;
 	
 	private LWXMLEvent lastEvent;
 	
@@ -89,7 +90,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	public LWXMLStreamReader(Reader in) {
 		this.in = new PushbackReader(in, PUSHBACK_BUFFER_SIZE);
-		this.fin = new ForwardReader(this.in);
+		this.fin = new FullyReader(this.in);
 	}
 	
 	@Override
@@ -104,8 +105,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private LWXMLEvent readNextEventImpl() throws IOException {
 		if (closed) return LWXMLEvent.END_DOCUMENT;
-		if (eventReader != null)
-			CharStreamUtil.flushCharwise(eventReader);
+		if (eventReader != null) CharStreamUtil.flushCharwise(eventReader);
 		
 		if (lastEvent != null) {
 			switch (lastEvent) {
@@ -117,6 +117,8 @@ public class LWXMLStreamReader extends LWXMLReader {
 				return LWXMLEvent.ATTRIBUTE_VALUE;
 			case CHARACTERS:
 				return handleElement();
+			default:
+				break;
 			}
 		}
 		
@@ -193,6 +195,17 @@ public class LWXMLStreamReader extends LWXMLReader {
 			
 			handleCDATA();
 			return LWXMLEvent.CDATA;
+		case 'D':
+			// TODO: remove quick fix
+			char[] buffer2 = new char[6];
+			fin.read(buffer2);
+			if (!"OCTYPE".equals(new String(buffer2)))
+				throw new LWXMLReaderException(
+						"malformed tag: doctype was expected");
+			CharStreamUtil.flushUntilMatch(in, Pattern
+					.compile(".*?(\\[.*\\])?.*>"));
+			
+			return readNextEventImpl();
 		default:
 			throw new LWXMLReaderException(
 					"malformed tag: comment or cdata was expected");

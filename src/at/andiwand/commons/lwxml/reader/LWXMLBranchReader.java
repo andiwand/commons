@@ -41,6 +41,8 @@ public class LWXMLBranchReader extends LWXMLDelegationReader<LWXMLReader> {
 		case END_DOCUMENT:
 			closed = true;
 			return event;
+		default:
+			break;
 		}
 		
 		if (depth < 0) {

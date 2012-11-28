@@ -3,17 +3,16 @@ package at.andiwand.commons.util.comparator;
 import java.util.Comparator;
 
 
-public class ReverseComparator<T> implements Comparator<T> {
+public class ReverseComparator<T> extends SimpleHybridDelegationComparator<T> {
 	
-	private final Comparator<? super T> comparator;
+	public ReverseComparator() {}
 	
 	public ReverseComparator(Comparator<? super T> comparator) {
-		this.comparator = (Comparator<? super T>) comparator;
+		super(comparator);
 	}
 	
-	@Override
 	public int compare(T o1, T o2) {
-		return -comparator.compare(o1, o2);
+		return -super.compare(o1, o2);
 	}
 	
 }

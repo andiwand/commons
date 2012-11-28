@@ -47,6 +47,8 @@ public class LWXMLElementReader extends LWXMLDelegationReader<LWXMLReader> {
 		case END_DOCUMENT:
 			closed = true;
 			return event;
+		default:
+			break;
 		}
 		
 		first = false;

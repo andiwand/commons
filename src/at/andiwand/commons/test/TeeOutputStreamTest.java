@@ -14,6 +14,8 @@ public class TeeOutputStreamTest {
 		
 		teeOutputStream.write("hallo welt!".getBytes());
 		teeOutputStream.flush();
+		
+		teeOutputStream.close();
 	}
 	
 }

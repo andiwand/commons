@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 
+// TODO: make use of
 public abstract class ProxyWriter extends DelegationWriter {
 	
 	public ProxyWriter(Writer out) {

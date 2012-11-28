@@ -3,14 +3,15 @@ package at.andiwand.commons.io;
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
-import java.util.Deque;
 import java.util.LinkedList;
 
 
 // TODO: optimize
 public class UnlimitedPushbackReader extends PushbackReader {
 	
-	private Deque<Character> buffer = new LinkedList<Character>();
+	// removed Deque because of Android 1.6
+	//	private Deque<Character> buffer = new LinkedList<Character>();
+	private LinkedList<Character> buffer = new LinkedList<Character>();
 	
 	public UnlimitedPushbackReader(Reader in) {
 		super(in);
@@ -19,7 +20,7 @@ public class UnlimitedPushbackReader extends PushbackReader {
 	@Override
 	public int read() throws IOException {
 		if (buffer.isEmpty()) return super.read();
-		else return buffer.remove();
+		else return buffer.removeFirst();
 	}
 	
 	@Override
@@ -43,20 +44,20 @@ public class UnlimitedPushbackReader extends PushbackReader {
 	
 	@Override
 	public void unread(int c) throws IOException {
-		buffer.offer((char) c);
+		buffer.addLast((char) c);
 	}
 	
 	@Override
 	public void unread(char[] cbuf) throws IOException {
 		for (char c : cbuf) {
-			buffer.offer(c);
+			buffer.addLast(c);
 		}
 	}
 	
 	@Override
 	public void unread(char[] cbuf, int off, int len) throws IOException {
 		for (int i = off; i < (off + len); i++) {
-			buffer.offer(cbuf[i]);
+			buffer.addLast(cbuf[i]);
 		}
 	}
 	

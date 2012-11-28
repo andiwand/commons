@@ -15,7 +15,6 @@ import at.andiwand.commons.util.iterator.IterableIterator;
 import at.andiwand.commons.util.iterator.IteratorEnumeration;
 
 
-// TODO: implement swapAll
 // TODO: improve argument names
 // TODO: call method by method, avoid redundant code?
 public class CollectionUtil {
@@ -739,17 +738,20 @@ public class CollectionUtil {
 		return result;
 	}
 	
-	// TODO: fix
 	public static <E extends Comparable<E>> E getSmallest(
 			Collection<? extends E> c) {
+		if (c.isEmpty()) throw new NoSuchElementException();
+		
 		if ((c instanceof List) && (c instanceof RandomAccess))
 			return getSmallest((List<? extends E>) c);
 		
-		E result = null;
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
 		
-		for (E e : c) {
-			if (e == null) continue;
-			if ((result == null) || (e.compareTo(result) < 0)) result = e;
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (element.compareTo(result) < 0) result = element;
 		}
 		
 		return result;
@@ -757,12 +759,11 @@ public class CollectionUtil {
 	
 	private static <E extends Comparable<E>> E getSmallest(
 			List<? extends E> randomAccessList) {
-		E result = null;
+		E result = randomAccessList.get(0);
 		
-		for (int i = 0; i < randomAccessList.size(); i++) {
-			E e = randomAccessList.get(i);
-			if (e == null) continue;
-			if ((result == null) || (e.compareTo(result) < 0)) result = e;
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			E element = randomAccessList.get(i);
+			if (element.compareTo(result) < 0) result = element;
 		}
 		
 		return result;
@@ -770,15 +771,18 @@ public class CollectionUtil {
 	
 	public static <E> E getSmallest(Comparator<? super E> comparator,
 			Collection<? extends E> c) {
+		if (c.isEmpty()) throw new NoSuchElementException();
+		
 		if ((c instanceof List) && (c instanceof RandomAccess))
 			return getSmallest(comparator, (List<? extends E>) c);
 		
-		E result = null;
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
 		
-		for (E e : c) {
-			if (e == null) continue;
-			if ((result == null) || (comparator.compare(e, result) < 0))
-				result = e;
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (comparator.compare(element, result) < 0) result = element;
 		}
 		
 		return result;
@@ -786,14 +790,88 @@ public class CollectionUtil {
 	
 	private static <E> E getSmallest(Comparator<? super E> comparator,
 			List<? extends E> randomAccessList) {
-		E result = null;
+		E result = randomAccessList.get(0);
 		
-		for (int i = 0; i < randomAccessList.size(); i++) {
-			E e = randomAccessList.get(i);
-			if (e == null) continue;
-			if ((result == null) || (comparator.compare(e, result) < 0))
-				result = e;
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			E element = randomAccessList.get(i);
+			if (comparator.compare(element, result) < 0) result = element;
 		}
+		
+		return result;
+	}
+	
+	public static <E extends Comparable<E>> E getSmallestNotNull(
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getSmallestNotNull((List<? extends E>) c);
+		
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
+		
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (element == null) continue;
+			if ((result == null) || (element.compareTo(result) < 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	private static <E extends Comparable<E>> E getSmallestNotNull(
+			List<? extends E> randomAccessList) {
+		E result = null;
+		E element = randomAccessList.get(0);
+		
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			element = randomAccessList.get(i);
+			if (element == null) continue;
+			if ((result == null) || (element.compareTo(result) < 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	public static <E> E getSmallestNotNull(Comparator<? super E> comparator,
+			Collection<? extends E> c) {
+		if ((c instanceof List) && (c instanceof RandomAccess))
+			return getSmallestNotNull(comparator, (List<? extends E>) c);
+		
+		Iterator<? extends E> iterator = c.iterator();
+		E result = iterator.next();
+		E element;
+		
+		while (iterator.hasNext()) {
+			element = iterator.next();
+			if (element == null) continue;
+			if ((result == null) || (comparator.compare(element, result) < 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
+		
+		return result;
+	}
+	
+	private static <E> E getSmallestNotNull(Comparator<? super E> comparator,
+			List<? extends E> randomAccessList) {
+		E result = randomAccessList.get(0);
+		E element;
+		
+		for (int i = 1; i < randomAccessList.size(); i++) {
+			element = randomAccessList.get(i);
+			if (element == null) continue;
+			if ((result == null) || (comparator.compare(element, result) < 0))
+				result = element;
+		}
+		
+		if (result == null) throw new NoSuchElementException();
 		
 		return result;
 	}
@@ -877,8 +955,43 @@ public class CollectionUtil {
 		}
 	}
 	
-	// TODO: implement swapAll
-	// TODO: implement reverseComperator
+	public static <E> void swapAll(List<E> list) {
+		if (list instanceof RandomAccess) {
+			for (int i = 0, j = list.size() - 1; i < j; i++, j--) {
+				list.set(i, list.set(j, list.get(i)));
+			}
+		} else {
+			ListIterator<E> iteratorI = list.listIterator();
+			ListIterator<E> iteratorJ = list.listIterator(list.size());
+			E tmp;
+			
+			while (iteratorI.nextIndex() < iteratorJ.nextIndex()) {
+				tmp = iteratorI.next();
+				iteratorI.set(iteratorJ.previous());
+				iteratorJ.set(tmp);
+			}
+		}
+	}
+	
+	public static <E> void swapAll(List<E> list, int off, int len) {
+		if (list instanceof RandomAccess) {
+			int last = off + len - 1;
+			for (int i = off, j = last; i < j; i++, j--) {
+				list.set(i, list.set(j, list.get(i)));
+			}
+		} else {
+			int end = off + len;
+			ListIterator<E> iteratorI = list.listIterator(off);
+			ListIterator<E> iteratorJ = list.listIterator(end);
+			E tmp;
+			
+			while (iteratorI.nextIndex() < iteratorJ.nextIndex()) {
+				tmp = iteratorI.next();
+				iteratorI.set(iteratorJ.previous());
+				iteratorJ.set(tmp);
+			}
+		}
+	}
 	
 	private CollectionUtil() {}
 	

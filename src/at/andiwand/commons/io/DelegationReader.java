@@ -1,15 +1,16 @@
 package at.andiwand.commons.io;
 
-import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
 
-public abstract class DelegationReader extends FilterReader {
+public abstract class DelegationReader extends Reader {
+	
+	protected Reader in;
 	
 	public DelegationReader(Reader in) {
-		super(in);
+		this.in = in;
 	}
 	
 	@Override
