@@ -30,6 +30,9 @@ public enum MetricPrefix implements UnitPrefix {
 	ZEPTO(-21, "z"),
 	YOCTO(-24, "y");
 	
+	public static final int BASE = 10;
+	public static final BigDecimal BIG_BASE = BigDecimal.TEN;
+	
 	private static final KeyGenerator<String, MetricPrefix> KEY_GENERATOR = new KeyGenerator<String, MetricPrefix>() {
 		@Override
 		public String generateKey(MetricPrefix value) {
