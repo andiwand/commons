@@ -177,7 +177,7 @@ public class LWXMLUtil {
 			
 			switch (event) {
 			case ATTRIBUTE_NAME:
-				if (!in.readValue().equals(attributeName))
+				if (in.readValue().equals(attributeName))
 					result.add(in.readFollowingValue());
 				break;
 			case END_DOCUMENT:
