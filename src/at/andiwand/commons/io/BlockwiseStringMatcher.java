@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import at.andiwand.commons.util.CharArrayCharSequence;
+import at.andiwand.commons.util.CharSequenceArray;
 import at.andiwand.commons.util.CharSequenceWraper;
 import at.andiwand.commons.util.collection.OrderedPair;
 
@@ -165,7 +165,7 @@ public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
 		if (buffer == null) buffer = new char[bufferSize];
 		
 		int read = CharStreamUtil.readForward(in, buffer);
-		CharSequence charSequence = new CharArrayCharSequence(buffer, 0, read);
+		CharSequence charSequence = new CharSequenceArray(buffer, 0, read);
 		
 		return get(charSequence);
 	}
