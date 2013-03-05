@@ -17,6 +17,16 @@ import at.andiwand.commons.util.collection.KeyGenerator;
 // TODO: call method by method, avoid redundant code?
 public class ArrayUtil {
 	
+	public static final boolean[] EMPTY_BOOLEAN_ARRAY = {};
+	public static final byte[] EMPTY_BYTE_ARRAY = {};
+	public static final char[] EMPTY_CHAR_ARRAY = {};
+	public static final short[] EMPTY_SHORT_ARRAY = {};
+	public static final int[] EMPTY_INT_ARRAY = {};
+	public static final long[] EMPTY_LONG_ARRAY = {};
+	public static final float[] EMPTY_FLOAT_ARRAY = {};
+	public static final double[] EMPTY_DOUBLE_ARRAY = {};
+	public static final Object[] EMPTY_OBJECT_ARRAY = {};
+	
 	public static <E> E getFirstNotNull(E... array) {
 		E element;
 		
