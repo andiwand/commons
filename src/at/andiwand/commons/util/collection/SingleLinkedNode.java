@@ -38,7 +38,6 @@ public class SingleLinkedNode<E> implements Iterable<E> {
 			return entry;
 		}
 		
-		// TODO: implement
 		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
@@ -77,6 +76,11 @@ public class SingleLinkedNode<E> implements Iterable<E> {
 	
 	public void setNext(SingleLinkedNode<E> next) {
 		this.next = next;
+	}
+	
+	public SingleLinkedNode<E> append(SingleLinkedNode<E> next) {
+		setNext(next);
+		return next;
 	}
 	
 	@Override
