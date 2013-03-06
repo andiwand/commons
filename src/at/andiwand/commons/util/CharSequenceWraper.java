@@ -32,6 +32,10 @@ public class CharSequenceWraper implements CharSequence {
 		return CharSequenceUtil.hashCode(charSequence);
 	}
 	
+	public CharSequence getCharSequence() {
+		return charSequence;
+	}
+	
 	@Override
 	public int length() {
 		return charSequence.length();
@@ -44,7 +48,7 @@ public class CharSequenceWraper implements CharSequence {
 	
 	@Override
 	public CharSequence subSequence(int start, int end) {
-		return charSequence.subSequence(start, end);
+		return new CharSequenceWraper(charSequence.subSequence(start, end));
 	}
 	
 }
