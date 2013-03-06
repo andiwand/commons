@@ -13,7 +13,7 @@ import at.andiwand.commons.util.collection.SingleLinkedNode;
 // TODO: implement with LinkedList
 public class CharArrayWriter extends Writer {
 	
-	private static final int DEFAULT_INITIAL_SIZE = 1024;
+	private static final int DEFAULT_INITIAL_SIZE = 16;
 	
 	private SingleLinkedNode<char[]> headNode;
 	private SingleLinkedNode<char[]> currentNode;

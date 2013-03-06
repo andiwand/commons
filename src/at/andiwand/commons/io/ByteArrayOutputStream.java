@@ -5,15 +5,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
+import at.andiwand.commons.util.ArrayUtil;
+
 
 // TODO: implement close() ?
 // TODO: implement input stream
 // TODO: implement with LinkedList
 public class ByteArrayOutputStream extends OutputStream {
 	
-	private static final int DEFAULT_INITIAL_SIZE = 1024;
-	
-	private static final byte[] EMPTY_BYTE_ARRAY = {};
+	private static final int DEFAULT_INITIAL_SIZE = 16;
 	
 	private class BufferNode {
 		private byte[] buffer;
@@ -52,7 +52,7 @@ public class ByteArrayOutputStream extends OutputStream {
 	}
 	
 	public byte[] toByteArray() {
-		if (count == 0) return EMPTY_BYTE_ARRAY;
+		if (count == 0) return ArrayUtil.EMPTY_BYTE_ARRAY;
 		
 		byte[] result = new byte[count];
 		int index = 0;
