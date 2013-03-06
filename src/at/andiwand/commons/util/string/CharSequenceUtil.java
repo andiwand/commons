@@ -1,4 +1,4 @@
-package at.andiwand.commons.util;
+package at.andiwand.commons.util.string;
 
 public class CharSequenceUtil {
 	

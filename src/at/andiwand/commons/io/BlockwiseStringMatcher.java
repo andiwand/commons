@@ -9,9 +9,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import at.andiwand.commons.util.CharSequenceArray;
-import at.andiwand.commons.util.CharSequenceWraper;
 import at.andiwand.commons.util.collection.OrderedPair;
+import at.andiwand.commons.util.string.CharSequenceArray;
+import at.andiwand.commons.util.string.CharSequenceWraper;
 
 
 public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {

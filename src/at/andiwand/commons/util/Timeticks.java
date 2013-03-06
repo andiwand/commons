@@ -1,5 +1,7 @@
 package at.andiwand.commons.util;
 
+import at.andiwand.commons.util.string.StringUtil;
+
 public class Timeticks {
 	
 	private final long millis;

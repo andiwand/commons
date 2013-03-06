@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import at.andiwand.commons.util.CharSequenceUtil;
 import at.andiwand.commons.util.collection.CharArrayQueue;
+import at.andiwand.commons.util.string.CharSequenceUtil;
 
 
 // TODO: rename readForward(...)

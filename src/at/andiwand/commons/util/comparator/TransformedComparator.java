@@ -2,7 +2,7 @@ package at.andiwand.commons.util.comparator;
 
 import java.util.Comparator;
 
-import at.andiwand.commons.util.ObjectTransformer;
+import at.andiwand.commons.util.object.ObjectTransformer;
 
 
 public class TransformedComparator<T1, T2> extends DelegationComparator<T1, T2> {

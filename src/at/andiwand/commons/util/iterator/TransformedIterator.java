@@ -2,7 +2,7 @@ package at.andiwand.commons.util.iterator;
 
 import java.util.Iterator;
 
-import at.andiwand.commons.util.ObjectTransformer;
+import at.andiwand.commons.util.object.ObjectTransformer;
 
 
 public class TransformedIterator<E1, E2> extends DelegationIterator<E1, E2> {

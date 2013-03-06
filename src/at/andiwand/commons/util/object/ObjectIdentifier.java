@@ -1,4 +1,4 @@
-package at.andiwand.commons.util;
+package at.andiwand.commons.util.object;
 
 import java.util.Arrays;
 

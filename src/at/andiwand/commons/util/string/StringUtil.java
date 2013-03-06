@@ -1,4 +1,4 @@
-package at.andiwand.commons.util;
+package at.andiwand.commons.util.string;
 
 import java.util.ArrayList;
 import java.util.List;

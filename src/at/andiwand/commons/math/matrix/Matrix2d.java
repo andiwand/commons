@@ -1,7 +1,7 @@
 package at.andiwand.commons.math.matrix;
 
 import at.andiwand.commons.math.vector.Vector2d;
-import at.andiwand.commons.util.StringUtil;
+import at.andiwand.commons.util.string.StringUtil;
 
 
 public class Matrix2d {
