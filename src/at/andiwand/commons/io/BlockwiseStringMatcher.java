@@ -164,7 +164,7 @@ public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
 	public OrderedPair<String, V> match(Reader in) throws IOException {
 		if (buffer == null) buffer = new char[bufferSize];
 		
-		int read = CharStreamUtil.readForward(in, buffer);
+		int read = CharStreamUtil.readTireless(in, buffer);
 		CharSequence charSequence = new CharSequenceArray(buffer, 0, read);
 		
 		return get(charSequence);

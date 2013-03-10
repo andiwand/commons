@@ -7,6 +7,7 @@ import java.io.Writer;
 import at.andiwand.commons.util.collection.SingleLinkedNode;
 
 
+// TODO: complete
 public class CharArrayBuilder implements CharSequence {
 	
 	private static final int DEFAULT_INITIAL_SIZE = 16;
@@ -41,6 +42,7 @@ public class CharArrayBuilder implements CharSequence {
 		lastIndex = 0;
 	}
 	
+	@SuppressWarnings("unused")
 	private char[] getBuffer(int index) {
 		if (index >= length) throw new ArrayIndexOutOfBoundsException(index);
 		

@@ -4,21 +4,30 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
+import at.andiwand.commons.io.CharArrayWriter;
 import at.andiwand.commons.io.CharStreamUtil;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 
 
+// TODO: improve causing memory allocation
 // TODO: improve getCurrentEvent()
 // TODO: improve exception handling (reading on no-value event)
 public abstract class LWXMLReader extends Reader {
+	
+	private CharArrayWriter tmpOut = new CharArrayWriter();
 	
 	public abstract LWXMLEvent getCurrentEvent();
 	
 	public abstract LWXMLEvent readEvent() throws IOException;
 	
+	// TODO: replace String
+	// TODO: make use of a buffer pool
 	public String readValue() throws IOException {
 		if (!LWXMLEvent.hasValue(getCurrentEvent())) return null;
-		return CharStreamUtil.readAsString(this);
+		tmpOut.write(this);
+		String result = tmpOut.toString();
+		tmpOut.reset();
+		return result;
 	}
 	
 	public String readFollowingValue() throws IOException {

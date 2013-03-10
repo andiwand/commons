@@ -14,12 +14,12 @@ import at.andiwand.commons.util.collection.CharArrayQueue;
 import at.andiwand.commons.util.string.CharSequenceUtil;
 
 
-// TODO: rename readForward(...)
+// TODO: kill StringBuilder
 public class CharStreamUtil {
 	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
 	
-	public static int readForward(Reader in, char[] cbuf) throws IOException {
+	public static int readTireless(Reader in, char[] cbuf) throws IOException {
 		int result = 0;
 		
 		while (true) {
@@ -30,11 +30,10 @@ public class CharStreamUtil {
 			if (result == cbuf.length) break;
 		}
 		
-		if (result == 0) return -1;
-		return result;
+		return (result == 0) ? -1 : result;
 	}
 	
-	public static int readForward(Reader in, char[] cbuf, int off, int len)
+	public static int readTireless(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
 		int result = 0;
 		
@@ -46,11 +45,10 @@ public class CharStreamUtil {
 			if (result == len) break;
 		}
 		
-		if (result == 0) return -1;
-		return result;
+		return (result == 0) ? -1 : result;
 	}
 	
-	public static int readForward(Reader in, CharBuffer target)
+	public static int readTireless(Reader in, CharBuffer target)
 			throws IOException {
 		int len = target.remaining();
 		if (len == 0) return 0;
@@ -65,8 +63,7 @@ public class CharStreamUtil {
 			if (result == len) break;
 		}
 		
-		if (result == 0) return -1;
-		return result;
+		return (result == 0) ? -1 : result;
 	}
 	
 	public static int readCharwise(Reader in, char[] cbuf) throws IOException {
@@ -84,8 +81,7 @@ public class CharStreamUtil {
 			if (result == cbuf.length) break;
 		}
 		
-		if (result == 0) return -1;
-		return result;
+		return (result == 0) ? -1 : result;
 	}
 	
 	public static int readCharwise(Reader in, char[] cbuf, int off, int len)
@@ -141,14 +137,14 @@ public class CharStreamUtil {
 	}
 	
 	public static int readFully(Reader in, char[] cbuf) throws IOException {
-		int read = readForward(in, cbuf);
+		int read = readTireless(in, cbuf);
 		if (read < cbuf.length) throw new EOFException();
 		return read;
 	}
 	
 	public static int readFully(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		int read = readForward(in, cbuf, off, len);
+		int read = readTireless(in, cbuf, off, len);
 		if (read < len) throw new EOFException();
 		return read;
 	}
@@ -156,13 +152,14 @@ public class CharStreamUtil {
 	public static int readFully(Reader in, CharBuffer target)
 			throws IOException {
 		int remaining = target.remaining();
-		int read = readForward(in, target);
+		int read = readTireless(in, target);
 		if (read < remaining) throw new EOFException();
 		return read;
 	}
 	
 	public static String readLine(PushbackReader in) throws IOException {
-		StringBuilder builder = new StringBuilder();
+		@SuppressWarnings("resource")
+		CharArrayWriter out = new CharArrayWriter();
 		
 		int read = in.read();
 		if (read == -1) return null;
@@ -179,39 +176,39 @@ public class CharStreamUtil {
 				in.unread(c);
 			}
 			
-			builder.append(c);
+			out.append(c);
 			
 			read = in.read();
 			if (read == -1) break;
 		}
 		
-		return builder.toString();
+		return out.toString();
 	}
 	
-	// TODO: improve
 	public static String readUntilChar(Reader in, char c) throws IOException {
-		StringBuilder builder = new StringBuilder();
+		@SuppressWarnings("resource")
+		CharArrayWriter out = new CharArrayWriter();
 		
 		while (true) {
 			int read = in.read();
-			if (read == c) return builder.toString();
+			if (read == c) return out.toString();
 			if (read == -1) throw new IllegalStateException("end of stream");
 			
-			builder.append((char) read);
+			out.append((char) read);
 		}
 	}
 	
-	// TODO: improve
 	public static String readUntilChar(Reader in, Set<Character> chars)
 			throws IOException {
-		StringBuilder builder = new StringBuilder();
+		@SuppressWarnings("resource")
+		CharArrayWriter out = new CharArrayWriter();
 		
 		while (true) {
 			int read = in.read();
-			if (chars.contains((char) read)) return builder.toString();
+			if (chars.contains((char) read)) return out.toString();
 			if (read == -1) throw new IllegalStateException("end of stream");
 			
-			builder.append((char) read);
+			out.append((char) read);
 		}
 	}
 	
@@ -359,21 +356,20 @@ public class CharStreamUtil {
 		}
 	}
 	
-	// TODO: improve
 	public static void flushUntilChar(Reader in, char c) throws IOException {
 		while (true) {
 			int read = in.read();
-			if (read == -1) throw new IllegalStateException("end of stream");
+			if (read == -1) throw new EOFException();
 			if (read == c) break;
 		}
 	}
 	
-	// TODO: improve
+	// TODO: improve (primitive set)
 	public static void flushUntilChar(Reader in, Set<Character> chars)
 			throws IOException {
 		while (true) {
 			int read = in.read();
-			if (read == -1) throw new IllegalStateException("end of stream");
+			if (read == -1) throw new EOFException();
 			if (chars.contains((char) read)) break;
 		}
 	}
@@ -392,7 +388,7 @@ public class CharStreamUtil {
 			queue.put((char) read);
 		}
 		
-		throw new IllegalStateException("end of stream");
+		throw new EOFException();
 	}
 	
 	// TODO: improve
@@ -410,7 +406,7 @@ public class CharStreamUtil {
 			if (matcher.matches()) return matcher;
 		}
 		
-		throw new IllegalStateException("end of stream");
+		throw new EOFException();
 	}
 	
 	// TODO: improve
@@ -428,7 +424,7 @@ public class CharStreamUtil {
 			if (matcher.find()) return matcher;
 		}
 		
-		throw new IllegalStateException("end of stream");
+		throw new EOFException();
 	}
 	
 	public static void flushBuffered(Reader in) throws IOException {

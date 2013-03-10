@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 import at.andiwand.commons.io.ApplyFilterReader;
 import at.andiwand.commons.io.CharFilter;
@@ -72,6 +72,8 @@ public class LWXMLStreamReader extends LWXMLReader {
 			return true;
 		}
 	};
+	
+	private static final char[] CDATA_CHARS = "CDATA[".toCharArray();
 	
 	private boolean closed;
 	private final PushbackReader in;
@@ -174,8 +176,10 @@ public class LWXMLStreamReader extends LWXMLReader {
 		eventReader = null;
 	}
 	
+	// TODO: improve
 	private LWXMLEvent handleCallsign() throws IOException {
 		int c = fin.read();
+		char[] buffer;
 		
 		switch (c) {
 		case '-':
@@ -186,26 +190,14 @@ public class LWXMLStreamReader extends LWXMLReader {
 			handleComment();
 			return LWXMLEvent.COMMENT;
 		case '[':
-			// TODO: improve
-			char[] buffer = new char[6];
+			buffer = new char[6];
 			fin.read(buffer);
-			if (!"CDATA[".equals(new String(buffer)))
+			if (!Arrays.equals(buffer, CDATA_CHARS))
 				throw new LWXMLReaderException(
 						"malformed tag: cdata was expected");
 			
 			handleCDATA();
 			return LWXMLEvent.CDATA;
-		case 'D':
-			// TODO: remove quick fix
-			char[] buffer2 = new char[6];
-			fin.read(buffer2);
-			if (!"OCTYPE".equals(new String(buffer2)))
-				throw new LWXMLReaderException(
-						"malformed tag: doctype was expected");
-			CharStreamUtil.flushUntilMatch(in, Pattern
-					.compile(".*?(\\[.*\\])?.*>"));
-			
-			return readNextEventImpl();
 		default:
 			throw new LWXMLReaderException(
 					"malformed tag: comment or cdata was expected");
