@@ -9,8 +9,8 @@ import javax.swing.JScrollPane;
 
 import at.andiwand.commons.math.graph.HashUndirectedGraph;
 import at.andiwand.commons.math.graph.SimpleUndirectedEdge;
-import at.andiwand.commons.swing.GraphViewer;
 import at.andiwand.commons.swing.JFrameUtil;
+import at.andiwand.commons.swing.graph.GraphViewer;
 
 
 public class GraphViewerTest {

@@ -1,4 +1,4 @@
-package at.andiwand.commons.swing;
+package at.andiwand.commons.swing.graph;
 
 public abstract class GenericGraphViewerVertexFactory<V extends Object, GV extends GraphViewerVertex> implements
 		GraphViewerVertexFactory {

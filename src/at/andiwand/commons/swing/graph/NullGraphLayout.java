@@ -1,6 +1,7 @@
-package at.andiwand.commons.swing;
+package at.andiwand.commons.swing.graph;
 
 import java.awt.Point;
+
 
 
 public class NullGraphLayout extends AbstractGraphLayout {

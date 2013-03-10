@@ -9,9 +9,9 @@ import javax.swing.JScrollPane;
 
 import at.andiwand.commons.math.graph.HashUndirectedGraph;
 import at.andiwand.commons.math.graph.SimpleUndirectedEdge;
-import at.andiwand.commons.swing.GraphViewer;
-import at.andiwand.commons.swing.GridGraphLayout;
 import at.andiwand.commons.swing.JFrameUtil;
+import at.andiwand.commons.swing.graph.GraphViewer;
+import at.andiwand.commons.swing.graph.GridGraphLayout;
 
 
 public class GridGraphLayoutTest {
