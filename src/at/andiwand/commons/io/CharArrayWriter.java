@@ -48,6 +48,7 @@ public class CharArrayWriter extends Writer {
 		int index = 0;
 		
 		for (char[] buffer : headNode) {
+			if (buffer == currentBuffer) break;
 			System.arraycopy(buffer, 0, result, index, buffer.length);
 			index += buffer.length;
 		}
