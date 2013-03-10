@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import at.andiwand.commons.util.ArrayUtil;
+import at.andiwand.commons.util.array.ArrayUtil;
 import at.andiwand.commons.util.collection.SingleLinkedNode;
 
 

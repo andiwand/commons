@@ -1,4 +1,4 @@
-package at.andiwand.commons.util;
+package at.andiwand.commons.util.array;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

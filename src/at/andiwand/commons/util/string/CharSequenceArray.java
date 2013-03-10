@@ -1,6 +1,6 @@
 package at.andiwand.commons.util.string;
 
-import at.andiwand.commons.util.ArrayUtil;
+import at.andiwand.commons.util.array.ArrayUtil;
 
 public class CharSequenceArray implements CharSequence {
 	

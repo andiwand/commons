@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-import at.andiwand.commons.util.ArrayUtil;
+import at.andiwand.commons.util.array.ArrayUtil;
 
 
 // TODO: implement close() ?

@@ -5,7 +5,7 @@ import java.io.Reader;
 import java.util.HashSet;
 import java.util.Set;
 
-import at.andiwand.commons.util.ArrayUtil;
+import at.andiwand.commons.util.array.ArrayUtil;
 
 
 // TODO: improve (boxing crap)

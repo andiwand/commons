@@ -3,7 +3,7 @@ package at.andiwand.commons.lwxml;
 import java.util.Collections;
 import java.util.Set;
 
-import at.andiwand.commons.util.ArrayUtil;
+import at.andiwand.commons.util.array.ArrayUtil;
 
 
 public class LWXMLConstants {

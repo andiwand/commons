@@ -3,7 +3,7 @@ package at.andiwand.commons.math;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import at.andiwand.commons.util.ArrayUtil;
+import at.andiwand.commons.util.array.ArrayUtil;
 import at.andiwand.commons.util.collection.KeyGenerator;
 
 
