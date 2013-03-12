@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import at.andiwand.commons.math.MathUtil;
 import at.andiwand.commons.util.collection.CollectionUtil;
 import at.andiwand.commons.util.collection.KeyGenerator;
 
@@ -1383,6 +1384,62 @@ public class ArrayUtil {
 			array[i] = array[j];
 			array[j] = tmp;
 		}
+	}
+	
+	public static Object newInstance(Class<?> arrayClass, int length) {
+		return Array.newInstance(arrayClass.getComponentType(), length);
+	}
+	
+	public static Object copyOf(Object array, int newLength) {
+		if (newLength < 0) throw new NegativeArraySizeException();
+		
+		int length = Array.getLength(array);
+		Object newArray = newInstance(array.getClass(), newLength);
+		System.arraycopy(array, 0, newArray, 0, Math.min(length, newLength));
+		
+		return newArray;
+	}
+	
+	public static Object copyOfRange(Object array, int from, int to) {
+		if (from < 0) throw new ArrayIndexOutOfBoundsException(from);
+		
+		int length = Array.getLength(array);
+		if (from > length) throw new ArrayIndexOutOfBoundsException(from);
+		
+		int newLength = from - to;
+		if (newLength < 0) throw new IllegalArgumentException();
+		
+		Object newArray = newInstance(array.getClass(), newLength);
+		System.arraycopy(array, from, newArray, 0, Math.min(length, newLength));
+		
+		return newArray;
+	}
+	
+	public static Object grow(Object array, int newLength) {
+		int length = Array.getLength(array);
+		if (length >= newLength) return array;
+		
+		return copyOf(array, newLength);
+	}
+	
+	public static Object growArithmetic(Object array, int newLength,
+			int difference) {
+		int length = Array.getLength(array);
+		if (length >= newLength) return array;
+		
+		newLength = length + difference
+				+ MathUtil.floor(newLength - length, difference);
+		return copyOf(array, newLength);
+	}
+	
+	public static Object growGeometric(Object array, int newLength, double base) {
+		int length = Array.getLength(array);
+		if (length >= newLength) return array;
+		
+		newLength = length
+				* (1 + (int) Math.pow(base, (int) (Math.log(newLength) / Math
+						.log(length))));
+		return copyOf(array, newLength);
 	}
 	
 	private ArrayUtil() {}

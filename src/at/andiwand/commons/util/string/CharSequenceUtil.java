@@ -3,9 +3,10 @@ package at.andiwand.commons.util.string;
 public class CharSequenceUtil {
 	
 	public static int hashCode(CharSequence charSequence) {
+		int length = charSequence.length();
 		int result = 0;
 		
-		for (int i = 0; i < charSequence.length(); i++) {
+		for (int i = 0; i < length; i++) {
 			result = 31 * result + charSequence.charAt(i);
 		}
 		
@@ -13,9 +14,10 @@ public class CharSequenceUtil {
 	}
 	
 	public static boolean equals(CharSequence a, CharSequence b) {
-		if (a.length() != b.length()) return false;
+		int length = a.length();
+		if (length != b.length()) return false;
 		
-		for (int i = 0; i < a.length(); i++) {
+		for (int i = 0; i < length; i++) {
 			if (a.charAt(i) != b.charAt(i)) return false;
 		}
 		
@@ -27,51 +29,92 @@ public class CharSequenceUtil {
 	}
 	
 	public static boolean statsWith(CharSequence a, CharSequence b) {
-		return statsWith(a, b, 0);
+		int length = b.length();
+		if (length > a.length()) return false;
+		
+		for (int i = 0; i < length; i++) {
+			if (a.charAt(i) != b.charAt(i)) return false;
+		}
+		
+		return true;
 	}
 	
-	public static boolean statsWith(CharSequence a, CharSequence b, int aoffset) {
-		if (aoffset < 0) return false;
-		if (b.length() > (a.length() - aoffset)) return false;
+	public static boolean statsWith(CharSequence a, int offset, CharSequence b) {
+		if (offset < 0) return false;
 		
-		for (int i = 0; i < b.length(); i++) {
-			if (a.charAt(aoffset + i) != b.charAt(i)) return false;
+		int length = b.length();
+		if (length > (a.length() - offset)) return false;
+		
+		for (int i = 0; i < length; i++) {
+			if (a.charAt(offset + i) != b.charAt(i)) return false;
 		}
 		
 		return true;
 	}
 	
 	public static boolean endsWith(CharSequence a, CharSequence b) {
-		return statsWith(a, b, a.length() - b.length());
+		int length = b.length();
+		int offset = length - a.length();
+		if (offset < 0) return false;
+		
+		for (int i = 0; i < length; i++) {
+			if (a.charAt(offset + i) != b.charAt(i)) return false;
+		}
+		
+		return true;
 	}
 	
 	public static CharSequence trim(CharSequence charSequence) {
 		int start = 0;
-		int end = charSequence.length();
+		int length = charSequence.length();
 		
-		for (; (start < end) && (charSequence.charAt(start) <= ' '); start++);
-		for (; (end > 0) && (charSequence.charAt(end - 1) <= ' '); end--);
+		for (; (start < length) && (charSequence.charAt(start) <= ' '); start++);
+		for (; (length > 0) && (charSequence.charAt(length - 1) <= ' '); length--);
 		
-		return charSequence.subSequence(start, end);
+		return charSequence.subSequence(start, length);
 	}
 	
 	public static CharSequence trimLeft(CharSequence charSequence) {
 		int start = 0;
-		int end = charSequence.length();
-		for (; (start < end) && (charSequence.charAt(start) <= ' '); start++);
-		return charSequence.subSequence(start, end);
+		int length = charSequence.length();
+		
+		for (; (start < length) && (charSequence.charAt(start) <= ' '); start++);
+		
+		return charSequence.subSequence(start, length);
 	}
 	
 	public static CharSequence trimRight(CharSequence charSequence) {
-		int end = charSequence.length();
-		for (; (end > 0) && (charSequence.charAt(end - 1) <= ' '); end--);
-		return charSequence.subSequence(0, end);
+		int length = charSequence.length();
+		
+		for (; (length > 0) && (charSequence.charAt(length - 1) <= ' '); length--);
+		
+		return charSequence.subSequence(0, length);
+	}
+	
+	public static void copy(CharSequence source, char[] destiantion) {
+		copy(source, destiantion, 0);
+	}
+	
+	public static void copy(CharSequence source, char[] destiantion, int offset) {
+		int length = source.length();
+		
+		for (int i = 0; i < length; i++) {
+			destiantion[offset + i] = source.charAt(i);
+		}
+	}
+	
+	public static void copy(CharSequence source, char[] destiantion,
+			int offset, int length) {
+		for (int i = 0; i < length; i++) {
+			destiantion[offset + i] = source.charAt(i);
+		}
 	}
 	
 	public static char[] getAsCharArray(CharSequence charSequence) {
-		char[] result = new char[charSequence.length()];
+		int length = charSequence.length();
+		char[] result = new char[length];
 		
-		for (int i = 0; i < charSequence.length(); i++) {
+		for (int i = 0; i < length; i++) {
 			result[i] = charSequence.charAt(i);
 		}
 		

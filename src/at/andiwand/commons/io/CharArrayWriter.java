@@ -98,6 +98,19 @@ public class CharArrayWriter extends Writer {
 	
 	@Override
 	public void write(String str, int off, int len) {
+		size += len;
+		
+		while (len > 0) {
+			if (currentIndex >= currentBuffer.length) getMoreSpace(len);
+			
+			int part = Math.min(currentBuffer.length - currentIndex, len);
+			str.getChars(off, off + part, currentBuffer, currentIndex);
+			
+			off += part;
+			len -= part;
+			currentIndex += part;
+		}
+		
 		if (str == null) throw new NullPointerException();
 		if ((off < 0) || (len < 0) || (len > (str.length() - off)))
 			throw new IndexOutOfBoundsException();

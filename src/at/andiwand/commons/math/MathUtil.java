@@ -109,6 +109,10 @@ public class MathUtil {
 		return max;
 	}
 	
+	public static int floor(int number, int divisor) {
+		return (number / divisor) * divisor;
+	}
+	
 	private MathUtil() {}
 	
 }
