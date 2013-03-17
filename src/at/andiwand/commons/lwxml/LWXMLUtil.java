@@ -1,5 +1,6 @@
 package at.andiwand.commons.lwxml;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -18,6 +19,7 @@ import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 
 
+// TODO: make use of EOFException
 public class LWXMLUtil {
 	
 	public static void flush(LWXMLReader in) throws IOException {
@@ -301,7 +303,7 @@ public class LWXMLUtil {
 		while (true) {
 			LWXMLEvent currentEvent = in.readEvent();
 			if (currentEvent == LWXMLEvent.END_DOCUMENT)
-				throw new LWXMLIllegalEventException(event);
+				throw new EOFException();
 			
 			if ((currentEvent == event) && in.readValue().equals(value))
 				return;
