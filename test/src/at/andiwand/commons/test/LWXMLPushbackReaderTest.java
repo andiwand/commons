@@ -28,6 +28,8 @@ public class LWXMLPushbackReaderTest {
 			System.out.println(event);
 			if (event.hasValue()) System.out.println(in.readValue());
 		}
+		
+		in.close();
 	}
 	
 }

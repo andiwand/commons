@@ -13,7 +13,7 @@ import at.andiwand.commons.lwxml.LWXMLIllegalFollowerException;
 
 
 // TODO: improve exception handling
-public class LWXMLPushbackReader extends LWXMLDelegationReader<LWXMLReader> {
+public class LWXMLPushbackReader extends LWXMLFilterReader {
 	
 	// removed Deque because of Android 1.6
 	//	private Deque<LWXMLEvent> eventStack = new LinkedList<LWXMLEvent>();

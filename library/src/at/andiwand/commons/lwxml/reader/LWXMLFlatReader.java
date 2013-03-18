@@ -6,7 +6,7 @@ import java.nio.CharBuffer;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 
 
-public class LWXMLFlatReader extends LWXMLDelegationReader<LWXMLReader> {
+public class LWXMLFlatReader extends LWXMLFilterReader {
 	
 	private LWXMLEvent lastEvent;
 	private int depth;

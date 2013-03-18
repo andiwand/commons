@@ -7,8 +7,7 @@ import at.andiwand.commons.lwxml.LWXMLEvent;
 import at.andiwand.commons.lwxml.LWXMLUtil;
 
 
-public class LWXMLElementDelegationReader extends
-		LWXMLDelegationReader<LWXMLReader> {
+public class LWXMLElementDelegationReader extends LWXMLFilterReader {
 	
 	private LWXMLEvent lastEvent;
 	

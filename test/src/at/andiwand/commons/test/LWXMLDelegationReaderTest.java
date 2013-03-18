@@ -51,6 +51,8 @@ public class LWXMLDelegationReaderTest {
 				System.out.println("value: " + in.readValue());
 			System.out.println();
 		}
+		
+		in.close();
 	}
 	
 }

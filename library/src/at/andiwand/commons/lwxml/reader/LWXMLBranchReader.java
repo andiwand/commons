@@ -6,7 +6,7 @@ import java.nio.CharBuffer;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 
 
-public class LWXMLBranchReader extends LWXMLDelegationReader<LWXMLReader> {
+public class LWXMLBranchReader extends LWXMLFilterReader {
 	
 	private boolean closed;
 	

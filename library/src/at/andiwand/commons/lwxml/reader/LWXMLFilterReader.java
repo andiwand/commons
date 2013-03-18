@@ -2,21 +2,23 @@ package at.andiwand.commons.lwxml.reader;
 
 import java.io.IOException;
 
+import at.andiwand.commons.lwxml.LWXMLEvent;
 
-public abstract class LWXMLDelegationReader<T extends LWXMLReader> extends
-		LWXMLReader {
+
+// TODO: improve
+public abstract class LWXMLFilterReader extends LWXMLReader {
 	
-	protected T in;
+	protected final LWXMLReader in;
 	
-	public LWXMLDelegationReader(T in) {
+	public LWXMLFilterReader(LWXMLReader in) {
 		if (in == null) throw new NullPointerException();
 		
 		this.in = in;
 	}
 	
 	@Override
-	public int read() throws IOException {
-		return in.read();
+	public LWXMLEvent getCurrentEvent() {
+		return in.getCurrentEvent();
 	}
 	
 	@Override
