@@ -3,7 +3,6 @@ package at.andiwand.commons.swing.graph;
 import java.awt.Point;
 
 
-
 public class NullGraphLayout extends AbstractGraphLayout {
 	
 	public NullGraphLayout(GraphViewer viewer) {
