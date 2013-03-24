@@ -2,6 +2,7 @@ package at.andiwand.commons.test;
 
 import java.io.InputStream;
 
+import at.andiwand.commons.io.FluidInputStreamReader;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 import at.andiwand.commons.lwxml.reader.LWXMLPushbackReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
@@ -13,7 +14,8 @@ public class LWXMLPushbackReaderTest {
 	public static void main(String[] args) throws Throwable {
 		InputStream inputStream = LWXMLSimpleTranslatorTest.class
 				.getResourceAsStream("test.xml");
-		LWXMLReader lwxmlReader = new LWXMLStreamReader(inputStream);
+		LWXMLReader lwxmlReader = new LWXMLStreamReader(
+				new FluidInputStreamReader(inputStream));
 		LWXMLPushbackReader in = new LWXMLPushbackReader(lwxmlReader);
 		
 		System.out.println(in.readEvent());

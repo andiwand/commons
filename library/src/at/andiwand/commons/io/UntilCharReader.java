@@ -1,22 +1,22 @@
 package at.andiwand.commons.io;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
 import at.andiwand.commons.util.StateMachine;
 
 
-public class UntilFilterInputStream extends BytewiseFilterInputStream implements
+public class UntilCharReader extends CharwiseFilterReader implements
 		StateMachine {
 	
 	private boolean found;
 	
-	private final ByteFilter filter;
+	private char c;
 	
-	public UntilFilterInputStream(InputStream in, ByteFilter filter) {
+	public UntilCharReader(Reader in, char c) {
 		super(in);
 		
-		this.filter = filter;
+		this.c = c;
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class UntilFilterInputStream extends BytewiseFilterInputStream implements
 		
 		int read = in.read();
 		
-		if ((read == -1) || !filter.accept((byte) read)) {
+		if ((read == -1) || (read == c)) {
 			found = true;
 			return -1;
 		}

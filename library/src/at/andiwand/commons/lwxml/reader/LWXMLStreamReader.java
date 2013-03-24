@@ -1,20 +1,22 @@
 package at.andiwand.commons.lwxml.reader;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
-import java.util.Arrays;
 
 import at.andiwand.commons.io.ApplyFilterReader;
 import at.andiwand.commons.io.CharFilter;
 import at.andiwand.commons.io.CharStreamUtil;
 import at.andiwand.commons.io.FullyReader;
+import at.andiwand.commons.io.UntilCharReader;
 import at.andiwand.commons.io.UntilCharSequenceReader;
 import at.andiwand.commons.io.UntilFilterReader;
 import at.andiwand.commons.lwxml.LWXMLConstants;
 import at.andiwand.commons.lwxml.LWXMLEvent;
+import at.andiwand.commons.util.InaccessibleSectionException;
 
 
 // TODO: improve code
@@ -29,31 +31,6 @@ public class LWXMLStreamReader extends LWXMLReader {
 		}
 	};
 	
-	private static final CharFilter END_ELEMENT_FILTER = new CharFilter() {
-		public boolean accept(char c) {
-			return c != '>';
-		}
-	};
-	
-	private static final CharFilter ATTRIBUTE_NAME_FILTER = new CharFilter() {
-		public boolean accept(char c) {
-			if (c == '=') return false;
-			return true;
-		}
-	};
-	
-	private static final CharFilter ATTRIBUTE_VALUE_FILTER = new CharFilter() {
-		public boolean accept(char c) {
-			return c != '"';
-		}
-	};
-	
-	private static final CharFilter CHARACTERS_FILTER = new CharFilter() {
-		public boolean accept(char c) {
-			return c != '<';
-		}
-	};
-	
 	private final CharFilter startElementFilter = new CharFilter() {
 		public boolean accept(char c) {
 			if (LWXMLConstants.isWhitespace(c)) return false;
@@ -65,7 +42,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 					LWXMLStreamReader.this.in.unread(c);
 					return false;
 				} catch (IOException e) {
-					throw new IllegalStateException("unreachable section");
+					throw new InaccessibleSectionException();
 				}
 			}
 			
@@ -76,8 +53,19 @@ public class LWXMLStreamReader extends LWXMLReader {
 	private static final char[] CDATA_CHARS = "CDATA[".toCharArray();
 	
 	private boolean closed;
+	
 	private final PushbackReader in;
 	private final FullyReader fin;
+	
+	private final UntilCharReader endElementIn;
+	private final UntilCharSequenceReader commentIn;
+	private final UntilCharSequenceReader cdataIn;
+	private final UntilFilterReader processingInstructionTargetIn;
+	private final UntilCharSequenceReader processingInstructionDataIn;
+	private final UntilFilterReader startElementIn;
+	private final UntilCharReader attributeNameIn;
+	private final UntilCharReader attributeValueIn;
+	private final UntilCharReader characterIn;
 	
 	private LWXMLEvent lastEvent;
 	
@@ -86,13 +74,27 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	private Reader eventReader;
 	
+	// TODO: remove
 	public LWXMLStreamReader(InputStream in) {
-		this(new InputStreamReader(in));
+		this(new BufferedReader(new InputStreamReader(in)));
 	}
 	
 	public LWXMLStreamReader(Reader in) {
 		this.in = new PushbackReader(in, PUSHBACK_BUFFER_SIZE);
 		this.fin = new FullyReader(this.in);
+		
+		endElementIn = new UntilCharReader(new ApplyFilterReader(fin,
+				WHITESPACE_FILTER), '>');
+		commentIn = new UntilCharSequenceReader(fin, "-->");
+		cdataIn = new UntilCharSequenceReader(fin, "]]>");
+		processingInstructionTargetIn = new UntilFilterReader(fin,
+				WHITESPACE_FILTER);
+		processingInstructionDataIn = new UntilCharSequenceReader(fin, "?>");
+		startElementIn = new UntilFilterReader(fin, startElementFilter);
+		attributeNameIn = new UntilCharReader(new ApplyFilterReader(fin,
+				WHITESPACE_FILTER), '=');
+		attributeValueIn = new UntilCharReader(fin, '"');
+		characterIn = new UntilCharReader(fin, '<');
 	}
 	
 	@Override
@@ -166,9 +168,10 @@ public class LWXMLStreamReader extends LWXMLReader {
 		}
 	}
 	
+	// TODO: another way w/o new?
 	private void handleEndElement() throws IOException {
-		eventReader = new ApplyFilterReader(fin, WHITESPACE_FILTER);
-		eventReader = new UntilFilterReader(eventReader, END_ELEMENT_FILTER);
+		endElementIn.clear();
+		eventReader = endElementIn;
 	}
 	
 	private void handleEndEmptyElement() throws IOException {
@@ -179,7 +182,6 @@ public class LWXMLStreamReader extends LWXMLReader {
 	// TODO: improve
 	private LWXMLEvent handleCallsign() throws IOException {
 		int c = fin.read();
-		char[] buffer;
 		
 		switch (c) {
 		case '-':
@@ -190,9 +192,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 			handleComment();
 			return LWXMLEvent.COMMENT;
 		case '[':
-			buffer = new char[6];
-			fin.read(buffer);
-			if (!Arrays.equals(buffer, CDATA_CHARS))
+			if (CharStreamUtil.equals(in, CDATA_CHARS))
 				throw new LWXMLReaderException(
 						"malformed tag: cdata was expected");
 			
@@ -205,34 +205,35 @@ public class LWXMLStreamReader extends LWXMLReader {
 	}
 	
 	private void handleComment() throws IOException {
-		eventReader = new UntilCharSequenceReader(fin, "-->");
+		commentIn.clear();
+		eventReader = commentIn;
 	}
 	
 	private void handleCDATA() throws IOException {
-		eventReader = new UntilCharSequenceReader(fin, "]]>");
+		cdataIn.clear();
+		eventReader = cdataIn;
 	}
 	
 	private void handleProcessingInstructionTarget() throws IOException {
-		eventReader = new UntilFilterReader(fin, WHITESPACE_FILTER);
+		processingInstructionTargetIn.clear();
+		eventReader = processingInstructionTargetIn;
 	}
 	
 	private void handleProcessingInstructionData() throws IOException {
-		try {
-			CharStreamUtil.flushChars(in, WHITESPACE_FILTER);
-		} catch (IllegalStateException e) {
-			throw new LWXMLReaderException("end of stream", e);
-		}
+		CharStreamUtil.flushUntilFilter(in, WHITESPACE_FILTER);
 		
-		eventReader = new UntilCharSequenceReader(fin, "?>");
+		processingInstructionDataIn.clear();
+		eventReader = processingInstructionDataIn;
 	}
 	
 	private void handleStartElement() throws IOException {
 		handleAttributeList = true;
-		eventReader = new UntilFilterReader(in, startElementFilter);
+		startElementIn.clear();
+		eventReader = startElementIn;
 	}
 	
 	private LWXMLEvent handleAttributeList() throws IOException {
-		CharStreamUtil.flushChars(in, WHITESPACE_FILTER);
+		CharStreamUtil.flushUntilFilter(in, WHITESPACE_FILTER);
 		int c = fin.read();
 		
 		switch (c) {
@@ -252,18 +253,21 @@ public class LWXMLStreamReader extends LWXMLReader {
 	}
 	
 	private void handleAttributeName() throws IOException {
-		eventReader = new ApplyFilterReader(fin, WHITESPACE_FILTER);
-		eventReader = new UntilFilterReader(eventReader, ATTRIBUTE_NAME_FILTER);
+		attributeNameIn.clear();
+		eventReader = attributeNameIn;
 	}
 	
 	// TODO: handle malformed xml
 	private void handleAttributeValue() throws IOException {
 		CharStreamUtil.flushUntilChar(in, '"');
-		eventReader = new UntilFilterReader(fin, ATTRIBUTE_VALUE_FILTER);
+		
+		attributeValueIn.clear();
+		eventReader = attributeValueIn;
 	}
 	
 	private void handleCharacters() throws IOException {
-		eventReader = new UntilFilterReader(in, CHARACTERS_FILTER);
+		characterIn.clear();
+		eventReader = characterIn;
 	}
 	
 	@Override

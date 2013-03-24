@@ -3,10 +3,13 @@ package at.andiwand.commons.io;
 import java.io.IOException;
 import java.io.Reader;
 
+import at.andiwand.commons.util.StateMachine;
 
-public class UntilFilterReader extends CharwiseFilterReader {
+
+public class UntilFilterReader extends CharwiseFilterReader implements
+		StateMachine {
 	
-	private boolean closed;
+	private boolean found;
 	
 	private final CharFilter filter;
 	
@@ -18,16 +21,20 @@ public class UntilFilterReader extends CharwiseFilterReader {
 	
 	@Override
 	public int read() throws IOException {
-		if (closed) return -1;
+		if (found) return -1;
 		
 		int read = in.read();
 		
 		if ((read == -1) || !filter.accept((char) read)) {
-			closed = true;
+			found = true;
 			return -1;
 		}
 		
 		return read;
+	}
+	
+	public void clear() {
+		found = false;
 	}
 	
 }

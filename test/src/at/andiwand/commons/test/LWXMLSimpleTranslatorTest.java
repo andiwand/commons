@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import at.andiwand.commons.io.CharArrayWriter;
+import at.andiwand.commons.io.FluidInputStreamReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 import at.andiwand.commons.lwxml.translator.simple.SimpleLWXMLTranslator;
@@ -16,7 +17,8 @@ public class LWXMLSimpleTranslatorTest {
 	public static void main(String[] args) throws IOException {
 		InputStream inputStream = LWXMLSimpleTranslatorTest.class
 				.getResourceAsStream("test.xml");
-		LWXMLReader in = new LWXMLStreamReader(inputStream);
+		LWXMLReader in = new LWXMLStreamReader(new FluidInputStreamReader(
+				inputStream));
 		
 		CharArrayWriter writer = new CharArrayWriter();
 		LWXMLWriter out = new LWXMLStreamWriter(writer);
