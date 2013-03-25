@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import at.andiwand.commons.io.BlockwiseStringMatcher;
+import at.andiwand.commons.io.StreamableStringMap;
 import at.andiwand.commons.lwxml.LWXMLAttribute;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 import at.andiwand.commons.lwxml.LWXMLIllegalEventException;
@@ -21,7 +21,7 @@ import at.andiwand.commons.util.collection.OrderedPair;
 // TODO: implement remove methods
 public abstract class SimpleElementTranslator extends LWXMLPushbackTranslator {
 	
-	private final BlockwiseStringMatcher<SimpleAttributeTranslator> attributeTranslatorMap = new BlockwiseStringMatcher<SimpleAttributeTranslator>();
+	private final StreamableStringMap<SimpleAttributeTranslator> attributeTranslatorMap = new StreamableStringMap<SimpleAttributeTranslator>();
 	
 	private final Set<String> parseAttributes = new HashSet<String>();
 	private final Map<String, String> currentParsedAttributes = new HashMap<String, String>();

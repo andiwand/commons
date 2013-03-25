@@ -4,7 +4,7 @@ public class CharSequenceUtil {
 	
 	public static int hashCode(CharSequence charSequence) {
 		int length = charSequence.length();
-		int result = 0;
+		int result = 1;
 		
 		for (int i = 0; i < length; i++) {
 			result = 31 * result + charSequence.charAt(i);
@@ -22,6 +22,10 @@ public class CharSequenceUtil {
 		}
 		
 		return true;
+	}
+	
+	public static String toString(CharSequence charSequence) {
+		return new String(getAsCharArray(charSequence));
 	}
 	
 	public static boolean isEmpty(CharSequence charSequence) {

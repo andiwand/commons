@@ -10,17 +10,18 @@ import java.util.Map;
 import java.util.Set;
 
 import at.andiwand.commons.util.collection.OrderedPair;
-import at.andiwand.commons.util.string.CharSequenceArray;
+import at.andiwand.commons.util.string.AbstractCharSequence;
+import at.andiwand.commons.util.string.CharSequenceArrayWrapper;
 import at.andiwand.commons.util.string.CharSequenceWraper;
 
 
-public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
+public class StreamableStringMap<V> extends AbstractMap<String, V> {
 	
 	private static class EntryWrapper<V> implements Entry<String, V> {
-		private Entry<CharSequenceWraper, OrderedPair<String, V>> entry;
+		private Entry<AbstractCharSequence, OrderedPair<String, V>> entry;
 		
 		public EntryWrapper(
-				Entry<CharSequenceWraper, OrderedPair<String, V>> entry) {
+				Entry<AbstractCharSequence, OrderedPair<String, V>> entry) {
 			this.entry = entry;
 		}
 		
@@ -58,7 +59,7 @@ public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
 	}
 	
 	private class EntrySetIterator implements Iterator<Entry<String, V>> {
-		private final Iterator<Entry<CharSequenceWraper, OrderedPair<String, V>>> iterator = map
+		private final Iterator<Entry<AbstractCharSequence, OrderedPair<String, V>>> iterator = map
 				.entrySet().iterator();
 		
 		@Override
@@ -85,20 +86,20 @@ public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
 		
 		@Override
 		public boolean add(Entry<String, V> e) {
-			BlockwiseStringMatcher.this.put(e.getKey(), e.getValue());
+			StreamableStringMap.this.put(e.getKey(), e.getValue());
 			return true;
 		}
 		
 		@Override
 		public boolean remove(Object o) {
-			boolean result = BlockwiseStringMatcher.this.containsKey(o);
-			if (result) BlockwiseStringMatcher.this.remove(o);
+			boolean result = StreamableStringMap.this.containsKey(o);
+			if (result) StreamableStringMap.this.remove(o);
 			return result;
 		}
 		
 		@Override
 		public boolean contains(Object o) {
-			return BlockwiseStringMatcher.this.containsKey(o);
+			return StreamableStringMap.this.containsKey(o);
 		}
 		
 		@Override
@@ -107,12 +108,14 @@ public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
 		}
 	}
 	
-	private final Map<CharSequenceWraper, OrderedPair<String, V>> map = new HashMap<CharSequenceWraper, OrderedPair<String, V>>();
+	private final Map<AbstractCharSequence, OrderedPair<String, V>> map = new HashMap<AbstractCharSequence, OrderedPair<String, V>>();
 	
 	private EntrySet entrySet;
 	
 	private int bufferSize;
 	private char[] buffer;
+	
+	private CharSequenceArrayWrapper matcher = new CharSequenceArrayWrapper();
 	
 	@Override
 	public V put(String key, V value) {
@@ -126,35 +129,39 @@ public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
 		
 		OrderedPair<String, V> result = map.put(new CharSequenceWraper(key),
 				new OrderedPair<String, V>(key, value));
-		if (result == null) return null;
-		return result.getElement2();
+		return (result == null) ? null : result.getElement2();
 	}
 	
 	@Override
 	public V remove(Object key) {
 		if (!(key instanceof String)) throw new ClassCastException();
-		String tmp = (String) key;
-		
-		OrderedPair<String, V> result = map.remove(new CharSequenceWraper(tmp));
-		if (result == null) return null;
-		return result.getElement2();
+		return remove((String) key);
+	}
+	
+	public V remove(String key) {
+		OrderedPair<String, V> result = map.remove(new CharSequenceWraper(key));
+		return (result == null) ? null : result.getElement2();
 	}
 	
 	@Override
 	public boolean containsKey(Object key) {
 		if (!(key instanceof String)) throw new ClassCastException();
-		String tmp = (String) key;
-		return map.containsKey(new CharSequenceWraper(tmp));
+		return containsKey((String) key);
+	}
+	
+	public boolean containsKey(String key) {
+		return map.containsKey(new CharSequenceWraper(key));
 	}
 	
 	@Override
 	public V get(Object key) {
 		if (!(key instanceof String)) throw new ClassCastException();
-		String tmp = (String) key;
-		
-		OrderedPair<String, V> result = get(tmp);
-		if (result == null) return null;
-		return result.getElement2();
+		return get((String) key);
+	}
+	
+	public V get(String key) {
+		OrderedPair<String, V> result = get((CharSequence) key);
+		return (result == null) ? null : result.getElement2();
 	}
 	
 	private OrderedPair<String, V> get(CharSequence charSequence) {
@@ -162,12 +169,15 @@ public class BlockwiseStringMatcher<V> extends AbstractMap<String, V> {
 	}
 	
 	public OrderedPair<String, V> match(Reader in) throws IOException {
-		if (buffer == null) buffer = new char[bufferSize];
+		if (buffer == null) {
+			buffer = new char[bufferSize];
+			matcher.setCharArray(buffer);
+		}
 		
 		int read = CharStreamUtil.readTireless(in, buffer);
-		CharSequence charSequence = new CharSequenceArray(buffer, 0, read);
+		matcher.setLength(read);
 		
-		return get(charSequence);
+		return map.get(matcher);
 	}
 	
 	@Override

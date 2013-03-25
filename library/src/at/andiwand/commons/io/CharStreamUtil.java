@@ -22,8 +22,9 @@ public class CharStreamUtil {
 	public static int readTireless(Reader in, char[] cbuf) throws IOException {
 		int result = 0;
 		
+		int read;
 		while (true) {
-			int read = in.read(cbuf, result, cbuf.length - result);
+			read = in.read(cbuf, result, cbuf.length - result);
 			if (read == -1) break;
 			
 			result += read;
@@ -37,8 +38,9 @@ public class CharStreamUtil {
 			throws IOException {
 		int result = 0;
 		
+		int read;
 		while (true) {
-			int read = in.read(cbuf, off + result, len - result);
+			read = in.read(cbuf, off + result, len - result);
 			if (read == -1) break;
 			
 			result += read;
@@ -55,8 +57,9 @@ public class CharStreamUtil {
 		
 		int result = 0;
 		
+		int read;
 		while (true) {
-			int read = in.read(target);
+			read = in.read(target);
 			if (read == -1) break;
 			
 			result += read;
@@ -71,8 +74,9 @@ public class CharStreamUtil {
 		
 		int result = 0;
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) break;
 			
 			cbuf[result] = (char) read;
@@ -88,8 +92,9 @@ public class CharStreamUtil {
 			throws IOException {
 		int result = 0;
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) break;
 			
 			cbuf[off + result] = (char) read;
@@ -109,8 +114,9 @@ public class CharStreamUtil {
 		
 		int result = 0;
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) break;
 			
 			target.put((char) read);
@@ -164,8 +170,9 @@ public class CharStreamUtil {
 		int read = in.read();
 		if (read == -1) return null;
 		
+		char c;
 		while (true) {
-			char c = (char) read;
+			c = (char) read;
 			
 			if (c == '\n') break;
 			if (c == '\r') {
@@ -189,8 +196,9 @@ public class CharStreamUtil {
 		@SuppressWarnings("resource")
 		CharArrayWriter out = new CharArrayWriter();
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == c) return out.toString();
 			if (read == -1) throw new IllegalStateException("end of stream");
 			
@@ -203,8 +211,9 @@ public class CharStreamUtil {
 		@SuppressWarnings("resource")
 		CharArrayWriter out = new CharArrayWriter();
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (chars.contains((char) read)) return out.toString();
 			if (read == -1) throw new IllegalStateException("end of stream");
 			
@@ -285,8 +294,9 @@ public class CharStreamUtil {
 	}
 	
 	public static void flushLine(PushbackReader in) throws IOException {
+		char c;
 		for (int read = in.read(); read != -1; read = in.read()) {
-			char c = (char) read;
+			c = (char) read;
 			
 			if (c == '\n') break;
 			if (c == '\r') {
@@ -300,27 +310,23 @@ public class CharStreamUtil {
 	}
 	
 	public static int flushWhitespace(Reader in) throws IOException {
-		for (int read; (read = in.read()) != -1;) {
-			if (Character.isWhitespace((char) read)) continue;
-			
-			return read;
-		}
+		int read;
+		do {
+			read = in.read();
+		} while ((read != -1) && Character.isWhitespace(read));
 		
-		return -1;
+		return read;
 	}
 	
 	public static void flushWhitespace(PushbackReader in) throws IOException {
-		for (int read; (read = in.read()) != -1;) {
-			if (Character.isWhitespace((char) read)) continue;
-			
-			in.unread(read);
-			return;
-		}
+		int c = flushWhitespace((Reader) in);
+		if (c != -1) in.unread(c);
 	}
 	
 	public static void flushChars(PushbackReader in, char c) throws IOException {
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) return;
 			
 			if (read == c) continue;
@@ -332,8 +338,9 @@ public class CharStreamUtil {
 	
 	public static void flushChars(PushbackReader in, Set<Character> chars)
 			throws IOException {
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) return;
 			
 			if (chars.contains((char) read)) continue;
@@ -345,8 +352,9 @@ public class CharStreamUtil {
 	
 	public static void flushChars(PushbackReader in, CharFilter filter)
 			throws IOException {
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) return;
 			
 			if (!filter.accept((char) read)) continue;
@@ -357,8 +365,9 @@ public class CharStreamUtil {
 	}
 	
 	public static void flushUntilChar(Reader in, char c) throws IOException {
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) throw new EOFException();
 			if (read == c) break;
 		}
@@ -367,8 +376,9 @@ public class CharStreamUtil {
 	// TODO: improve (primitive set)
 	public static void flushUntilChar(Reader in, Set<Character> chars)
 			throws IOException {
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) throw new EOFException();
 			if (chars.contains((char) read)) break;
 		}
@@ -379,8 +389,9 @@ public class CharStreamUtil {
 			throws IOException {
 		CharArrayQueue queue = new CharArrayQueue(string.length());
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) break;
 			
 			if ((queue.size() >= string.length())
@@ -396,8 +407,9 @@ public class CharStreamUtil {
 			throws IOException {
 		StringBuilder builder = new StringBuilder();
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) break;
 			
 			builder.append((char) read);
@@ -414,8 +426,9 @@ public class CharStreamUtil {
 			throws IOException {
 		StringBuilder builder = new StringBuilder();
 		
+		int read;
 		while (true) {
-			int read = in.read();
+			read = in.read();
 			if (read == -1) break;
 			
 			builder.append((char) read);
@@ -492,8 +505,9 @@ public class CharStreamUtil {
 		initBuffer();
 		int count = 0;
 		
+		int read;
 		while (count < len) {
-			int read = in.read(cbuf, 0, Math.min(bufferSize, len - count));
+			read = in.read(cbuf, 0, Math.min(bufferSize, len - count));
 			if (read == -1) break;
 			out.write(cbuf, 0, read);
 			count += read;

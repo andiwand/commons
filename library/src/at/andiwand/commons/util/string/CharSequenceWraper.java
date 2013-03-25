@@ -1,18 +1,18 @@
 package at.andiwand.commons.util.string;
 
-public class CharSequenceWraper implements CharSequence {
+public class CharSequenceWraper extends AbstractCharSequence {
 	
-	private final CharSequence charSequence;
+	private CharSequence charSequence;
+	
+	public CharSequenceWraper() {}
 	
 	public CharSequenceWraper(CharSequence charSequence) {
-		if (charSequence == null) throw new NullPointerException();
-		
 		this.charSequence = charSequence;
 	}
 	
 	@Override
-	public String toString() {
-		return charSequence.toString();
+	public int hashCode() {
+		return CharSequenceUtil.hashCode(charSequence);
 	}
 	
 	@Override
@@ -20,16 +20,26 @@ public class CharSequenceWraper implements CharSequence {
 		if (obj == null) return false;
 		if (obj == this) return true;
 		
-		if (!(obj instanceof CharSequenceWraper)) return false;
-		CharSequenceWraper other = (CharSequenceWraper) obj;
+		if (obj instanceof CharSequenceWraper) {
+			CharSequenceWraper other = (CharSequenceWraper) obj;
+			return (charSequence == other.charSequence)
+					|| CharSequenceUtil
+							.equals(charSequence, other.charSequence);
+		} else if (obj instanceof CharSequence) {
+			CharSequence other = (CharSequence) obj;
+			return CharSequenceUtil.equals(this, other);
+		}
 		
-		return (charSequence == other.charSequence)
-				|| CharSequenceUtil.equals(charSequence, other.charSequence);
+		return false;
 	}
 	
 	@Override
-	public int hashCode() {
-		return CharSequenceUtil.hashCode(charSequence);
+	public String toString() {
+		return charSequence.toString();
+	}
+	
+	public void setCharSequence(CharSequence charSequence) {
+		this.charSequence = charSequence;
 	}
 	
 	public CharSequence getCharSequence() {
