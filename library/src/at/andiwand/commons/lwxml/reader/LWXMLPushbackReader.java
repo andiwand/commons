@@ -109,7 +109,7 @@ public class LWXMLPushbackReader extends LWXMLFilterReader {
 		if (streamReading) return in.readValue();
 		
 		if (!LWXMLEvent.hasValue(currentEvent)) return null;
-		return currentValue.substring(countingReader.count());
+		return currentValue.substring((int) countingReader.count());
 	}
 	
 	@Override

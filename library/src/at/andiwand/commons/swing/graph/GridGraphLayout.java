@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 
-
 public class GridGraphLayout extends AbstractGraphLayout {
 	
 	public static final int DEFAULT_HGAP = 20;

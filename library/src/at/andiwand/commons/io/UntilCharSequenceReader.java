@@ -3,12 +3,14 @@ package at.andiwand.commons.io;
 import java.io.IOException;
 import java.io.Reader;
 
+import at.andiwand.commons.util.StateMachine;
 import at.andiwand.commons.util.collection.CharArrayQueue;
 
 
-public class UntilCharSequenceReader extends CharwiseFilterReader {
+public class UntilCharSequenceReader extends CharwiseFilterReader implements
+		StateMachine {
 	
-	private boolean closed;
+	private boolean found;
 	
 	private CharSequence charSequence;
 	private CharArrayQueue queue;
@@ -22,13 +24,13 @@ public class UntilCharSequenceReader extends CharwiseFilterReader {
 			this.charSequence = charSequence;
 			this.queue = new CharArrayQueue(charSequence.length());
 		} else {
-			closed = true;
+			found = true;
 		}
 	}
 	
 	@Override
 	public int read() throws IOException {
-		if (closed) return -1;
+		if (found) return -1;
 		if (!queue.isEmpty()) return queue.poll();
 		
 		while (true) {
@@ -41,9 +43,14 @@ public class UntilCharSequenceReader extends CharwiseFilterReader {
 			if (queue.size() >= charSequence.length()) break;
 		}
 		
-		closed = true;
+		found = true;
 		charSequence = null;
 		return -1;
+	}
+	
+	@Override
+	public void clear() {
+		found = false;
 	}
 	
 }

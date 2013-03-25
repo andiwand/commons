@@ -6,13 +6,13 @@ import java.io.OutputStream;
 
 public class CountingOutputStream extends FilterOutputStream {
 	
-	private int count;
+	private long count;
 	
 	public CountingOutputStream(OutputStream out) {
 		super(out);
 	}
 	
-	public int count() {
+	public long count() {
 		return count;
 	}
 	

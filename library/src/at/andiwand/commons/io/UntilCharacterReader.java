@@ -5,13 +5,15 @@ import java.io.Reader;
 import java.util.HashSet;
 import java.util.Set;
 
+import at.andiwand.commons.util.StateMachine;
 import at.andiwand.commons.util.array.ArrayUtil;
 
 
 // TODO: improve (boxing crap)
-public class UntilCharacterReader extends CharwiseFilterReader {
+public class UntilCharacterReader extends CharwiseFilterReader implements
+		StateMachine {
 	
-	private boolean closed;
+	private boolean found;
 	
 	private Set<Character> characterSet;
 	
@@ -29,16 +31,21 @@ public class UntilCharacterReader extends CharwiseFilterReader {
 	
 	@Override
 	public int read() throws IOException {
-		if (closed) return -1;
+		if (found) return -1;
 		
 		int read = in.read();
 		
 		if ((read == -1) || characterSet.contains((char) read)) {
-			closed = true;
+			found = true;
 			return -1;
 		}
 		
 		return read;
+	}
+	
+	@Override
+	public void clear() {
+		found = false;
 	}
 	
 }

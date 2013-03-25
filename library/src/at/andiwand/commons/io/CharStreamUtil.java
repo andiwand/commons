@@ -15,6 +15,7 @@ import at.andiwand.commons.util.string.CharSequenceUtil;
 
 
 // TODO: kill StringBuilder
+// TODO: exceptions
 public class CharStreamUtil {
 	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
@@ -350,12 +351,12 @@ public class CharStreamUtil {
 		}
 	}
 	
-	public static void flushChars(PushbackReader in, CharFilter filter)
+	public static void flushUntilFilter(PushbackReader in, CharFilter filter)
 			throws IOException {
 		int read;
 		while (true) {
 			read = in.read();
-			if (read == -1) return;
+			if (read == -1) new EOFException();
 			
 			if (!filter.accept((char) read)) continue;
 			
@@ -456,6 +457,32 @@ public class CharStreamUtil {
 		}
 		
 		return n;
+	}
+	
+	public static boolean equals(Reader in, char[] array) throws IOException {
+		int read;
+		
+		for (int i = 0; i < array.length; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != array[i]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(Reader in, char[] array, int off, int len)
+			throws IOException {
+		int end = off + len;
+		int read;
+		
+		for (int i = off; i < end; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != array[i]) return false;
+		}
+		
+		return true;
 	}
 	
 	private final int bufferSize;

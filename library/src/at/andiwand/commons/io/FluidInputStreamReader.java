@@ -11,13 +11,13 @@ import java.nio.charset.CoderResult;
 
 
 // TODO: improve
-// TODO: fix for android
 public class FluidInputStreamReader extends Reader {
 	
 	private final InputStream in;
 	
 	private final Charset charset;
 	private final CharsetDecoder decoder;
+	
 	private ByteBuffer inBuffer;
 	private final CharBuffer outBuffer;
 	
@@ -33,9 +33,10 @@ public class FluidInputStreamReader extends Reader {
 		this.charset = charset;
 		this.decoder = charset.newDecoder();
 		
-		inBuffer = ByteBuffer.allocate((int) charset.newEncoder()
-				.maxBytesPerChar());
-		outBuffer = CharBuffer.allocate((int) decoder.maxCharsPerByte());
+		inBuffer = ByteBuffer.allocate((int) Math.ceil(charset.newEncoder()
+				.maxBytesPerChar()));
+		outBuffer = CharBuffer.allocate((int) Math.ceil(decoder
+				.maxCharsPerByte()));
 	}
 	
 	public FluidInputStreamReader(InputStream in, String charset) {
@@ -46,10 +47,6 @@ public class FluidInputStreamReader extends Reader {
 		return charset;
 	}
 	
-	public CharsetDecoder getDecoder() {
-		return decoder;
-	}
-	
 	public boolean isClosed() {
 		return closed;
 	}
@@ -58,39 +55,45 @@ public class FluidInputStreamReader extends Reader {
 	public int read() throws IOException {
 		if (closed) return -1;
 		
-		if ((outBuffer.remaining() == 0) || (outBuffer.position() == 0)) {
-			outBuffer.limit(outBuffer.capacity());
-			outBuffer.position(0);
+		if (!outBuffer.hasRemaining() || (outBuffer.position() == 0)) {
+			decoder.reset();
+			outBuffer.clear();
 			
-			int limit = 1;
+			int read;
+			CoderResult coderResult;
+			
 			while (true) {
-				int read = in.read();
+				read = in.read();
+				
 				if (read == -1) {
 					closed = true;
-					return -1;
+				} else {
+					inBuffer.put((byte) read);
 				}
 				
-				inBuffer.limit(limit);
-				inBuffer.put(limit - 1, (byte) read);
+				inBuffer.flip();
 				
-				CoderResult coderResult = decoder.decode(inBuffer, outBuffer,
-						true);
-				if (!coderResult.isError()) break;
+				coderResult = decoder.decode(inBuffer, outBuffer, closed);
 				
-				limit++;
-				
-				if (inBuffer.capacity() <= limit) {
-					inBuffer.rewind();
-					limit = 1;
+				if (coderResult.isUnderflow()) {
+					if (closed) break;
+					if (outBuffer.position() > 0) break;
+				} else if (coderResult.isOverflow()) {
+					break;
+				} else {
+					if (inBuffer.limit() == inBuffer.capacity())
+						coderResult.throwException();
 				}
+				
+				inBuffer.position(inBuffer.limit());
+				inBuffer.limit(inBuffer.capacity());
 			}
 			
-			inBuffer.position(0);
-			outBuffer.limit(outBuffer.position());
-			outBuffer.position(0);
+			inBuffer.clear();
+			outBuffer.flip();
 		}
 		
-		return outBuffer.get();
+		return (outBuffer.hasRemaining()) ? outBuffer.get() : -1;
 	}
 	
 	@Override
@@ -106,6 +109,11 @@ public class FluidInputStreamReader extends Reader {
 	@Override
 	public int read(CharBuffer target) throws IOException {
 		return CharStreamUtil.readCharwise(this, target);
+	}
+	
+	@Override
+	public long skip(long n) throws IOException {
+		return CharStreamUtil.skipCharacterwise(this, n);
 	}
 	
 	@Override

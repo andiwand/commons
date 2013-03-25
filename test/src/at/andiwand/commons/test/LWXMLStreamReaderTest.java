@@ -3,6 +3,7 @@ package at.andiwand.commons.test;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import at.andiwand.commons.io.FluidInputStreamReader;
 import at.andiwand.commons.lwxml.LWXMLEvent;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
@@ -14,7 +15,8 @@ public class LWXMLStreamReaderTest {
 		InputStream inputStream = LWXMLSimpleTranslatorTest.class
 				.getResourceAsStream("test.xml");
 		inputStream = new FileInputStream("/home/andreas/test.odt.html");
-		LWXMLReader in = new LWXMLStreamReader(inputStream);
+		LWXMLReader in = new LWXMLStreamReader(new FluidInputStreamReader(
+				inputStream));
 		
 		long start = System.nanoTime();
 		

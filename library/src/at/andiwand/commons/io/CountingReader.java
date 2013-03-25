@@ -6,13 +6,13 @@ import java.io.Reader;
 
 public class CountingReader extends FilterReader {
 	
-	private int count;
+	private long count;
 	
 	public CountingReader(Reader in) {
 		super(in);
 	}
 	
-	public int count() {
+	public long count() {
 		return count;
 	}
 	

@@ -6,13 +6,13 @@ import java.io.Writer;
 
 public class CountingWriter extends FilterWriter {
 	
-	private int count;
+	private long count;
 	
 	public CountingWriter(Writer out) {
 		super(out);
 	}
 	
-	public int count() {
+	public long count() {
 		return count;
 	}
 	

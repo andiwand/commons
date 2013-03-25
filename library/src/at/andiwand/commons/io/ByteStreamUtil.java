@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-// TODO: rename readForward(...)
+// TODO: exceptions
 public class ByteStreamUtil {
 	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
 	
-	public static int readForward(InputStream in, byte[] b) throws IOException {
+	public static int readTireless(InputStream in, byte[] b) throws IOException {
 		if (b.length == 0) return 0;
 		
 		int result = 0;
@@ -28,7 +28,7 @@ public class ByteStreamUtil {
 		return result;
 	}
 	
-	public static int readForward(InputStream in, byte[] b, int off, int len)
+	public static int readTireless(InputStream in, byte[] b, int off, int len)
 			throws IOException {
 		if (len == 0) return 0;
 		
@@ -99,14 +99,14 @@ public class ByteStreamUtil {
 	}
 	
 	public static int readFully(InputStream in, byte[] b) throws IOException {
-		int read = readForward(in, b);
+		int read = readTireless(in, b);
 		if (read < b.length) throw new EOFException();
 		return read;
 	}
 	
 	public static int readFully(InputStream in, byte[] b, int off, int len)
 			throws IOException {
-		int read = readForward(in, b, off, len);
+		int read = readTireless(in, b, off, len);
 		if (read < len) throw new EOFException();
 		return read;
 	}
@@ -184,6 +184,33 @@ public class ByteStreamUtil {
 		}
 		
 		return n;
+	}
+	
+	public static boolean equals(InputStream in, byte[] array)
+			throws IOException {
+		int read;
+		
+		for (int i = 0; i < array.length; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != array[i]) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(InputStream in, byte[] array, int off, int len)
+			throws IOException {
+		int end = off + len;
+		int read;
+		
+		for (int i = off; i < end; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != array[i]) return false;
+		}
+		
+		return true;
 	}
 	
 	private final int bufferSize;
