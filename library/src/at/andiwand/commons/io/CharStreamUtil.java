@@ -471,6 +471,19 @@ public class CharStreamUtil {
 		return true;
 	}
 	
+	public static boolean equals(Reader in, char[] array, int off)
+			throws IOException {
+		int read;
+		
+		for (int i = off; i < array.length; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != array[i]) return false;
+		}
+		
+		return true;
+	}
+	
 	public static boolean equals(Reader in, char[] array, int off, int len)
 			throws IOException {
 		int end = off + len;

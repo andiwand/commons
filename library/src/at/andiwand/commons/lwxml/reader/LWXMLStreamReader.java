@@ -50,7 +50,9 @@ public class LWXMLStreamReader extends LWXMLReader {
 		}
 	};
 	
-	private static final char[] CDATA_CHARS = "CDATA[".toCharArray();
+	private static final char[] CDATA_CHARS = "[CDATA[".toCharArray();
+	// TODO: remove
+	private static final char[] DOCTYPE_CHARS = "DOCTYPE".toCharArray();
 	
 	private boolean closed;
 	
@@ -192,12 +194,21 @@ public class LWXMLStreamReader extends LWXMLReader {
 			handleComment();
 			return LWXMLEvent.COMMENT;
 		case '[':
-			if (CharStreamUtil.equals(in, CDATA_CHARS))
+			if (!CharStreamUtil.equals(in, CDATA_CHARS, 1))
 				throw new LWXMLReaderException(
 						"malformed tag: cdata was expected");
 			
 			handleCDATA();
 			return LWXMLEvent.CDATA;
+		case 'D':
+			// TODO: remove
+			if (!CharStreamUtil.equals(in, DOCTYPE_CHARS, 1))
+				throw new LWXMLReaderException(
+						"malformed tag: doctype expected");
+			
+			// TODO: improve
+			CharStreamUtil.flushUntilChar(fin, '>');
+			return readEvent();
 		default:
 			throw new LWXMLReaderException(
 					"malformed tag: comment or cdata was expected");
