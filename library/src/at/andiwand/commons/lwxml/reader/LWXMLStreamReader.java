@@ -96,7 +96,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 		attributeNameIn = new UntilCharReader(new ApplyFilterReader(fin,
 				WHITESPACE_FILTER), '=');
 		attributeValueIn = new UntilCharReader(fin, '"');
-		characterIn = new UntilCharReader(fin, '<');
+		characterIn = new UntilCharReader(this.in, '<');
 	}
 	
 	@Override
