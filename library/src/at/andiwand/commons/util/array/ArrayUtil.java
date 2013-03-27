@@ -1436,7 +1436,8 @@ public class ArrayUtil {
 		int length = Array.getLength(array);
 		if (length >= newLength) return array;
 		
-		int addExponent = (int) (((double) newLength / length) * (1d / base));
+		int addExponent = (int) Math.ceil(((double) newLength / length)
+				* (1d / base));
 		newLength = (int) (length * Math.pow(base, addExponent));
 		return copyOf(array, newLength);
 	}

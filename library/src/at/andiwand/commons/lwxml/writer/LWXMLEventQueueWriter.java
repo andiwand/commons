@@ -15,7 +15,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
 	
 	private static final LWXMLEvent[] EVENT_ARRAY = LWXMLEvent.values();
 	
-	private static final double CHAR_PER_EVENT = 4.3;
+	private static final double CHAR_PER_EVENT = 4;
 	
 	public static final int INITIAL_EVENT_SIZE = 10;
 	public static final int INITIAL_VALUE_SIZE = 4;
