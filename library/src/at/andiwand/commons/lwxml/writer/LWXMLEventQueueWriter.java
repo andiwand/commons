@@ -143,9 +143,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
 	
 	@Override
 	public void write(char[] cbuf) {
-		checkWrite(cbuf.length);
-		System.arraycopy(cbuf, 0, charArray, charCount, cbuf.length);
-		charCount += cbuf.length;
+		write(cbuf, 0, cbuf.length);
 	}
 	
 	@Override
@@ -157,9 +155,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
 	
 	@Override
 	public void write(String str) {
-		checkWrite(str.length());
-		str.getChars(0, str.length(), charArray, charCount);
-		charCount += str.length();
+		write(str, 0, str.length());
 	}
 	
 	@Override
@@ -177,11 +173,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
 	
 	@Override
 	public LWXMLEventQueueWriter append(CharSequence csq) {
-		int length = csq.length();
-		checkWrite(length);
-		CharSequenceUtil.copy(csq, charArray);
-		charCount += length;
-		return this;
+		return append(csq, 0, csq.length());
 	}
 	
 	@Override

@@ -1415,7 +1415,7 @@ public class ArrayUtil {
 		return newArray;
 	}
 	
-	public static Object grow(Object array, int newLength) {
+	public static Object growDirect(Object array, int newLength) {
 		int length = Array.getLength(array);
 		if (length >= newLength) return array;
 		
@@ -1423,22 +1423,21 @@ public class ArrayUtil {
 	}
 	
 	public static Object growArithmetic(Object array, int newLength,
-			int difference) {
+			int stepSize) {
 		int length = Array.getLength(array);
 		if (length >= newLength) return array;
 		
-		newLength = length + difference
-				+ MathUtil.floor(newLength - length, difference);
+		newLength = length + stepSize
+				+ MathUtil.floor(newLength - length, stepSize);
 		return copyOf(array, newLength);
 	}
 	
-	public static Object growGeometric(Object array, int newLength, double base) {
+	public static Object growGeometric(Object array, int newLength, int base) {
 		int length = Array.getLength(array);
 		if (length >= newLength) return array;
 		
-		newLength = length
-				* (1 + (int) Math.pow(base, (int) (Math.log(newLength) / Math
-						.log(length))));
+		int addExponent = (int) (((double) newLength / length) * (1d / base));
+		newLength = (int) (length * Math.pow(base, addExponent));
 		return copyOf(array, newLength);
 	}
 	
