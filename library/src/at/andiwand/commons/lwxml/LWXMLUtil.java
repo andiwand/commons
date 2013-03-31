@@ -52,7 +52,7 @@ public class LWXMLUtil {
 		
 		while (true) {
 			LWXMLEvent event = in.readEvent();
-			if (event == LWXMLEvent.END_DOCUMENT) return;
+			if (event == LWXMLEvent.END_DOCUMENT) throw new EOFException();
 			
 			switch (event) {
 			case START_ELEMENT:
@@ -77,7 +77,7 @@ public class LWXMLUtil {
 			case END_EMPTY_ELEMENT:
 			case END_ELEMENT:
 				depth--;
-				if (matchingIndex > depth) return;
+				if (matchingIndex > depth) throw new EOFException();
 				
 				break;
 			default:

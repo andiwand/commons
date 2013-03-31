@@ -1,6 +1,9 @@
 package at.andiwand.commons.lwxml.writer;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import at.andiwand.commons.lwxml.LWXMLEvent;
@@ -14,6 +17,10 @@ public class LWXMLStreamWriter extends LWXMLWriter {
 	
 	private LWXMLEvent lastEvent;
 	private boolean eventWritten;
+	
+	public LWXMLStreamWriter(OutputStream out) {
+		this(new BufferedWriter(new OutputStreamWriter(out)));
+	}
 	
 	public LWXMLStreamWriter(Writer out) {
 		this.out = out;
