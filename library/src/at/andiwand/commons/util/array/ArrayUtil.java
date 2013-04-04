@@ -3,14 +3,11 @@ package at.andiwand.commons.util.array;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import at.andiwand.commons.math.MathUtil;
 import at.andiwand.commons.util.collection.CollectionUtil;
-import at.andiwand.commons.util.collection.KeyGenerator;
 
 
 // TODO: improve attribute names
@@ -731,45 +728,6 @@ public class ArrayUtil {
 			if (element < result) result = element;
 		}
 		
-		return result;
-	}
-	
-	public static <K, V> void putAll(Map<? super K, ? super V> map,
-			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
-		V value;
-		K key;
-		
-		for (int i = 0; i < values.length; i++) {
-			value = values[i];
-			key = keyGenerator.generateKey(value);
-			map.put(key, value);
-		}
-	}
-	
-	public static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
-			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
-		V value;
-		K key;
-		
-		for (int i = 0; i < values.length; i++) {
-			value = values[i];
-			key = keyGenerator.generateKey(value);
-			if (key == null) continue;
-			map.put(key, value);
-		}
-	}
-	
-	public static <K, V> HashMap<K, V> toHashMap(
-			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
-		HashMap<K, V> result = new HashMap<K, V>();
-		putAll(result, keyGenerator, values);
-		return result;
-	}
-	
-	public static <K, V> HashMap<K, V> toHashMapNotNull(
-			KeyGenerator<? extends K, ? super V> keyGenerator, V... values) {
-		HashMap<K, V> result = new HashMap<K, V>();
-		putAllNotNull(result, keyGenerator, values);
 		return result;
 	}
 	

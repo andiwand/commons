@@ -11,12 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import at.andiwand.commons.io.CharStreamUtil;
+import at.andiwand.commons.io.StreamableStringMap;
+import at.andiwand.commons.io.StreamableStringSet;
 import at.andiwand.commons.lwxml.path.LWXMLNodeIdentifier;
 import at.andiwand.commons.lwxml.path.LWXMLPath;
 import at.andiwand.commons.lwxml.reader.LWXMLBranchReader;
 import at.andiwand.commons.lwxml.reader.LWXMLElementReader;
 import at.andiwand.commons.lwxml.reader.LWXMLReader;
 import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
+import at.andiwand.commons.util.collection.OrderedPair;
 
 
 // TODO: make use of EOFException
@@ -209,11 +213,58 @@ public class LWXMLUtil {
 		}
 	}
 	
-	public static Map<String, String> parseAttributes(LWXMLReader in,
-			Set<String> attributeNames) throws IOException {
-		if (attributeNames.isEmpty()) return Collections.emptyMap();
+	public static void parseAttributes(LWXMLReader in,
+			StreamableStringSet attributes, Map<String, String> result)
+			throws IOException {
+		while (true) {
+			LWXMLEvent event = in.readEvent();
+			
+			switch (event) {
+			case ATTRIBUTE_NAME:
+				String attribute = attributes.match(in);
+				if (attribute == null) break;
+				
+				result.put(attribute, in.readFollowingValue());
+				if (result.size() >= attributes.size()) return;
+			case ATTRIBUTE_VALUE:
+				break;
+			case END_ATTRIBUTE_LIST:
+				return;
+			default:
+				throw new LWXMLIllegalEventException(event);
+			}
+		}
+	}
+	
+	public static void parseAttributes(LWXMLReader in,
+			StreamableStringMap<String> map) throws IOException {
+		int parsed = 0;
 		
-		Map<String, String> result = new HashMap<String, String>(attributeNames
+		while (true) {
+			LWXMLEvent event = in.readEvent();
+			
+			switch (event) {
+			case ATTRIBUTE_NAME:
+				OrderedPair<String, String> match = map.match(in);
+				if (match == null) break;
+				
+				map.put(match.getElement1(), in.readFollowingValue());
+				if (++parsed >= map.size()) return;
+			case ATTRIBUTE_VALUE:
+				break;
+			case END_ATTRIBUTE_LIST:
+				return;
+			default:
+				throw new LWXMLIllegalEventException(event);
+			}
+		}
+	}
+	
+	public static Map<String, String> parseAttributes(LWXMLReader in,
+			Set<String> attributes) throws IOException {
+		if (attributes.isEmpty()) return Collections.emptyMap();
+		
+		Map<String, String> result = new HashMap<String, String>(attributes
 				.size());
 		
 		while (true) {
@@ -222,9 +273,9 @@ public class LWXMLUtil {
 			switch (event) {
 			case ATTRIBUTE_NAME:
 				String attributeName = in.readValue();
-				if (attributeNames.contains(attributeName)) {
+				if (attributes.contains(attributeName)) {
 					result.put(attributeName, in.readFollowingValue());
-					if (result.size() >= attributeNames.size()) return result;
+					if (result.size() >= attributes.size()) return result;
 				}
 			case ATTRIBUTE_VALUE:
 				break;
@@ -243,7 +294,7 @@ public class LWXMLUtil {
 			
 			switch (event) {
 			case ATTRIBUTE_NAME:
-				if (in.readValue().equals(attributeName))
+				if (CharStreamUtil.equals(in, attributeName))
 					return in.readFollowingValue();
 				break;
 			case ATTRIBUTE_VALUE:

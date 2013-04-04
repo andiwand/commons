@@ -3,7 +3,7 @@ package at.andiwand.commons.math;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import at.andiwand.commons.util.array.ArrayUtil;
+import at.andiwand.commons.util.collection.CollectionUtil;
 import at.andiwand.commons.util.collection.KeyGenerator;
 
 
@@ -43,7 +43,7 @@ public enum MetricPrefix implements UnitPrefix {
 	private static final Map<String, MetricPrefix> SYMBOL_MAP;
 	
 	static {
-		SYMBOL_MAP = ArrayUtil.toHashMap(KEY_GENERATOR, values());
+		SYMBOL_MAP = CollectionUtil.toHashMap(KEY_GENERATOR, values());
 	}
 	
 	public static MetricPrefix getBySymbol(String symbol) {
