@@ -4,8 +4,6 @@ public class CharSequenceWraper extends AbstractCharSequence {
 	
 	private CharSequence charSequence;
 	
-	public CharSequenceWraper() {}
-	
 	public CharSequenceWraper(CharSequence charSequence) {
 		this.charSequence = charSequence;
 	}
@@ -36,10 +34,6 @@ public class CharSequenceWraper extends AbstractCharSequence {
 	@Override
 	public String toString() {
 		return charSequence.toString();
-	}
-	
-	public void setCharSequence(CharSequence charSequence) {
-		this.charSequence = charSequence;
 	}
 	
 	public CharSequence getCharSequence() {

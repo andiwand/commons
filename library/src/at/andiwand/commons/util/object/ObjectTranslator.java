@@ -1,9 +1,7 @@
 package at.andiwand.commons.util.object;
 
-public interface ObjectTranslator<T1, T2> {
+public interface ObjectTranslator<S, D> extends ObjectTransformer<S, D> {
 	
-	public T2 translate(T1 o1);
-	
-	public T1 translateBack(T2 o2);
+	public S retransform(D destination);
 	
 }

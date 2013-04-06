@@ -9,8 +9,6 @@ public class CharSequenceArrayWrapper extends AbstractCharSequence {
 	private int off;
 	private int len;
 	
-	public CharSequenceArrayWrapper() {}
-	
 	public CharSequenceArrayWrapper(char[] array) {
 		this(array, 0, array.length);
 	}
@@ -42,18 +40,6 @@ public class CharSequenceArrayWrapper extends AbstractCharSequence {
 		}
 		
 		return false;
-	}
-	
-	public void setCharArray(char[] array) {
-		this.array = array;
-	}
-	
-	public void setOffset(int off) {
-		this.off = off;
-	}
-	
-	public void setLength(int len) {
-		this.len = len;
 	}
 	
 	public char[] getCharArray() {

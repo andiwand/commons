@@ -2,6 +2,10 @@ package at.andiwand.commons.util.object;
 
 public class ObjectUtil {
 	
+	public static int hashCode(Object o) {
+		return (o == null) ? 0 : o.hashCode();
+	}
+	
 	public static boolean equals(Object a, Object b) {
 		return (a == null) ? (b == null) : a.equals(b);
 	}

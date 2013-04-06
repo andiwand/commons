@@ -13,7 +13,6 @@ import java.util.Set;
 
 import at.andiwand.commons.io.CharStreamUtil;
 import at.andiwand.commons.io.StreamableStringMap;
-import at.andiwand.commons.io.StreamableStringSet;
 import at.andiwand.commons.lwxml.path.LWXMLNodeIdentifier;
 import at.andiwand.commons.lwxml.path.LWXMLPath;
 import at.andiwand.commons.lwxml.reader.LWXMLBranchReader;
