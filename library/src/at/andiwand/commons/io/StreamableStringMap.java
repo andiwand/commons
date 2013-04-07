@@ -19,6 +19,7 @@ import at.andiwand.commons.util.string.CharSequenceWraper;
 
 // TODO: improve: make use of object tools
 // TODO: improve: re-implement for mapt, set, ... matching ability
+// TODO: override HashMap?
 public class StreamableStringMap<V> extends AbstractMap<String, V> {
 	
 	private static class EntryWrapper<V> extends
@@ -88,12 +89,27 @@ public class StreamableStringMap<V> extends AbstractMap<String, V> {
 		}
 	}
 	
-	private final Map<AbstractCharSequence, OrderedPair<String, V>> map = new HashMap<AbstractCharSequence, OrderedPair<String, V>>();
+	private final HashMap<AbstractCharSequence, OrderedPair<String, V>> map;
 	
 	private EntrySet entrySet;
 	
 	private int bufferSize;
 	private char[] buffer;
+	
+	public StreamableStringMap() {
+		map = new HashMap<AbstractCharSequence, OrderedPair<String, V>>();
+	}
+	
+	public StreamableStringMap(int capacity) {
+		map = new HashMap<AbstractCharSequence, OrderedPair<String, V>>(
+				capacity);
+	}
+	
+	public StreamableStringMap(Map<? extends String, ? extends V> map) {
+		this(map.size());
+		
+		putAll(map);
+	}
 	
 	@Override
 	public V put(String key, V value) {

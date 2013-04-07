@@ -4,15 +4,14 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import at.andiwand.commons.io.CharStreamUtil;
 import at.andiwand.commons.io.StreamableStringMap;
+import at.andiwand.commons.io.StreamableStringSet;
 import at.andiwand.commons.lwxml.path.LWXMLNodeIdentifier;
 import at.andiwand.commons.lwxml.path.LWXMLPath;
 import at.andiwand.commons.lwxml.reader.LWXMLBranchReader;
@@ -259,31 +258,12 @@ public class LWXMLUtil {
 		}
 	}
 	
-	public static Map<String, String> parseAttributes(LWXMLReader in,
-			Set<String> attributes) throws IOException {
-		if (attributes.isEmpty()) return Collections.emptyMap();
-		
-		Map<String, String> result = new HashMap<String, String>(attributes
+	public static HashMap<String, String> parseAttributes(LWXMLReader in,
+			StreamableStringSet attributes) throws IOException {
+		HashMap<String, String> result = new HashMap<String, String>(attributes
 				.size());
-		
-		while (true) {
-			LWXMLEvent event = in.readEvent();
-			
-			switch (event) {
-			case ATTRIBUTE_NAME:
-				String attributeName = in.readValue();
-				if (attributes.contains(attributeName)) {
-					result.put(attributeName, in.readFollowingValue());
-					if (result.size() >= attributes.size()) return result;
-				}
-			case ATTRIBUTE_VALUE:
-				break;
-			case END_ATTRIBUTE_LIST:
-				return result;
-			default:
-				throw new LWXMLIllegalEventException(event);
-			}
-		}
+		parseAttributes(in, attributes, result);
+		return result;
 	}
 	
 	public static String parseSingleAttributes(LWXMLReader in,

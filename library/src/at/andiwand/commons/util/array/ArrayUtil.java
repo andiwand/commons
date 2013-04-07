@@ -2,6 +2,7 @@ package at.andiwand.commons.util.array;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -165,222 +166,263 @@ public class ArrayUtil {
 		return result;
 	}
 	
+	public static <T extends Collection<? super E>, E> T toCollection(T c,
+			E... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Boolean>, E> T toCollection(
+			T c, boolean... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Byte>, E> T toCollection(T c,
+			byte... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Character>, E> T toCollection(
+			T c, char... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Short>, E> T toCollection(T c,
+			short... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Integer>, E> T toCollection(
+			T c, int... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Long>, E> T toCollection(T c,
+			long... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Float>, E> T toCollection(T c,
+			float... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Double>, E> T toCollection(T c,
+			double... array) {
+		CollectionUtil.addAll(c, array);
+		return c;
+	}
+	
+	public static <T extends Collection<? super E>, E> T toCollection(T c,
+			E[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Boolean>, E> T toCollection(
+			T c, boolean[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Byte>, E> T toCollection(T c,
+			byte[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Character>, E> T toCollection(
+			T c, char[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Short>, E> T toCollection(T c,
+			short[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Integer>, E> T toCollection(
+			T c, int[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Long>, E> T toCollection(T c,
+			long[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Float>, E> T toCollection(T c,
+			float[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
+	public static <T extends Collection<? super Double>, E> T toCollection(T c,
+			double[] array, int off, int len) {
+		CollectionUtil.addAll(c, array, off, len);
+		return c;
+	}
+	
 	public static <E> HashSet<E> toHashSet(E... array) {
-		HashSet<E> result = new HashSet<E>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<E>(array.length), array);
 	}
 	
 	public static HashSet<Boolean> toHashSet(boolean... array) {
-		HashSet<Boolean> result = new HashSet<Boolean>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Boolean>(array.length), array);
 	}
 	
 	public static HashSet<Byte> toHashSet(byte... array) {
-		HashSet<Byte> result = new HashSet<Byte>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Byte>(array.length), array);
 	}
 	
 	public static HashSet<Character> toHashSet(char... array) {
-		HashSet<Character> result = new HashSet<Character>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Character>(array.length), array);
 	}
 	
 	public static HashSet<Short> toHashSet(short... array) {
-		HashSet<Short> result = new HashSet<Short>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Short>(array.length), array);
 	}
 	
 	public static HashSet<Integer> toHashSet(int... array) {
-		HashSet<Integer> result = new HashSet<Integer>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Integer>(array.length), array);
 	}
 	
 	public static HashSet<Long> toHashSet(long... array) {
-		HashSet<Long> result = new HashSet<Long>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Long>(array.length), array);
 	}
 	
 	public static HashSet<Float> toHashSet(float... array) {
-		HashSet<Float> result = new HashSet<Float>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Float>(array.length), array);
 	}
 	
 	public static HashSet<Double> toHashSet(double... array) {
-		HashSet<Double> result = new HashSet<Double>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new HashSet<Double>(array.length), array);
 	}
 	
 	public static <E> HashSet<E> toHashSet(E[] array, int off, int len) {
-		HashSet<E> result = new HashSet<E>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<E>(array.length), array, off, len);
 	}
 	
 	public static HashSet<Boolean> toHashSet(boolean[] array, int off, int len) {
-		HashSet<Boolean> result = new HashSet<Boolean>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Boolean>(array.length), array, off, len);
 	}
 	
 	public static HashSet<Byte> toHashSet(byte[] array, int off, int len) {
-		HashSet<Byte> result = new HashSet<Byte>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Byte>(array.length), array, off, len);
 	}
 	
 	public static HashSet<Character> toHashSet(char[] array, int off, int len) {
-		HashSet<Character> result = new HashSet<Character>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Character>(array.length), array, off,
+				len);
 	}
 	
 	public static HashSet<Short> toHashSet(short[] array, int off, int len) {
-		HashSet<Short> result = new HashSet<Short>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Short>(array.length), array, off, len);
 	}
 	
 	public static HashSet<Integer> toHashSet(int[] array, int off, int len) {
-		HashSet<Integer> result = new HashSet<Integer>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Integer>(array.length), array, off, len);
 	}
 	
 	public static HashSet<Long> toHashSet(long[] array, int off, int len) {
-		HashSet<Long> result = new HashSet<Long>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Long>(array.length), array, off, len);
 	}
 	
 	public static HashSet<Float> toHashSet(float[] array, int off, int len) {
-		HashSet<Float> result = new HashSet<Float>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Float>(array.length), array, off, len);
 	}
 	
 	public static HashSet<Double> toHashSet(double[] array, int off, int len) {
-		HashSet<Double> result = new HashSet<Double>(len);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new HashSet<Double>(array.length), array, off, len);
 	}
 	
 	public static <E> ArrayList<E> toArrayList(E... array) {
-		ArrayList<E> result = new ArrayList<E>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<E>(array.length), array);
 	}
 	
 	public static ArrayList<Boolean> toArrayList(boolean... array) {
-		ArrayList<Boolean> result = new ArrayList<Boolean>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Boolean>(array.length), array);
 	}
 	
 	public static ArrayList<Byte> toArrayList(byte... array) {
-		ArrayList<Byte> result = new ArrayList<Byte>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Byte>(array.length), array);
 	}
 	
 	public static ArrayList<Character> toArrayList(char... array) {
-		ArrayList<Character> result = new ArrayList<Character>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Character>(array.length), array);
 	}
 	
 	public static ArrayList<Short> toArrayList(short... array) {
-		ArrayList<Short> result = new ArrayList<Short>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Short>(array.length), array);
 	}
 	
 	public static ArrayList<Integer> toArrayList(int... array) {
-		ArrayList<Integer> result = new ArrayList<Integer>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Integer>(array.length), array);
 	}
 	
 	public static ArrayList<Long> toArrayList(long... array) {
-		ArrayList<Long> result = new ArrayList<Long>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Long>(array.length), array);
 	}
 	
 	public static ArrayList<Float> toArrayList(float... array) {
-		ArrayList<Float> result = new ArrayList<Float>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Float>(array.length), array);
 	}
 	
 	public static ArrayList<Double> toArrayList(double... array) {
-		ArrayList<Double> result = new ArrayList<Double>(array.length);
-		CollectionUtil.addAll(result, array);
-		return result;
+		return toCollection(new ArrayList<Double>(array.length), array);
 	}
 	
 	public static <E> ArrayList<E> toArrayList(E[] array, int off, int len) {
-		ArrayList<E> result = new ArrayList<E>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<E>(array.length), array, off, len);
 	}
 	
 	public static ArrayList<Boolean> toArrayList(boolean[] array, int off,
 			int len) {
-		ArrayList<Boolean> result = new ArrayList<Boolean>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Boolean>(array.length), array, off,
+				len);
 	}
 	
 	public static ArrayList<Byte> toArrayList(byte[] array, int off, int len) {
-		ArrayList<Byte> result = new ArrayList<Byte>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Byte>(array.length), array, off, len);
 	}
 	
 	public static ArrayList<Character> toArrayList(char[] array, int off,
 			int len) {
-		ArrayList<Character> result = new ArrayList<Character>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Character>(array.length), array, off,
+				len);
 	}
 	
 	public static ArrayList<Short> toArrayList(short[] array, int off, int len) {
-		ArrayList<Short> result = new ArrayList<Short>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Short>(array.length), array, off, len);
 	}
 	
 	public static ArrayList<Integer> toArrayList(int[] array, int off, int len) {
-		ArrayList<Integer> result = new ArrayList<Integer>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Integer>(array.length), array, off,
+				len);
 	}
 	
 	public static ArrayList<Long> toArrayList(long[] array, int off, int len) {
-		ArrayList<Long> result = new ArrayList<Long>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Long>(array.length), array, off, len);
 	}
 	
 	public static ArrayList<Float> toArrayList(float[] array, int off, int len) {
-		ArrayList<Float> result = new ArrayList<Float>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Float>(array.length), array, off, len);
 	}
 	
 	public static ArrayList<Double> toArrayList(double[] array, int off, int len) {
-		ArrayList<Double> result = new ArrayList<Double>(array.length);
-		CollectionUtil.addAll(result, array, off, len);
-		return result;
+		return toCollection(new ArrayList<Double>(array.length), array, off,
+				len);
 	}
 	
 	public static <E extends Comparable<E>> E getGreatest(E... array) {

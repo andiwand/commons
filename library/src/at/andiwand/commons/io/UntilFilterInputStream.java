@@ -34,7 +34,7 @@ public class UntilFilterInputStream extends BytewiseFilterInputStream implements
 	}
 	
 	@Override
-	public void clear() {
+	public void reset() {
 		found = false;
 	}
 	
