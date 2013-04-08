@@ -15,7 +15,7 @@ import at.andiwand.commons.util.collection.KeyGenerator;
 
 // TODO: improve attribute names
 // TODO: implement array methods with offset and length
-// TODO: call method by method, avoid redundant code?
+// TODO: avoid redundant code?
 public class ArrayUtil {
 	
 	public static final boolean[] EMPTY_BOOLEAN_ARRAY = {};

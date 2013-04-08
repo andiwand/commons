@@ -10,8 +10,7 @@ public abstract class AbstractLWXMLVisitor implements LWXMLVisitor {
 	
 	@Override
 	public synchronized void visitHost(LWXMLHost host) {
-		if (host != null) throw new IllegalStateException("already visiting");
-		
+		if (host != currentHost) throw new IllegalArgumentException();
 		this.currentHost = host;
 	}
 	
