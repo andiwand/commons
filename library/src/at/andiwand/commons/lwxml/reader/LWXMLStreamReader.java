@@ -172,7 +172,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	
 	// TODO: another way w/o new?
 	private void handleEndElement() throws IOException {
-		endElementIn.clear();
+		endElementIn.reset();
 		eventReader = endElementIn;
 	}
 	
@@ -216,30 +216,30 @@ public class LWXMLStreamReader extends LWXMLReader {
 	}
 	
 	private void handleComment() throws IOException {
-		commentIn.clear();
+		commentIn.reset();
 		eventReader = commentIn;
 	}
 	
 	private void handleCDATA() throws IOException {
-		cdataIn.clear();
+		cdataIn.reset();
 		eventReader = cdataIn;
 	}
 	
 	private void handleProcessingInstructionTarget() throws IOException {
-		processingInstructionTargetIn.clear();
+		processingInstructionTargetIn.reset();
 		eventReader = processingInstructionTargetIn;
 	}
 	
 	private void handleProcessingInstructionData() throws IOException {
 		CharStreamUtil.flushUntilFilter(in, WHITESPACE_FILTER);
 		
-		processingInstructionDataIn.clear();
+		processingInstructionDataIn.reset();
 		eventReader = processingInstructionDataIn;
 	}
 	
 	private void handleStartElement() throws IOException {
 		handleAttributeList = true;
-		startElementIn.clear();
+		startElementIn.reset();
 		eventReader = startElementIn;
 	}
 	
@@ -264,7 +264,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 	}
 	
 	private void handleAttributeName() throws IOException {
-		attributeNameIn.clear();
+		attributeNameIn.reset();
 		eventReader = attributeNameIn;
 	}
 	
@@ -272,12 +272,12 @@ public class LWXMLStreamReader extends LWXMLReader {
 	private void handleAttributeValue() throws IOException {
 		CharStreamUtil.flushUntilChar(in, '"');
 		
-		attributeValueIn.clear();
+		attributeValueIn.reset();
 		eventReader = attributeValueIn;
 	}
 	
 	private void handleCharacters() throws IOException {
-		characterIn.clear();
+		characterIn.reset();
 		eventReader = characterIn;
 	}
 	

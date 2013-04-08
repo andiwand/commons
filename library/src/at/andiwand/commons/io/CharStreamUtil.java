@@ -498,6 +498,47 @@ public class CharStreamUtil {
 		return true;
 	}
 	
+	public static boolean equals(Reader in, CharSequence charSequence)
+			throws IOException {
+		int length = charSequence.length();
+		int read;
+		
+		for (int i = 0; i < length; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != charSequence.charAt(i)) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(Reader in, CharSequence charSequence, int start)
+			throws IOException {
+		int length = charSequence.length();
+		int read;
+		
+		for (int i = start; i < length; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != charSequence.charAt(i)) return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean equals(Reader in, CharSequence charSequence,
+			int start, int end) throws IOException {
+		int read;
+		
+		for (int i = start; i < end; i++) {
+			read = in.read();
+			if (read == -1) throw new EOFException();
+			if (read != charSequence.charAt(i)) return false;
+		}
+		
+		return true;
+	}
+	
 	private final int bufferSize;
 	private char[] cbuf;
 	

@@ -18,31 +18,31 @@ public class CloseableInputStream extends FilterInputStream {
 	
 	@Override
 	public int read() throws IOException {
-		if (closed) return -1;
+		if (closed) throw new StreamClosedException();
 		return in.read();
 	}
 	
 	@Override
 	public int read(byte[] b) throws IOException {
-		if (closed) return -1;
+		if (closed) throw new StreamClosedException();
 		return in.read(b);
 	}
 	
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
-		if (closed) return -1;
+		if (closed) throw new StreamClosedException();
 		return in.read(b, off, len);
 	}
 	
 	@Override
 	public int available() throws IOException {
-		if (closed) return 0;
+		if (closed) throw new StreamClosedException();
 		return in.available();
 	}
 	
 	@Override
 	public void reset() throws IOException {
-		if (closed) throw new IOException("stream is already closed");
+		if (closed) throw new StreamClosedException();
 		in.reset();
 	}
 	
@@ -54,7 +54,7 @@ public class CloseableInputStream extends FilterInputStream {
 	
 	@Override
 	public long skip(long n) throws IOException {
-		if (closed) return 0;
+		if (closed) throw new StreamClosedException();
 		return in.skip(n);
 	}
 	

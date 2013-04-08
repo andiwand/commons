@@ -114,27 +114,27 @@ public class LWXMLPushbackReader extends LWXMLFilterReader {
 	
 	@Override
 	public int read() throws IOException {
-		return in.read();
+		return valueReader.read();
 	}
 	
 	@Override
 	public int read(char[] cbuf) throws IOException {
-		return in.read(cbuf);
+		return valueReader.read(cbuf);
 	}
 	
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		return in.read(cbuf, off, len);
+		return valueReader.read(cbuf, off, len);
 	}
 	
 	@Override
 	public int read(CharBuffer target) throws IOException {
-		return in.read(target);
+		return valueReader.read(target);
 	}
 	
 	@Override
 	public long skip(long n) throws IOException {
-		return in.skip(n);
+		return valueReader.skip(n);
 	}
 	
 }

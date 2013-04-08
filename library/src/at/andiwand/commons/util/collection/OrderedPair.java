@@ -2,8 +2,8 @@ package at.andiwand.commons.util.collection;
 
 public class OrderedPair<E1, E2> {
 	
-	protected final E1 element1;
-	protected final E2 element2;
+	private final E1 element1;
+	private final E2 element2;
 	
 	public OrderedPair(E1 element1, E2 element2) {
 		this.element1 = element1;

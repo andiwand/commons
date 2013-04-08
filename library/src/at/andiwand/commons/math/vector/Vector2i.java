@@ -119,6 +119,14 @@ public class Vector2i {
 		return new Vector2i(Math.abs(x), Math.abs(y));
 	}
 	
+	public Vector2i min(Vector2i b) {
+		return new Vector2i(Math.min(x, b.x), Math.min(y, b.y));
+	}
+	
+	public Vector2i max(Vector2i b) {
+		return new Vector2i(Math.max(x, b.x), Math.max(y, b.y));
+	}
+	
 	public Vector2i turnLeft() {
 		return new Vector2i(-y, x);
 	}

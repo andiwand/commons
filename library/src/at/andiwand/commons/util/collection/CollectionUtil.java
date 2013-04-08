@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -13,6 +14,7 @@ import java.util.RandomAccess;
 
 import at.andiwand.commons.util.iterator.IterableIterator;
 import at.andiwand.commons.util.iterator.IteratorEnumeration;
+import at.andiwand.commons.util.object.ObjectTransformer;
 
 
 // TODO: improve argument names
@@ -877,7 +879,7 @@ public class CollectionUtil {
 	}
 	
 	public static <K, V> void putAll(Map<? super K, ? super V> map,
-			KeyGenerator<? extends K, ? super V> keyGenerator,
+			ObjectTransformer<? super V, ? extends K> keyGenerator,
 			Collection<? extends V> values) {
 		if ((values instanceof List) && (values instanceof RandomAccess)) {
 			putAll(map, keyGenerator, (List<? extends V>) values);
@@ -885,23 +887,23 @@ public class CollectionUtil {
 		}
 		
 		for (V value : values) {
-			K key = keyGenerator.generateKey(value);
+			K key = keyGenerator.transform(value);
 			map.put(key, value);
 		}
 	}
 	
 	private static <K, V> void putAll(Map<? super K, ? super V> map,
-			KeyGenerator<? extends K, ? super V> keyGenerator,
+			ObjectTransformer<? super V, ? extends K> keyGenerator,
 			List<? extends V> randomAccessList) {
 		for (int i = 0; i < randomAccessList.size(); i++) {
 			V value = randomAccessList.get(i);
-			K key = keyGenerator.generateKey(value);
+			K key = keyGenerator.transform(value);
 			map.put(key, value);
 		}
 	}
 	
 	public static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
-			KeyGenerator<? extends K, ? super V> keyGenerator,
+			ObjectTransformer<? super V, ? extends K> keyGenerator,
 			Collection<? extends V> values) {
 		if ((values instanceof List) && (values instanceof RandomAccess)) {
 			putAllNotNull(map, keyGenerator, (List<? extends V>) values);
@@ -909,25 +911,64 @@ public class CollectionUtil {
 		}
 		
 		for (V value : values) {
-			K key = keyGenerator.generateKey(value);
+			K key = keyGenerator.transform(value);
 			if (key == null) continue;
 			map.put(key, value);
 		}
 	}
 	
 	private static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
-			KeyGenerator<? extends K, ? super V> keyGenerator,
+			ObjectTransformer<? super V, ? extends K> keyGenerator,
 			List<? extends V> randomAccessList) {
 		for (int i = 0; i < randomAccessList.size(); i++) {
 			V value = randomAccessList.get(i);
-			K key = keyGenerator.generateKey(value);
+			K key = keyGenerator.transform(value);
+			if (key == null) continue;
+			map.put(key, value);
+		}
+	}
+	
+	public static <K, V> void putAll(Map<? super K, ? super V> map,
+			ObjectTransformer<? super V, ? extends K> keyGenerator, V... values) {
+		V value;
+		K key;
+		
+		for (int i = 0; i < values.length; i++) {
+			value = values[i];
+			key = keyGenerator.transform(value);
+			map.put(key, value);
+		}
+	}
+	
+	public static <K, V> void putAllNotNull(Map<? super K, ? super V> map,
+			ObjectTransformer<? super V, ? extends K> keyGenerator, V... values) {
+		V value;
+		K key;
+		
+		for (int i = 0; i < values.length; i++) {
+			value = values[i];
+			key = keyGenerator.transform(value);
 			if (key == null) continue;
 			map.put(key, value);
 		}
 	}
 	
 	public static <K, V> HashMap<K, V> toHashMap(
-			KeyGenerator<? extends K, ? super V> keyGenerator,
+			ObjectTransformer<? super V, ? extends K> keyGenerator, V... values) {
+		HashMap<K, V> result = new HashMap<K, V>();
+		putAll(result, keyGenerator, values);
+		return result;
+	}
+	
+	public static <K, V> HashMap<K, V> toHashMapNotNull(
+			ObjectTransformer<? super V, ? extends K> keyGenerator, V... values) {
+		HashMap<K, V> result = new HashMap<K, V>();
+		putAllNotNull(result, keyGenerator, values);
+		return result;
+	}
+	
+	public static <K, V> HashMap<K, V> toHashMap(
+			ObjectTransformer<? super V, ? extends K> keyGenerator,
 			Collection<? extends V> values) {
 		HashMap<K, V> result = new HashMap<K, V>();
 		putAll(result, keyGenerator, values);
@@ -935,7 +976,7 @@ public class CollectionUtil {
 	}
 	
 	public static <K, V> HashMap<K, V> toHashMapNotNull(
-			KeyGenerator<? extends K, ? super V> keyGenerator,
+			ObjectTransformer<? super V, ? extends K> keyGenerator,
 			Collection<? extends V> values) {
 		HashMap<K, V> result = new HashMap<K, V>();
 		putAllNotNull(result, keyGenerator, values);
@@ -991,6 +1032,72 @@ public class CollectionUtil {
 				iteratorJ.set(tmp);
 			}
 		}
+	}
+	
+	public static <V> void get(Map<?, ? extends V> map,
+			Collection<? extends Object> keys, Collection<? super V> values) {
+		for (Object key : keys) {
+			if (!map.containsKey(key)) continue;
+			
+			V value = map.get(key);
+			values.add(value);
+		}
+	}
+	
+	public static <V> void get(Map<?, ? extends V> map,
+			Collection<? super V> values, Object... keys) {
+		for (int i = 0; i < keys.length; i++) {
+			Object key = keys[i];
+			if (!map.containsKey(key)) continue;
+			
+			V value = map.get(key);
+			values.add(value);
+		}
+	}
+	
+	public static <V> void getNotNull(Map<?, ? extends V> map,
+			Collection<? extends Object> keys, Collection<? super V> values) {
+		for (Object key : keys) {
+			V value = map.get(key);
+			if (value != null) values.add(value);
+		}
+	}
+	
+	public static <V> void getNotNull(Map<?, ? extends V> map,
+			Collection<? super V> values, Object... keys) {
+		for (int i = 0; i < keys.length; i++) {
+			Object key = keys[i];
+			V value = map.get(key);
+			if (value != null) values.add(value);
+		}
+	}
+	
+	public static <V> HashSet<V> getHashSet(Map<?, ? extends V> map,
+			Collection<? extends Object> keys) {
+		HashSet<V> result = new HashSet<V>();
+		get(map, keys, result);
+		return result;
+	}
+	
+	public static <V> HashSet<V> getHashSet(Map<?, ? extends V> map,
+			Object... keys) {
+		HashSet<V> result = new HashSet<V>();
+		get(map, result, keys);
+		return result;
+	}
+	
+	public static <V> HashSet<V> getHashSetNotNull(Map<?, ? extends V> map,
+			Collection<? extends Object> keys) {
+		HashSet<V> result = new HashSet<V>();
+		getNotNull(map, keys, result);
+		return result;
+	}
+	
+	public static <V> HashSet<V> getHashSetNotNull(Map<?, ? extends V> map,
+			Object... keys) {
+		HashSet<V> result = new HashSet<V>();
+		getNotNull(map, result, keys);
+		return result;
 	}
 	
 	private CollectionUtil() {}

@@ -10,8 +10,6 @@ public class LWXMLElementReader extends LWXMLFilterReader {
 	
 	private boolean closed;
 	
-	private LWXMLEvent lastEvent;
-	
 	private boolean first = true;
 	private int depth;
 	
@@ -22,7 +20,7 @@ public class LWXMLElementReader extends LWXMLFilterReader {
 	@Override
 	public LWXMLEvent getCurrentEvent() {
 		if (closed) return LWXMLEvent.END_DOCUMENT;
-		return lastEvent;
+		return in.getCurrentEvent();
 	}
 	
 	@Override
@@ -46,13 +44,13 @@ public class LWXMLElementReader extends LWXMLFilterReader {
 			break;
 		case END_DOCUMENT:
 			closed = true;
-			return event;
+			return LWXMLEvent.END_DOCUMENT;
 		default:
 			break;
 		}
 		
 		first = false;
-		return lastEvent = event;
+		return event;
 	}
 	
 	@Override

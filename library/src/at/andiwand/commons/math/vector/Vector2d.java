@@ -145,6 +145,14 @@ public class Vector2d {
 		return new Vector2d(Math.abs(x), Math.abs(y));
 	}
 	
+	public Vector2d min(Vector2d b) {
+		return new Vector2d(Math.min(x, b.x), Math.min(y, b.y));
+	}
+	
+	public Vector2d max(Vector2d b) {
+		return new Vector2d(Math.max(x, b.x), Math.max(y, b.y));
+	}
+	
 	public Vector2d turnLeft() {
 		return new Vector2d(-y, x);
 	}

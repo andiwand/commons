@@ -18,25 +18,25 @@ public class CloseableOutputStream extends FilterOutputStream {
 	
 	@Override
 	public void write(int c) throws IOException {
-		if (closed) return;
+		if (closed) throw new StreamClosedException();
 		out.write(c);
 	}
 	
 	@Override
 	public void write(byte[] b) throws IOException {
-		if (closed) return;
+		if (closed) throw new StreamClosedException();
 		out.write(b);
 	}
 	
 	@Override
 	public void write(byte[] b, int off, int len) throws IOException {
-		if (closed) return;
+		if (closed) throw new StreamClosedException();
 		out.write(b, off, len);
 	}
 	
 	@Override
 	public void flush() throws IOException {
-		if (closed) return;
+		if (closed) throw new StreamClosedException();
 		out.flush();
 	}
 	

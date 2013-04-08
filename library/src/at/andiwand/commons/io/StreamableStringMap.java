@@ -9,36 +9,24 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import at.andiwand.commons.util.collection.AbstractEntryWrapper;
 import at.andiwand.commons.util.collection.OrderedPair;
+import at.andiwand.commons.util.iterator.DelegationIterator;
 import at.andiwand.commons.util.string.AbstractCharSequence;
 import at.andiwand.commons.util.string.CharSequenceArrayWrapper;
 import at.andiwand.commons.util.string.CharSequenceWraper;
 
 
+// TODO: improve: make use of object tools
+// TODO: improve: re-implement for mapt, set, ... matching ability
+// TODO: override HashMap?
 public class StreamableStringMap<V> extends AbstractMap<String, V> {
 	
-	private static class EntryWrapper<V> implements Entry<String, V> {
-		private Entry<AbstractCharSequence, OrderedPair<String, V>> entry;
-		
+	private static class EntryWrapper<V> extends
+			AbstractEntryWrapper<AbstractCharSequence, OrderedPair<String, V>, String, V> {
 		public EntryWrapper(
 				Entry<AbstractCharSequence, OrderedPair<String, V>> entry) {
-			this.entry = entry;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null) return false;
-			if (obj == this) return true;
-			
-			if (!(obj instanceof EntryWrapper)) return false;
-			EntryWrapper<?> other = (EntryWrapper<?>) obj;
-			
-			return entry.equals(other.entry);
-		}
-		
-		@Override
-		public int hashCode() {
-			return entry.hashCode();
+			super(entry);
 		}
 		
 		@Override
@@ -51,6 +39,7 @@ public class StreamableStringMap<V> extends AbstractMap<String, V> {
 			return entry.getValue().getElement2();
 		}
 		
+		@Override
 		public V setValue(V value) {
 			V result = entry.getValue().getElement2();
 			entry.setValue(entry.getValue().setElement2(value));
@@ -58,23 +47,15 @@ public class StreamableStringMap<V> extends AbstractMap<String, V> {
 		}
 	}
 	
-	private class EntrySetIterator implements Iterator<Entry<String, V>> {
-		private final Iterator<Entry<AbstractCharSequence, OrderedPair<String, V>>> iterator = map
-				.entrySet().iterator();
-		
-		@Override
-		public boolean hasNext() {
-			return iterator.hasNext();
+	private class EntrySetIterator extends
+			DelegationIterator<Entry<AbstractCharSequence, OrderedPair<String, V>>, Entry<String, V>> {
+		public EntrySetIterator() {
+			super(map.entrySet().iterator());
 		}
 		
 		@Override
 		public Entry<String, V> next() {
 			return new EntryWrapper<V>(iterator.next());
-		}
-		
-		@Override
-		public void remove() {
-			iterator.remove();
 		}
 	}
 	
@@ -108,14 +89,27 @@ public class StreamableStringMap<V> extends AbstractMap<String, V> {
 		}
 	}
 	
-	private final Map<AbstractCharSequence, OrderedPair<String, V>> map = new HashMap<AbstractCharSequence, OrderedPair<String, V>>();
+	private final HashMap<AbstractCharSequence, OrderedPair<String, V>> map;
 	
 	private EntrySet entrySet;
 	
 	private int bufferSize;
 	private char[] buffer;
 	
-	private CharSequenceArrayWrapper matcher = new CharSequenceArrayWrapper();
+	public StreamableStringMap() {
+		map = new HashMap<AbstractCharSequence, OrderedPair<String, V>>();
+	}
+	
+	public StreamableStringMap(int capacity) {
+		map = new HashMap<AbstractCharSequence, OrderedPair<String, V>>(
+				capacity);
+	}
+	
+	public StreamableStringMap(Map<? extends String, ? extends V> map) {
+		this(map.size());
+		
+		putAll(map);
+	}
 	
 	@Override
 	public V put(String key, V value) {
@@ -169,14 +163,11 @@ public class StreamableStringMap<V> extends AbstractMap<String, V> {
 	}
 	
 	public OrderedPair<String, V> match(Reader in) throws IOException {
-		if (buffer == null) {
-			buffer = new char[bufferSize];
-			matcher.setCharArray(buffer);
-		}
+		if (buffer == null) buffer = new char[bufferSize];
 		
 		int read = CharStreamUtil.readTireless(in, buffer);
-		matcher.setLength(read);
 		
+		Object matcher = new CharSequenceArrayWrapper(buffer, 0, read);
 		return map.get(matcher);
 	}
 	
@@ -184,6 +175,19 @@ public class StreamableStringMap<V> extends AbstractMap<String, V> {
 	public Set<Entry<String, V>> entrySet() {
 		if (entrySet == null) entrySet = new EntrySet();
 		return entrySet;
+	}
+	
+	public void clearBuffer() {
+		bufferSize = 0;
+		buffer = null;
+	}
+	
+	@Override
+	public void clear() {
+		map.clear();
+		entrySet = null;
+		
+		clearBuffer();
 	}
 	
 }

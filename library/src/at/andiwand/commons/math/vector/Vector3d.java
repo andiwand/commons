@@ -246,6 +246,20 @@ public class Vector3d {
 		return new Vector3d(-x, -y, -z);
 	}
 	
+	public Vector3d abs() {
+		return new Vector3d(Math.abs(x), Math.abs(y), Math.abs(z));
+	}
+	
+	public Vector3d min(Vector3d b) {
+		return new Vector3d(Math.min(x, b.x), Math.min(y, b.y), Math
+				.min(z, b.z));
+	}
+	
+	public Vector3d max(Vector3d b) {
+		return new Vector3d(Math.max(x, b.x), Math.max(y, b.y), Math
+				.max(z, b.z));
+	}
+	
 	public Vector3d normalize() {
 		double length = length();
 		if (length == 0d) return new Vector3d();

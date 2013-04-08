@@ -207,6 +207,20 @@ public class Vector3i {
 		return new Vector3i(-x, -y, -z);
 	}
 	
+	public Vector3i abs() {
+		return new Vector3i(Math.abs(x), Math.abs(y), Math.abs(z));
+	}
+	
+	public Vector3i min(Vector3i b) {
+		return new Vector3i(Math.min(x, b.x), Math.min(y, b.y), Math
+				.min(z, b.z));
+	}
+	
+	public Vector3i max(Vector3i b) {
+		return new Vector3i(Math.max(x, b.x), Math.max(y, b.y), Math
+				.max(z, b.z));
+	}
+	
 	public Vector3i add(int b) {
 		Vector3i result = new Vector3i();
 		

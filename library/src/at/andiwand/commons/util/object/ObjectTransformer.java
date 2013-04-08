@@ -1,7 +1,7 @@
 package at.andiwand.commons.util.object;
 
-public interface ObjectTransformer<T1, T2> {
+public interface ObjectTransformer<S, D> {
 	
-	public T2 transform(T1 o1);
+	public D transform(S source);
 	
 }

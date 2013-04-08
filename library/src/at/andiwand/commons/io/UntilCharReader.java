@@ -34,7 +34,7 @@ public class UntilCharReader extends CharwiseFilterReader implements
 	}
 	
 	@Override
-	public void clear() {
+	public void reset() {
 		found = false;
 	}
 	
