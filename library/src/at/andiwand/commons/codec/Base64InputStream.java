@@ -19,7 +19,7 @@ public class Base64InputStream extends InputStream {
 		InputStreamReader inputStreamReader = new InputStreamReader(
 				base64InputStream, "utf-8");
 		
-		System.out.println(CharStreamUtil.readAsString(inputStreamReader));
+		System.out.println(CharStreamUtil.readString(inputStreamReader));
 	}
 	
 	private final Reader in;

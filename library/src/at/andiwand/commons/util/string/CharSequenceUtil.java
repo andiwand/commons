@@ -2,6 +2,8 @@ package at.andiwand.commons.util.string;
 
 public class CharSequenceUtil {
 	
+	public static final CharSequence NULL = StringUtil.NULL;
+	
 	public static int hashCode(CharSequence charSequence) {
 		int length = charSequence.length();
 		int result = 1;

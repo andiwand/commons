@@ -7,6 +7,8 @@ import java.util.List;
 // TODO: clean up
 public final class StringUtil {
 	
+	public static final String NULL = "null";
+	
 	public static final String NEW_LINE = System.getProperty("line.separator");
 	
 	public static String trimLeft(String s) {

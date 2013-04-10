@@ -15,21 +15,19 @@ import at.andiwand.commons.util.string.CharSequenceUtil;
 
 
 // TODO: kill StringBuilder
-// TODO: exceptions
 public class CharStreamUtil {
 	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
 	
 	public static int readTireless(Reader in, char[] cbuf) throws IOException {
-		int result = 0;
+		if (cbuf.length == 0) return 0;
 		
+		int result;
 		int read;
-		while (true) {
+		
+		for (result = 0; result < cbuf.length; result += read) {
 			read = in.read(cbuf, result, cbuf.length - result);
 			if (read == -1) break;
-			
-			result += read;
-			if (result == cbuf.length) break;
 		}
 		
 		return (result == 0) ? -1 : result;
@@ -37,15 +35,14 @@ public class CharStreamUtil {
 	
 	public static int readTireless(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		int result = 0;
+		if (cbuf.length == 0) return 0;
 		
+		int result;
 		int read;
-		while (true) {
+		
+		for (result = 0; result < len; result += read) {
 			read = in.read(cbuf, off + result, len - result);
 			if (read == -1) break;
-			
-			result += read;
-			if (result == len) break;
 		}
 		
 		return (result == 0) ? -1 : result;
@@ -56,15 +53,12 @@ public class CharStreamUtil {
 		int len = target.remaining();
 		if (len == 0) return 0;
 		
-		int result = 0;
-		
+		int result;
 		int read;
-		while (true) {
+		
+		for (result = 0; result < len; result += read) {
 			read = in.read(target);
 			if (read == -1) break;
-			
-			result += read;
-			if (result == len) break;
 		}
 		
 		return (result == 0) ? -1 : result;
@@ -73,17 +67,14 @@ public class CharStreamUtil {
 	public static int readCharwise(Reader in, char[] cbuf) throws IOException {
 		if (cbuf.length == 0) return 0;
 		
-		int result = 0;
-		
+		int result;
 		int read;
-		while (true) {
+		
+		for (result = 0; result < cbuf.length; result++) {
 			read = in.read();
 			if (read == -1) break;
 			
 			cbuf[result] = (char) read;
-			
-			result++;
-			if (result == cbuf.length) break;
 		}
 		
 		return (result == 0) ? -1 : result;
@@ -91,21 +82,17 @@ public class CharStreamUtil {
 	
 	public static int readCharwise(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
-		int result = 0;
-		
+		int result;
 		int read;
-		while (true) {
+		
+		for (result = 0; result < cbuf.length; result++) {
 			read = in.read();
 			if (read == -1) break;
 			
 			cbuf[off + result] = (char) read;
-			
-			result++;
-			if (result == cbuf.length) break;
 		}
 		
-		if (result == 0) return -1;
-		return result;
+		return (result == 0) ? -1 : result;
 	}
 	
 	public static int readCharwise(Reader in, CharBuffer target)
@@ -113,21 +100,17 @@ public class CharStreamUtil {
 		int len = target.remaining();
 		if (len == 0) return 0;
 		
-		int result = 0;
-		
+		int result;
 		int read;
-		while (true) {
+		
+		for (result = 0; result < len; result++) {
 			read = in.read();
 			if (read == -1) break;
 			
 			target.put((char) read);
-			
-			result++;
-			if (result == len) break;
 		}
 		
-		if (result == 0) return -1;
-		return result;
+		return (result == 0) ? -1 : result;
 	}
 	
 	public static char readFully(Reader in) throws IOException {
@@ -164,46 +147,51 @@ public class CharStreamUtil {
 		return read;
 	}
 	
+	public static char[] readBytes(Reader in) throws IOException {
+		CharArrayWriter out = new CharArrayWriter();
+		out.write(in);
+		out.close();
+		return out.toCharArray();
+	}
+	
+	public static String readString(Reader in) throws IOException {
+		CharArrayWriter out = new CharArrayWriter();
+		out.write(in);
+		out.close();
+		return out.toString();
+	}
+	
 	public static String readLine(PushbackReader in) throws IOException {
 		@SuppressWarnings("resource")
 		CharArrayWriter out = new CharArrayWriter();
+		int read;
 		
-		int read = in.read();
-		if (read == -1) return null;
-		
-		char c;
 		while (true) {
-			c = (char) read;
-			
-			if (c == '\n') break;
-			if (c == '\r') {
-				read = in.read();
-				if (read == -1) break;
-				c = (char) read;
-				if (c == '\n') break;
-				in.unread(c);
-			}
-			
-			out.append(c);
-			
 			read = in.read();
-			if (read == -1) break;
+			
+			switch (read) {
+			case '\r':
+				skipIfChar(in, '\n');
+			case '\n':
+			case -1:
+				return out.isEmpty() ? null : out.toString();
+			default:
+				out.write(read);
+			}
 		}
-		
-		return out.toString();
 	}
 	
 	public static String readUntilChar(Reader in, char c) throws IOException {
 		@SuppressWarnings("resource")
 		CharArrayWriter out = new CharArrayWriter();
-		
 		int read;
+		
 		while (true) {
 			read = in.read();
 			if (read == c) return out.toString();
-			if (read == -1) throw new IllegalStateException("end of stream");
+			if (read == -1) throw new EOFException();
 			
-			out.append((char) read);
+			out.write((char) read);
 		}
 	}
 	
@@ -211,14 +199,14 @@ public class CharStreamUtil {
 			throws IOException {
 		@SuppressWarnings("resource")
 		CharArrayWriter out = new CharArrayWriter();
-		
 		int read;
+		
 		while (true) {
 			read = in.read();
 			if (chars.contains((char) read)) return out.toString();
-			if (read == -1) throw new IllegalStateException("end of stream");
+			if (read == -1) throw new EOFException();
 			
-			out.append((char) read);
+			out.write((char) read);
 		}
 	}
 	
@@ -226,8 +214,8 @@ public class CharStreamUtil {
 	public static String readUntilString(Reader in, String string)
 			throws IOException {
 		StringBuilder builder = new StringBuilder();
-		
 		int read;
+		
 		while ((read = in.read()) != -1) {
 			builder.append((char) read);
 			if ((builder.length() >= string.length())
@@ -235,14 +223,7 @@ public class CharStreamUtil {
 				return builder.substring(0, builder.length() - string.length());
 		}
 		
-		throw new IllegalStateException("end of stream");
-	}
-	
-	public static String readAsString(Reader in) throws IOException {
-		CharArrayWriter out = new CharArrayWriter();
-		out.write(in);
-		out.close();
-		return out.toString();
+		throw new EOFException();
 	}
 	
 	public static void writeCharwise(Writer out, char[] cbuf)
@@ -252,10 +233,19 @@ public class CharStreamUtil {
 		}
 	}
 	
+	public static void writeCharwise(Writer out, char[] cbuf, int off)
+			throws IOException {
+		for (int i = off; i < cbuf.length; i++) {
+			out.write(cbuf[i]);
+		}
+	}
+	
 	public static void writeCharwise(Writer out, char[] cbuf, int off, int len)
 			throws IOException {
-		for (int i = 0; i < len; i++) {
-			out.write(cbuf[off + i]);
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			out.write(cbuf[i]);
 		}
 	}
 	
@@ -265,28 +255,99 @@ public class CharStreamUtil {
 		}
 	}
 	
+	public static void writeCharwise(Writer out, String str, int off)
+			throws IOException {
+		for (int i = off; i < str.length(); i++) {
+			out.write(str.charAt(i));
+		}
+	}
+	
 	public static void writeCharwise(Writer out, String str, int off, int len)
 			throws IOException {
-		for (int i = 0; i < len; i++) {
-			out.write(str.charAt(off + i));
+		int end = off + len;
+		
+		for (int i = off; i < end; i++) {
+			out.write(str.charAt(i));
 		}
 	}
 	
 	public static void appendCharwise(Writer out, CharSequence csq)
 			throws IOException {
-		if (csq == null) csq = "null";
+		if (csq == null) csq = CharSequenceUtil.NULL;
 		
-		for (int i = 0; i < csq.length(); i++) {
+		int len = csq.length();
+		
+		for (int i = 0; i < len; i++) {
+			out.append(csq.charAt(i));
+		}
+	}
+	
+	public static void appendCharwise(Writer out, CharSequence csq, int start)
+			throws IOException {
+		if (csq == null) csq = CharSequenceUtil.NULL;
+		
+		int len = csq.length();
+		
+		for (int i = start; i < len; i++) {
 			out.append(csq.charAt(i));
 		}
 	}
 	
 	public static void appendCharwise(Writer out, CharSequence csq, int start,
 			int end) throws IOException {
-		if (csq == null) csq = "null";
+		if (csq == null) {
+			csq = CharSequenceUtil.NULL;
+			start = 0;
+			end = CharSequenceUtil.NULL.length();
+		}
 		
 		for (int i = start; i < end; i++) {
 			out.append(csq.charAt(i));
+		}
+	}
+	
+	public static void writeStreamCharwise(Reader in, Writer out)
+			throws IOException {
+		for (int read; (read = in.read()) != -1;)
+			out.write(read);
+	}
+	
+	public static int writeStreamCharwiseLimited(Reader in, Writer out, int len)
+			throws IOException {
+		int read;
+		int count = 0;
+		
+		while (true) {
+			read = in.read();
+			if (read == -1) return count;
+			
+			out.write(read);
+			count++;
+		}
+	}
+	
+	public static int writeStreamBuffered(Reader in, Writer out)
+			throws IOException {
+		return writeStreamBuffered(in, out, DEFAULT_BUFFER_SIZE);
+	}
+	
+	public static int writeStreamBuffered(Reader in, Writer out, int bufferSize)
+			throws IOException {
+		char[] cbuf = new char[bufferSize];
+		return writeStreamBuffered(in, out, cbuf);
+	}
+	
+	public static int writeStreamBuffered(Reader in, Writer out, char[] cbuf)
+			throws IOException {
+		int read;
+		int count = 0;
+		
+		while (true) {
+			read = in.read(cbuf);
+			if (read == -1) return count;
+			
+			out.write(cbuf, 0, read);
+			count += read;
 		}
 	}
 	
@@ -295,78 +356,76 @@ public class CharStreamUtil {
 	}
 	
 	public static void flushLine(PushbackReader in) throws IOException {
-		char c;
-		for (int read = in.read(); read != -1; read = in.read()) {
-			c = (char) read;
-			
-			if (c == '\n') break;
-			if (c == '\r') {
-				read = in.read();
-				if (read == -1) break;
-				c = (char) read;
-				if (c == '\n') break;
-				in.unread(c);
+		while (true) {
+			switch (in.read()) {
+			case '\r':
+				skipIfChar(in, '\n');
+			case '\n':
+			case -1:
+				return;
+			default:
+				break;
 			}
 		}
 	}
 	
 	public static int flushWhitespace(Reader in) throws IOException {
 		int read;
-		do {
+		
+		while (true) {
 			read = in.read();
-		} while ((read != -1) && Character.isWhitespace(read));
+			if (!Character.isWhitespace(read)) break;
+			if (read == -1) break;
+		}
 		
 		return read;
 	}
 	
 	public static void flushWhitespace(PushbackReader in) throws IOException {
-		int c = flushWhitespace((Reader) in);
-		if (c != -1) in.unread(c);
+		int read = flushWhitespace((Reader) in);
+		if (read != -1) in.unread(read);
+	}
+	
+	public static int flushChars(Reader in, char c) throws IOException {
+		int read;
+		
+		while (true) {
+			read = in.read();
+			if (read != c) break;
+			if (read == -1) break;
+		}
+		
+		return read;
 	}
 	
 	public static void flushChars(PushbackReader in, char c) throws IOException {
-		int read;
-		while (true) {
-			read = in.read();
-			if (read == -1) return;
-			
-			if (read == c) continue;
-			
-			in.unread(read);
-			return;
-		}
+		int read = flushChars((Reader) in, c);
+		if (read != -1) in.unread(read);
 	}
 	
-	public static void flushChars(PushbackReader in, Set<Character> chars)
+	public static int flushUntilFilter(Reader in, CharFilter filter)
 			throws IOException {
 		int read;
+		
 		while (true) {
 			read = in.read();
-			if (read == -1) return;
-			
-			if (chars.contains((char) read)) continue;
-			
-			in.unread(read);
-			return;
+			if (filter.accept((char) read)) break;
+			if (read == -1) break;
 		}
+		
+		return read;
 	}
 	
 	public static void flushUntilFilter(PushbackReader in, CharFilter filter)
 			throws IOException {
-		int read;
-		while (true) {
-			read = in.read();
-			if (read == -1) new EOFException();
-			
-			if (!filter.accept((char) read)) continue;
-			
-			in.unread(read);
-			return;
-		}
+		int read = flushUntilFilter((Reader) in, filter);
+		if (read == -1) throw new EOFException();
+		in.unread(read);
 	}
 	
 	public static void flushUntilChar(Reader in, char c) throws IOException {
 		int read;
+		
 		while (true) {
 			read = in.read();
 			if (read == -1) throw new EOFException();
@@ -374,29 +433,16 @@ public class CharStreamUtil {
 		}
 	}
 	
-	// TODO: improve (primitive set)
-	public static void flushUntilChar(Reader in, Set<Character> chars)
-			throws IOException {
-		int read;
-		while (true) {
-			read = in.read();
-			if (read == -1) throw new EOFException();
-			if (chars.contains((char) read)) break;
-		}
-	}
-	
 	// TODO: improve
 	public static void flushUntilString(Reader in, String string)
 			throws IOException {
 		CharArrayQueue queue = new CharArrayQueue(string.length());
-		
 		int read;
+		
 		while (true) {
+			if (CharSequenceUtil.equals(queue, string)) return;
 			read = in.read();
 			if (read == -1) break;
-			
-			if ((queue.size() >= string.length())
-					&& CharSequenceUtil.equals(queue, string)) return;
 			queue.put((char) read);
 		}
 		
@@ -407,15 +453,16 @@ public class CharStreamUtil {
 	public static Matcher flushUntilMatch(Reader in, Pattern pattern)
 			throws IOException {
 		StringBuilder builder = new StringBuilder();
-		
+		Matcher matcher = pattern.matcher(builder);
 		int read;
+		
 		while (true) {
 			read = in.read();
 			if (read == -1) break;
 			
 			builder.append((char) read);
 			
-			Matcher matcher = pattern.matcher(builder);
+			matcher.reset();
 			if (matcher.matches()) return matcher;
 		}
 		
@@ -426,15 +473,16 @@ public class CharStreamUtil {
 	public static Matcher flushUntilFind(Reader in, Pattern pattern)
 			throws IOException {
 		StringBuilder builder = new StringBuilder();
-		
+		Matcher matcher = pattern.matcher(builder);
 		int read;
+		
 		while (true) {
 			read = in.read();
 			if (read == -1) break;
 			
 			builder.append((char) read);
 			
-			Matcher matcher = pattern.matcher(builder);
+			matcher.reset();
 			if (matcher.find()) return matcher;
 		}
 		
@@ -451,89 +499,85 @@ public class CharStreamUtil {
 		while (in.read(cbuf, 0, bufferSize) != -1);
 	}
 	
-	public static long skipCharacterwise(Reader in, long n) throws IOException {
-		for (long i = 0; i < n; i++) {
-			if (in.read() == -1) return i;
-		}
+	public static long skipCharwise(Reader in, long n) throws IOException {
+		long i = 0;
 		
-		return n;
+		while ((i < n) && (in.read() != -1))
+			i++;
+		
+		return i;
 	}
 	
-	public static boolean equals(Reader in, char[] array) throws IOException {
+	public static boolean skipIfChar(PushbackReader in, char c)
+			throws IOException {
+		int read = readFully(in);
+		if (read == c) return true;
+		in.unread(read);
+		return true;
+	}
+	
+	public static boolean matchChars(Reader in, char[] array)
+			throws IOException {
 		int read;
 		
 		for (int i = 0; i < array.length; i++) {
 			read = in.read();
-			if (read == -1) throw new EOFException();
 			if (read != array[i]) return false;
+			if (read == -1) throw new EOFException();
 		}
 		
 		return true;
 	}
 	
-	public static boolean equals(Reader in, char[] array, int off)
+	public static boolean matchChars(Reader in, char[] array, int off)
 			throws IOException {
 		int read;
 		
 		for (int i = off; i < array.length; i++) {
 			read = in.read();
-			if (read == -1) throw new EOFException();
 			if (read != array[i]) return false;
+			if (read == -1) throw new EOFException();
 		}
 		
 		return true;
 	}
 	
-	public static boolean equals(Reader in, char[] array, int off, int len)
+	public static boolean matchChars(Reader in, char[] array, int off, int len)
 			throws IOException {
 		int end = off + len;
 		int read;
 		
 		for (int i = off; i < end; i++) {
 			read = in.read();
-			if (read == -1) throw new EOFException();
 			if (read != array[i]) return false;
+			if (read == -1) throw new EOFException();
 		}
 		
 		return true;
 	}
 	
-	public static boolean equals(Reader in, CharSequence charSequence)
+	public static boolean matchChars(Reader in, CharSequence charSequence)
 			throws IOException {
 		int length = charSequence.length();
 		int read;
 		
 		for (int i = 0; i < length; i++) {
 			read = in.read();
-			if (read == -1) throw new EOFException();
 			if (read != charSequence.charAt(i)) return false;
+			if (read == -1) throw new EOFException();
 		}
 		
 		return true;
 	}
 	
-	public static boolean equals(Reader in, CharSequence charSequence, int start)
-			throws IOException {
-		int length = charSequence.length();
-		int read;
-		
-		for (int i = start; i < length; i++) {
-			read = in.read();
-			if (read == -1) throw new EOFException();
-			if (read != charSequence.charAt(i)) return false;
-		}
-		
-		return true;
-	}
-	
-	public static boolean equals(Reader in, CharSequence charSequence,
+	public static boolean matchChars(Reader in, CharSequence charSequence,
 			int start, int end) throws IOException {
 		int read;
 		
 		for (int i = start; i < end; i++) {
 			read = in.read();
-			if (read == -1) throw new EOFException();
 			if (read != charSequence.charAt(i)) return false;
+			if (read == -1) throw new EOFException();
 		}
 		
 		return true;
@@ -570,26 +614,30 @@ public class CharStreamUtil {
 	
 	public int writeStream(Reader in, Writer out) throws IOException {
 		initBuffer();
+		
+		int read;
 		int count = 0;
 		
-		for (int read; (read = in.read(cbuf)) != -1; count++) {
+		while (true) {
+			read = in.read(cbuf);
+			if (read == -1) return count;
+			
 			out.write(cbuf, 0, read);
+			count += read;
 		}
-		
-		return count;
 	}
 	
 	public int writeStreamLimited(Reader in, Writer out, int len)
 			throws IOException {
-		if (len == 0) return 0;
-		
 		initBuffer();
-		int count = 0;
 		
+		int count = 0;
 		int read;
+		
 		while (count < len) {
 			read = in.read(cbuf, 0, Math.min(bufferSize, len - count));
 			if (read == -1) break;
+			
 			out.write(cbuf, 0, read);
 			count += read;
 		}
@@ -599,6 +647,7 @@ public class CharStreamUtil {
 	
 	public void flush(Reader in) throws IOException {
 		initBuffer();
+		
 		while (in.read(cbuf, 0, bufferSize) != -1);
 	}
 	

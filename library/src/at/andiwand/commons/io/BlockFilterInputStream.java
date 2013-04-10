@@ -14,7 +14,8 @@ public abstract class BlockFilterInputStream extends DelegationInputStream {
 	
 	@Override
 	public int read() throws IOException {
-		return (read(singleByte, 0, 1) == -1) ? -1 : singleByte[0];
+		return (ByteStreamUtil.readTireless(in, singleByte, 0, 1) == -1) ? -1
+				: singleByte[0];
 	}
 	
 	@Override

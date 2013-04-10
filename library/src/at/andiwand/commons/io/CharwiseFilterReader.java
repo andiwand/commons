@@ -31,7 +31,7 @@ public abstract class CharwiseFilterReader extends FilterReader {
 	
 	@Override
 	public long skip(long n) throws IOException {
-		return CharStreamUtil.skipCharacterwise(this, n);
+		return CharStreamUtil.skipCharwise(this, n);
 	}
 	
 }

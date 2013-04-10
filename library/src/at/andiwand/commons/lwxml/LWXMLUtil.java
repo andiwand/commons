@@ -273,7 +273,7 @@ public class LWXMLUtil {
 			
 			switch (event) {
 			case ATTRIBUTE_NAME:
-				if (CharStreamUtil.equals(in, attributeName))
+				if (CharStreamUtil.matchChars(in, attributeName))
 					return in.readFollowingValue();
 				break;
 			case ATTRIBUTE_VALUE:

@@ -37,6 +37,10 @@ public class CharArrayWriter extends Writer {
 		return new String(toCharArray());
 	}
 	
+	public boolean isEmpty() {
+		return size == 0;
+	}
+	
 	public int size() {
 		return size;
 	}
