@@ -147,6 +147,29 @@ public final class StringUtil {
 		return string;
 	}
 	
+	public static String concate(String separator, String... strings) {
+		StringBuilder builder = new StringBuilder();
+		
+		for (int i = 0; i < strings.length; i++) {
+			if (i > 0) builder.append(separator);
+			builder.append(strings[i]);
+		}
+		
+		return builder.toString();
+	}
+	
+	public static String concateNotNull(String separator, String... strings) {
+		StringBuilder builder = new StringBuilder();
+		
+		for (int i = 0, j = 0; i < strings.length; i++) {
+			if (strings[i] == null) continue;
+			if (j++ > 0) builder.append(separator);
+			builder.append(strings[i]);
+		}
+		
+		return builder.toString();
+	}
+	
 	private StringUtil() {}
 	
 }
