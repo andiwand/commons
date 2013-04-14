@@ -5,18 +5,19 @@ import java.util.Iterator;
 import java.util.Set;
 
 
+// TODO: implement toString
 public abstract class AbstractMultiset<E> extends AbstractSet<E> implements
 		Multiset<E> {
 	
-	private class ElementSet extends AbstractSet<E> {
+	private class UniqueSet extends AbstractSet<E> {
 		@Override
 		public Iterator<E> iterator() {
-			return elementIterator();
+			return uniqueIterator();
 		}
 		
 		@Override
 		public int size() {
-			return elementCount();
+			return uniqueCount();
 		}
 		
 		@Override
@@ -35,7 +36,7 @@ public abstract class AbstractMultiset<E> extends AbstractSet<E> implements
 		}
 	}
 	
-	private ElementSet elementSet;
+	private UniqueSet uniqueSet;
 	
 	@Override
 	public int hashCode() {
@@ -48,6 +49,7 @@ public abstract class AbstractMultiset<E> extends AbstractSet<E> implements
 		return result;
 	}
 	
+	// TODO: fix for collections
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) return false;
@@ -57,11 +59,11 @@ public abstract class AbstractMultiset<E> extends AbstractSet<E> implements
 		Multiset<?> other = (Multiset<?>) o;
 		
 		if (size() != other.size()) return false;
-		if (elementCount() != other.elementCount()) return false;
+		if (uniqueCount() != other.uniqueCount()) return false;
 		
 		for (E e : this) {
 			if (!contains(e)) return false;
-			if (elementCount(e) != other.elementCount(e)) return false;
+			if (uniqueCount(e) != other.uniqueCount(e)) return false;
 		}
 		
 		return true;
@@ -70,14 +72,14 @@ public abstract class AbstractMultiset<E> extends AbstractSet<E> implements
 	@Override
 	public boolean contains(Object o, int c) {
 		if (!contains(o)) return false;
-		if (elementCount(o) < c) return false;
+		if (uniqueCount(o) < c) return false;
 		return true;
 	}
 	
 	@Override
 	public boolean containsExactly(Object o, int c) {
 		if (!contains(o)) return false;
-		if (elementCount(o) != c) return false;
+		if (uniqueCount(o) != c) return false;
 		return true;
 	}
 	
@@ -93,13 +95,12 @@ public abstract class AbstractMultiset<E> extends AbstractSet<E> implements
 	
 	@Override
 	public boolean removeAll(Object o) {
-		return remove(o, elementCount(o));
+		return remove(o, uniqueCount(o));
 	}
 	
 	@Override
-	public Set<E> elementSet() {
-		return (elementSet == null) ? (elementSet = new ElementSet())
-				: elementSet;
+	public Set<E> uniqueSet() {
+		return (uniqueSet == null) ? (uniqueSet = new UniqueSet()) : uniqueSet;
 	}
 	
 }

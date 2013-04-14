@@ -4,20 +4,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 
+// TODO: improve addAll, removeAll, ...
+// TODO: implement count iterator
 public interface Multiset<E> extends Set<E> {
 	
-	@Override
-	public int hashCode();
+	public int uniqueCount();
 	
-	@Override
-	public boolean equals(Object o);
-	
-	@Override
-	public int size();
-	
-	public int elementCount();
-	
-	public int elementCount(Object o);
+	public int uniqueCount(Object o);
 	
 	public boolean contains(Object o, int c);
 	
@@ -29,11 +22,8 @@ public interface Multiset<E> extends Set<E> {
 	
 	public boolean removeAll(Object o);
 	
-	@Override
-	public Iterator<E> iterator();
+	public Iterator<E> uniqueIterator();
 	
-	public Iterator<E> elementIterator();
-	
-	public Set<E> elementSet();
+	public Set<E> uniqueSet();
 	
 }

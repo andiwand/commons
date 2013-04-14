@@ -40,7 +40,7 @@ public class HashUndirectedGraph<V, E extends AbstractUndirectedEdge> extends
 	}
 	
 	public synchronized int getEdgeCount(E edge) {
-		return edges.elementCount(edge);
+		return edges.uniqueCount(edge);
 	}
 	
 	@Override
