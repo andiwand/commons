@@ -1,7 +1,26 @@
 package at.andiwand.commons.util.primitive;
 
-public class ShortReference implements PrimitiveReference {
+public class ShortReference implements PrimitiveReference<Short> {
+	
+	public static final Class<Short> WRAPPER_CLASS = Short.class;
+	
+	public static final Class<?> PRIMITIVE_CLASS = short.class;
 	
 	public short value;
+	
+	@Override
+	public Short getWrapper() {
+		return Short.valueOf(value);
+	}
+	
+	@Override
+	public Class<Short> getWrapperClass() {
+		return WRAPPER_CLASS;
+	}
+	
+	@Override
+	public Class<?> getPrimitiveClass() {
+		return PRIMITIVE_CLASS;
+	}
 	
 }
