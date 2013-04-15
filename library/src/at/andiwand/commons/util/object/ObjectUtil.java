@@ -10,6 +10,11 @@ public class ObjectUtil {
 		return (a == null) ? (b == null) : a.equals(b);
 	}
 	
+	public static boolean fastEquals(Object a, Object b) {
+		return (a == null) ? (b == null) : ((b != null)
+				&& (a.hashCode() == b.hashCode()) && a.equals(b));
+	}
+	
 	private ObjectUtil() {}
 	
 }
