@@ -6,6 +6,8 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
 
+import at.andiwand.commons.util.collection.OrderedPair;
+
 
 public class StreamableStringSet extends AbstractSet<String> {
 	
@@ -64,7 +66,8 @@ public class StreamableStringSet extends AbstractSet<String> {
 	}
 	
 	public String match(Reader in) throws IOException {
-		return map.match(in).getElement1();
+		OrderedPair<String, Object> match = map.match(in);
+		return (match == null) ? null : match.getElement1();
 	}
 	
 	public void clearBuffer() {

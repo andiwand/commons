@@ -20,7 +20,7 @@ public class LWXMLUtilTest {
 		File file = fileChooser.getSelectedFile();
 		FileReader reader = new FileReader(file);
 		
-		System.out.println(LWXMLUtil.getAttributeValue(reader, new LWXMLPath(
+		System.out.println(LWXMLUtil.parseAttributeValue(reader, new LWXMLPath(
 				"/office:document-meta/office:meta/meta:document-statistic"),
 				"meta:table-count"));
 	}

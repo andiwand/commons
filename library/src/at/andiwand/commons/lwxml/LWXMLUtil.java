@@ -104,17 +104,19 @@ public class LWXMLUtil {
 		return new LWXMLBranchReader(in);
 	}
 	
-	public static String getAttributeValue(InputStream in, LWXMLPath path,
+	public static String parseAttributeValue(InputStream in, LWXMLPath path,
 			String attributeName) throws IOException {
-		return getAttributeValue(new LWXMLStreamReader(in), path, attributeName);
+		return parseAttributeValue(new LWXMLStreamReader(in), path,
+				attributeName);
 	}
 	
-	public static String getAttributeValue(Reader in, LWXMLPath path,
+	public static String parseAttributeValue(Reader in, LWXMLPath path,
 			String attributeName) throws IOException {
-		return getAttributeValue(new LWXMLStreamReader(in), path, attributeName);
+		return parseAttributeValue(new LWXMLStreamReader(in), path,
+				attributeName);
 	}
 	
-	public static String getAttributeValue(LWXMLReader in, LWXMLPath path,
+	public static String parseAttributeValue(LWXMLReader in, LWXMLPath path,
 			String attributeName) throws IOException {
 		flushUntilPath(in, path);
 		
@@ -135,44 +137,46 @@ public class LWXMLUtil {
 		}
 	}
 	
-	public static String getFirstAttributeValue(InputStream in,
+	public static String parseFirstAttributeValue(InputStream in,
 			String attributeName) throws IOException {
-		return getFirstAttributeValue(new LWXMLStreamReader(in), attributeName);
+		return parseFirstAttributeValue(new LWXMLStreamReader(in),
+				attributeName);
 	}
 	
-	public static String getFirstAttributeValue(Reader in, String attributeName)
-			throws IOException {
-		return getFirstAttributeValue(new LWXMLStreamReader(in), attributeName);
+	public static String parseFirstAttributeValue(Reader in,
+			String attributeName) throws IOException {
+		return parseFirstAttributeValue(new LWXMLStreamReader(in),
+				attributeName);
 	}
 	
-	public static String getFirstAttributeValue(LWXMLReader in,
+	public static String parseFirstAttributeValue(LWXMLReader in,
 			String attributeName) throws IOException {
 		while (true) {
 			LWXMLEvent event = in.readEvent();
 			
 			switch (event) {
 			case ATTRIBUTE_NAME:
-				if (!in.readValue().equals(attributeName)) break;
-				return in.readFollowingValue();
-			case END_DOCUMENT:
-				return null;
+				if (CharStreamUtil.matchChars(in, attributeName))
+					return in.readFollowingValue();
 			default:
 				break;
+			case END_DOCUMENT:
+				return null;
 			}
 		}
 	}
 	
-	public static List<String> getAllAttributeValue(InputStream in,
+	public static List<String> parseAllAttributeValues(InputStream in,
 			String attributeName) throws IOException {
-		return getAllAttributeValue(new LWXMLStreamReader(in), attributeName);
+		return parseAllAttributeValues(new LWXMLStreamReader(in), attributeName);
 	}
 	
-	public static List<String> getAllAttributeValue(Reader in,
+	public static List<String> parseAllAttributeValues(Reader in,
 			String attributeName) throws IOException {
-		return getAllAttributeValue(new LWXMLStreamReader(in), attributeName);
+		return parseAllAttributeValues(new LWXMLStreamReader(in), attributeName);
 	}
 	
-	public static List<String> getAllAttributeValue(LWXMLReader in,
+	public static List<String> parseAllAttributeValues(LWXMLReader in,
 			String attributeName) throws IOException {
 		List<String> result = new LinkedList<String>();
 		
@@ -266,7 +270,7 @@ public class LWXMLUtil {
 		return result;
 	}
 	
-	public static String parseSingleAttributes(LWXMLReader in,
+	public static String parseSingleAttribute(LWXMLReader in,
 			String attributeName) throws IOException {
 		while (true) {
 			LWXMLEvent event = in.readEvent();
@@ -275,7 +279,6 @@ public class LWXMLUtil {
 			case ATTRIBUTE_NAME:
 				if (CharStreamUtil.matchChars(in, attributeName))
 					return in.readFollowingValue();
-				break;
 			case ATTRIBUTE_VALUE:
 				break;
 			case END_ATTRIBUTE_LIST:
