@@ -1,10 +1,10 @@
 package at.andiwand.commons.math.graph;
 
-public abstract class AbstractHypergraph<V, E extends AbstractHyperedge> extends
-		AbstractGraph<V, E> implements Hypergraph<V, E> {
-	
-	public boolean removeAllEdges(E edge) {
-		return removeEdge(edge);
-	}
-	
+public abstract class AbstractHypergraph<V, E extends AbstractHyperedge>
+	extends AbstractGraph<V, E> implements Hypergraph<V, E> {
+
+    public boolean removeAllEdges(E edge) {
+	return removeEdge(edge);
+    }
+
 }

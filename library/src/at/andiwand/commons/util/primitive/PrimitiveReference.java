@@ -1,11 +1,11 @@
 package at.andiwand.commons.util.primitive;
 
 public interface PrimitiveReference<T> {
-	
-	public T getWrapper();
-	
-	public Class<T> getWrapperClass();
-	
-	public Class<?> getPrimitiveClass();
-	
+
+    public T getWrapper();
+
+    public Class<T> getWrapperClass();
+
+    public Class<?> getPrimitiveClass();
+
 }

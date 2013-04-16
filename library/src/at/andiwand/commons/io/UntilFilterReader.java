@@ -5,36 +5,36 @@ import java.io.Reader;
 
 import at.andiwand.commons.util.StateMachine;
 
-
 public class UntilFilterReader extends CharwiseFilterReader implements
-		StateMachine {
-	
-	private boolean found;
-	
-	private final CharFilter filter;
-	
-	public UntilFilterReader(Reader in, CharFilter filter) {
-		super(in);
-		
-		this.filter = filter;
+	StateMachine {
+
+    private boolean found;
+
+    private final CharFilter filter;
+
+    public UntilFilterReader(Reader in, CharFilter filter) {
+	super(in);
+
+	this.filter = filter;
+    }
+
+    @Override
+    public int read() throws IOException {
+	if (found)
+	    return -1;
+
+	int read = in.read();
+
+	if ((read == -1) || !filter.accept((char) read)) {
+	    found = true;
+	    return -1;
 	}
-	
-	@Override
-	public int read() throws IOException {
-		if (found) return -1;
-		
-		int read = in.read();
-		
-		if ((read == -1) || !filter.accept((char) read)) {
-			found = true;
-			return -1;
-		}
-		
-		return read;
-	}
-	
-	public void reset() {
-		found = false;
-	}
-	
+
+	return read;
+    }
+
+    public void reset() {
+	found = false;
+    }
+
 }

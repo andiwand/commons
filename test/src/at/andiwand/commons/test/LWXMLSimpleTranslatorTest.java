@@ -11,30 +11,29 @@ import at.andiwand.commons.lwxml.translator.simple.SimpleLWXMLTranslator;
 import at.andiwand.commons.lwxml.writer.LWXMLStreamWriter;
 import at.andiwand.commons.lwxml.writer.LWXMLWriter;
 
-
 public class LWXMLSimpleTranslatorTest {
-	
-	public static void main(String[] args) throws IOException {
-		InputStream inputStream = LWXMLSimpleTranslatorTest.class
-				.getResourceAsStream("test.xml");
-		LWXMLReader in = new LWXMLStreamReader(new FluidInputStreamReader(
-				inputStream));
-		
-		CharArrayWriter writer = new CharArrayWriter();
-		LWXMLWriter out = new LWXMLStreamWriter(writer);
-		
-		SimpleLWXMLTranslator lwxmlTranslator = new SimpleLWXMLTranslator();
-		lwxmlTranslator.addElementTranslator("html", "xml");
-		lwxmlTranslator.addElementTranslator("head", "kopf");
-		lwxmlTranslator.addElementTranslator("title", "name");
-		lwxmlTranslator.addElementTranslator("body", "bauch");
-		lwxmlTranslator.addElementTranslator("empty", "leer");
-		lwxmlTranslator.addStaticAttributeTranslator("name", "attribute");
-		lwxmlTranslator.translate(in, out);
-		
-		out.close();
-		
-		System.out.println(writer);
-	}
-	
+
+    public static void main(String[] args) throws IOException {
+	InputStream inputStream = LWXMLSimpleTranslatorTest.class
+		.getResourceAsStream("test.xml");
+	LWXMLReader in = new LWXMLStreamReader(new FluidInputStreamReader(
+		inputStream));
+
+	CharArrayWriter writer = new CharArrayWriter();
+	LWXMLWriter out = new LWXMLStreamWriter(writer);
+
+	SimpleLWXMLTranslator lwxmlTranslator = new SimpleLWXMLTranslator();
+	lwxmlTranslator.addElementTranslator("html", "xml");
+	lwxmlTranslator.addElementTranslator("head", "kopf");
+	lwxmlTranslator.addElementTranslator("title", "name");
+	lwxmlTranslator.addElementTranslator("body", "bauch");
+	lwxmlTranslator.addElementTranslator("empty", "leer");
+	lwxmlTranslator.addStaticAttributeTranslator("name", "attribute");
+	lwxmlTranslator.translate(in, out);
+
+	out.close();
+
+	System.out.println(writer);
+    }
+
 }
