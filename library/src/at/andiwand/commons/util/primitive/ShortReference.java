@@ -8,6 +8,12 @@ public class ShortReference implements PrimitiveReference<Short> {
 	
 	public short value;
 	
+	public ShortReference() {}
+	
+	public ShortReference(short value) {
+		this.value = value;
+	}
+	
 	@Override
 	public Short getWrapper() {
 		return Short.valueOf(value);

@@ -8,6 +8,12 @@ public class LongReference implements PrimitiveReference<Long> {
 	
 	public long value;
 	
+	public LongReference() {}
+	
+	public LongReference(long value) {
+		this.value = value;
+	}
+	
 	@Override
 	public Long getWrapper() {
 		return Long.valueOf(value);

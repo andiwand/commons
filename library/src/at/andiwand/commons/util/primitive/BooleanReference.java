@@ -8,6 +8,12 @@ public class BooleanReference implements PrimitiveReference<Boolean> {
 	
 	public boolean value;
 	
+	public BooleanReference() {}
+	
+	public BooleanReference(boolean value) {
+		this.value = value;
+	}
+	
 	@Override
 	public Boolean getWrapper() {
 		return Boolean.valueOf(value);

@@ -8,6 +8,12 @@ public class IntegerReference implements PrimitiveReference<Integer> {
 	
 	public int value;
 	
+	public IntegerReference() {}
+	
+	public IntegerReference(int value) {
+		this.value = value;
+	}
+	
 	@Override
 	public Integer getWrapper() {
 		return Integer.valueOf(value);

@@ -8,6 +8,12 @@ public class FloatReference implements PrimitiveReference<Float> {
 	
 	public float value;
 	
+	public FloatReference() {}
+	
+	public FloatReference(float value) {
+		this.value = value;
+	}
+	
 	@Override
 	public Float getWrapper() {
 		return Float.valueOf(value);

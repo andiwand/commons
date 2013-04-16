@@ -8,6 +8,12 @@ public class DoubleReference implements PrimitiveReference<Double> {
 	
 	public double value;
 	
+	public DoubleReference() {}
+	
+	public DoubleReference(double value) {
+		this.value = value;
+	}
+	
 	@Override
 	public Double getWrapper() {
 		return Double.valueOf(value);

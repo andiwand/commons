@@ -8,6 +8,12 @@ public class ByteReference implements PrimitiveReference<Byte> {
 	
 	public byte value;
 	
+	public ByteReference() {}
+	
+	public ByteReference(byte value) {
+		this.value = value;
+	}
+	
 	@Override
 	public Byte getWrapper() {
 		return Byte.valueOf(value);
