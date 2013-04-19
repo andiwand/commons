@@ -379,6 +379,38 @@ public class CharStreamUtil {
 	    ;
     }
 
+    public static void flushBuffered(Reader in) throws IOException {
+	flushBuffered(in, DEFAULT_BUFFER_SIZE);
+    }
+
+    public static void flushBuffered(Reader in, int bufferSize)
+	    throws IOException {
+	char[] cbuf = new char[bufferSize];
+	while (in.read(cbuf, 0, bufferSize) != -1)
+	    ;
+    }
+
+    public static int flushBytewiseCount(Reader in) throws IOException {
+	int result = 0;
+	while (in.read() != -1)
+	    result++;
+	return result;
+    }
+
+    public static int flushBufferedCount(Reader in) throws IOException {
+	return flushBufferedCount(in, DEFAULT_BUFFER_SIZE);
+    }
+
+    public static int flushBufferedCount(Reader in, int bufferSize)
+	    throws IOException {
+	int result = 0;
+	int read;
+	char[] cbuf = new char[bufferSize];
+	while ((read = in.read(cbuf, 0, bufferSize)) != -1)
+	    result += read;
+	return result;
+    }
+
     public static void flushLine(PushbackReader in) throws IOException {
 	while (true) {
 	    switch (in.read()) {
@@ -528,17 +560,6 @@ public class CharStreamUtil {
 	}
 
 	throw new EOFException();
-    }
-
-    public static void flushBuffered(Reader in) throws IOException {
-	flushBuffered(in, DEFAULT_BUFFER_SIZE);
-    }
-
-    public static void flushBuffered(Reader in, int bufferSize)
-	    throws IOException {
-	char[] cbuf = new char[bufferSize];
-	while (in.read(cbuf, 0, bufferSize) != -1)
-	    ;
     }
 
     public static long skipCharwise(Reader in, long n) throws IOException {

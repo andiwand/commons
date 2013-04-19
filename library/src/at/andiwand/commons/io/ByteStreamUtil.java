@@ -201,6 +201,27 @@ public class ByteStreamUtil {
 	    ;
     }
 
+    public static int flushBytewiseCount(InputStream in) throws IOException {
+	int result = 0;
+	while (in.read() != -1)
+	    result++;
+	return result;
+    }
+
+    public static int flushBufferedCount(InputStream in) throws IOException {
+	return flushBufferedCount(in, DEFAULT_BUFFER_SIZE);
+    }
+
+    public static int flushBufferedCount(InputStream in, int bufferSize)
+	    throws IOException {
+	int result = 0;
+	int read;
+	byte[] b = new byte[bufferSize];
+	while ((read = in.read(b, 0, bufferSize)) != -1)
+	    result += read;
+	return result;
+    }
+
     public static long skipBytewise(InputStream in, long n) throws IOException {
 	long i = 0;
 
