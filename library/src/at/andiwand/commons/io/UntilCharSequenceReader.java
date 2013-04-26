@@ -24,7 +24,7 @@ public class UntilCharSequenceReader extends CharwiseFilterReader implements
 	    this.charSequence = charSequence;
 	    this.queue = new CharArrayQueue(charSequence.length());
 	} else {
-	    found = true;
+	    this.found = true;
 	}
     }
 
@@ -49,13 +49,13 @@ public class UntilCharSequenceReader extends CharwiseFilterReader implements
 	}
 
 	found = true;
-	charSequence = null;
 	return -1;
     }
 
     @Override
     public void reset() {
 	found = false;
+	queue.clear();
     }
 
 }
