@@ -11,7 +11,7 @@ import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 public class LWXMLStreamReaderTest {
 
     public static void main(String[] args) throws Throwable {
-	InputStream inputStream = LWXMLSimpleTranslatorTest.class
+	InputStream inputStream = LWXMLStreamReaderTest.class
 		.getResourceAsStream("test.xml");
 	inputStream = new FileInputStream("/home/andreas/test.odt.html");
 	LWXMLReader in = new LWXMLStreamReader(new FluidInputStreamReader(

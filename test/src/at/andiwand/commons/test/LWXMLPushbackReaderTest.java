@@ -11,7 +11,7 @@ import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 public class LWXMLPushbackReaderTest {
 
     public static void main(String[] args) throws Throwable {
-	InputStream inputStream = LWXMLSimpleTranslatorTest.class
+	InputStream inputStream = LWXMLPushbackReaderTest.class
 		.getResourceAsStream("test.xml");
 	LWXMLReader lwxmlReader = new LWXMLStreamReader(
 		new FluidInputStreamReader(inputStream));

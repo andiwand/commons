@@ -12,7 +12,7 @@ import at.andiwand.commons.lwxml.reader.LWXMLStreamReader;
 public class LWXMLDelegationReaderTest {
 
     public static void main(String[] args) throws IOException {
-	InputStream inputStream = LWXMLSimpleTranslatorTest.class
+	InputStream inputStream = LWXMLDelegationReaderTest.class
 		.getResourceAsStream("test.xml");
 	LWXMLReader lwxmlReader = new LWXMLStreamReader(
 		new FluidInputStreamReader(inputStream));
