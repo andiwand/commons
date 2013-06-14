@@ -8,7 +8,7 @@ public class LWXMLNullWriter extends LWXMLWriter {
 
     private LWXMLEvent currentEvent;
 
-    protected LWXMLNullWriter() {
+    public LWXMLNullWriter() {
     }
 
     @Override
