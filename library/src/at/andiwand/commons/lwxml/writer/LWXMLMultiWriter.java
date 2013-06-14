@@ -37,7 +37,6 @@ public class LWXMLMultiWriter extends LWXMLWriter implements
 
     @Override
     public void writeEvent(LWXMLEvent event) throws IOException {
-	System.out.println("writeEvent");
 	for (int i = 0; i < outs.length; i++) {
 	    outs[i].writeEvent(event);
 	}
@@ -45,7 +44,6 @@ public class LWXMLMultiWriter extends LWXMLWriter implements
 
     @Override
     public void writeEvent(LWXMLEvent event, String value) throws IOException {
-	System.out.println("writeEvent2");
 	for (int i = 0; i < outs.length; i++) {
 	    outs[i].writeEvent(event, value);
 	}
@@ -53,7 +51,6 @@ public class LWXMLMultiWriter extends LWXMLWriter implements
 
     @Override
     public void write(int c) throws IOException {
-	System.out.println("write");
 	for (int i = 0; i < outs.length; i++) {
 	    outs[i].write(c);
 	}
@@ -61,7 +58,6 @@ public class LWXMLMultiWriter extends LWXMLWriter implements
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-	System.out.println("write2");
 	for (int i = 0; i < outs.length; i++) {
 	    outs[i].write(cbuf, off, len);
 	}
