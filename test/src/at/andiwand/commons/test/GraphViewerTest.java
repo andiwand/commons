@@ -9,7 +9,6 @@ import javax.swing.JScrollPane;
 
 import at.andiwand.commons.math.graph.HashUndirectedGraph;
 import at.andiwand.commons.math.graph.SimpleUndirectedEdge;
-import at.andiwand.commons.swing.JFrameUtil;
 import at.andiwand.commons.swing.graph.GraphViewer;
 
 public class GraphViewerTest {
@@ -27,7 +26,7 @@ public class GraphViewerTest {
 	JFrame frame = new JFrame();
 	frame.add(scrollPane);
 	frame.setSize(400, 400);
-	JFrameUtil.centerFrame(frame);
+	frame.setLocationRelativeTo(null);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setVisible(true);
 

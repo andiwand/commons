@@ -9,7 +9,7 @@ public class RectangleD {
     private final double right;
     private final double bottom;
 
-    public RectangleD(int left, int top, int right, int bottom) {
+    public RectangleD(double left, double top, double right, double bottom) {
 	this.left = left;
 	this.top = top;
 	this.right = right;
@@ -45,17 +45,15 @@ public class RectangleD {
 	    return false;
 	RectangleD other = (RectangleD) obj;
 
-	if (Double.doubleToLongBits(bottom) != Double
-		.doubleToLongBits(other.bottom))
+	if (bottom != other.bottom)
 	    return false;
-	if (Double.doubleToLongBits(left) != Double
-		.doubleToLongBits(other.left))
+	if (left != other.left)
 	    return false;
-	if (Double.doubleToLongBits(right) != Double
-		.doubleToLongBits(other.right))
+	if (right != other.right)
 	    return false;
-	if (Double.doubleToLongBits(top) != Double.doubleToLongBits(other.top))
+	if (top != other.top)
 	    return false;
+
 	return true;
     }
 
@@ -63,7 +61,7 @@ public class RectangleD {
     public String toString() {
 	StringBuilder builder = new StringBuilder();
 
-	builder.append("RectangeI [left=");
+	builder.append("RectangeD [left=");
 	builder.append(left);
 	builder.append(", top=");
 	builder.append(top);
