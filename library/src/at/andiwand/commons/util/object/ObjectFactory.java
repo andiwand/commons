@@ -1,7 +1,7 @@
 package at.andiwand.commons.util.object;
 
-public interface ObjectFactory<T> {
+public interface ObjectFactory<T, C> {
 
-    public T create();
+    public T create(C context);
 
 }

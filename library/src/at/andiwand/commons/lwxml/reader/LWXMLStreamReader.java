@@ -252,6 +252,7 @@ public class LWXMLStreamReader extends LWXMLReader {
 
 	switch (c) {
 	case '/':
+	    // TODO: flush whitespace?
 	    if (fin.read() != '>')
 		throw new LWXMLReaderException("malformed tag: expected '>'");
 	    handleEndEmptyElement = true;

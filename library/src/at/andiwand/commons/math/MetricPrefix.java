@@ -19,8 +19,8 @@ public enum MetricPrefix implements UnitPrefix {
 
     private static final ObjectTransformer<MetricPrefix, String> KEY_GENERATOR = new ObjectTransformer<MetricPrefix, String>() {
 	@Override
-	public String transform(MetricPrefix value) {
-	    return value.symbol;
+	public String transform(MetricPrefix from) {
+	    return from.symbol;
 	}
     };
 
