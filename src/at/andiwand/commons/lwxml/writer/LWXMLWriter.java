@@ -65,6 +65,11 @@ public abstract class LWXMLWriter extends Writer {
 	writeEvent(LWXMLEvent.END_ATTRIBUTE_LIST);
     }
 
+    public void writeEmptyElement(String name) throws IOException {
+	writeEmptyStartElement(name);
+	writeEndEmptyElement();
+    }
+
     public void writeAttribute(LWXMLAttribute attribute) throws IOException {
 	if (attribute == null)
 	    throw new NullPointerException();
