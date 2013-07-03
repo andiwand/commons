@@ -21,6 +21,11 @@ public class LWXMLHierarchyTranslator<C> extends
 	elementTranslators.put(element, translator);
     }
 
+    public void addElementTranslator(String element, String newElement) {
+	addElementTranslator(element,
+		new LWXMLElementReplacement<C>(newElement));
+    }
+
     public void removeElementTranslator(String element) {
 	elementTranslators.remove(element);
     }
