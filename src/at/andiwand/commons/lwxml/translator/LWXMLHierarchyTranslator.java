@@ -1,6 +1,8 @@
 package at.andiwand.commons.lwxml.translator;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 import at.andiwand.commons.io.StreamableStringMap;
 import at.andiwand.commons.lwxml.LWXMLEvent;
@@ -28,6 +30,10 @@ public class LWXMLHierarchyTranslator<C> extends
 
     public void removeElementTranslator(String element) {
 	elementTranslators.remove(element);
+    }
+
+    public Collection<LWXMLElementTranslator<? super C>> elementTranslators() {
+	return Collections.unmodifiableCollection(elementTranslators.values());
     }
 
     @Override

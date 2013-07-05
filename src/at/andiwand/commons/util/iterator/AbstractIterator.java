@@ -17,7 +17,7 @@ public abstract class AbstractIterator<E> implements Iterator<E> {
 
     @Override
     public void remove() {
-	throw new IllegalStateException();
+	throw new UnsupportedOperationException();
     }
 
 }

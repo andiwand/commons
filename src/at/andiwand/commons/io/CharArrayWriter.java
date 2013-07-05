@@ -8,7 +8,7 @@ import at.andiwand.commons.util.array.ArrayUtil;
 import at.andiwand.commons.util.collection.SingleLinkedNode;
 
 // TODO: implement close() ?
-// TODO: implement writer
+// TODO: implement reader
 // TODO: implement with LinkedList
 public class CharArrayWriter extends Writer {
 
