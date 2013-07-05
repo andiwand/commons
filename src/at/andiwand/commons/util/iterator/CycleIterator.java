@@ -1,35 +1,44 @@
 package at.andiwand.commons.util.iterator;
 
-import java.util.Collection;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class CycleIterator<E> extends SimpleDelegationIterator<E> {
+public class CycleIterator<E> extends AbstractIterator<E> {
 
-    private final Collection<? extends E> collection;
+    private final Iterable<? extends E> iterable;
+    private Iterator<? extends E> iterator;
 
-    public CycleIterator(Collection<? extends E> collection) {
-	super(collection.iterator());
+    private boolean hasNext;
 
-	this.collection = collection;
+    public CycleIterator(Iterable<? extends E> iterable) {
+	this.iterable = iterable;
+
+	reinit();
+    }
+
+    private void reinit() {
+	this.iterator = iterable.iterator();
+	this.hasNext = iterator.hasNext();
     }
 
     @Override
     public boolean hasNext() {
-	return !collection.isEmpty();
+	return hasNext;
     }
 
     @Override
     public E next() {
-	if (collection.isEmpty())
+	if (!hasNext)
 	    throw new NoSuchElementException();
+	E result = iterator.next();
 	if (!iterator.hasNext())
-	    iterator = collection.iterator();
-	return iterator.next();
+	    reinit();
+	return result;
     }
 
     @Override
     public void remove() {
-	if (collection.isEmpty())
+	if (!hasNext)
 	    throw new IllegalStateException();
 	iterator.remove();
     }
