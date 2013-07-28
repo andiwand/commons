@@ -22,19 +22,16 @@ public class Base64Settings {
     public static final char PADDING_CHAR = '=';
 
     public static final Base64Settings ORIGINAL = new Base64Settings('+', '/',
-	    true, false);
+	    true);
     public static final Base64Settings FILENAME = new Base64Settings('+', '-',
-	    false, false);
-    public static final Base64Settings URL = new Base64Settings('-', '_',
-	    false, false);
+	    false);
+    public static final Base64Settings URL = new Base64Settings('-', '_', false);
 
     final char[] encodeTable;
     final byte[] decodeTable;
     final boolean padding;
-    final boolean skipUnmappedChars;
 
-    public Base64Settings(char index62, char index63, boolean padding,
-	    boolean skipUnmappedChars) {
+    public Base64Settings(char index62, char index63, boolean padding) {
 	encodeTable = ENCODE_TABLE.clone();
 	decodeTable = DECODE_TABLE.clone();
 
@@ -44,7 +41,6 @@ public class Base64Settings {
 	decodeTable[index63] = 63;
 
 	this.padding = padding;
-	this.skipUnmappedChars = skipUnmappedChars;
     }
 
     public char[] getEncodeTable() {
@@ -57,10 +53,6 @@ public class Base64Settings {
 
     public boolean isPadding() {
 	return padding;
-    }
-
-    public boolean isSkipUnmappedChars() {
-	return skipUnmappedChars;
     }
 
     public boolean canEncode(byte b) {
