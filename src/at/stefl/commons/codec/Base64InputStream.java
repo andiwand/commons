@@ -2,34 +2,33 @@ package at.stefl.commons.codec;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 
 import at.stefl.commons.io.CharStreamUtil;
 
+// TODO: use bytes?
 public class Base64InputStream extends InputStream {
 
-    public static void main(String[] args) throws Throwable {
-	String base64 = "UG9seWZvbiB6d2l0c2NoZXJuZCBhw59lbiBNw6R4Y2hlbnMgVsO2Z2VsIFLDvGJlbiwgSm9naHVydCB1bmQgUXVhcms=";
-	StringReader stringReader = new StringReader(base64);
-	Base64InputStream base64InputStream = new Base64InputStream(
-		stringReader);
-	InputStreamReader inputStreamReader = new InputStreamReader(
-		base64InputStream, "utf-8");
-
-	System.out.println(CharStreamUtil.readString(inputStreamReader));
-    }
+    private static final int DEFAULT_BUFFER_SIZE = 8192;
 
     private final Reader in;
     private boolean closed;
 
-    private final char[] inBuffer = new char[4];
-    private final byte[] outBuffer = new byte[3];
-    private int index = 3;
+    private final Base64Settings settings;
 
-    public Base64InputStream(Reader in) {
+    private final char[] inBuffer;
+    private final byte[] outBuffer = new byte[3];
+    private int outIndex = 0;
+    private int outBuffered = 0;
+
+    public Base64InputStream(Reader in, Base64Settings settings) {
+	this(in, DEFAULT_BUFFER_SIZE, settings);
+    }
+
+    public Base64InputStream(Reader in, int bufferSize, Base64Settings settings) {
 	this.in = in;
+	this.inBuffer = new char[bufferSize];
+	this.settings = settings;
     }
 
     @Override
@@ -37,30 +36,62 @@ public class Base64InputStream extends InputStream {
 	if (closed)
 	    return -1;
 
-	if (index >= 3) {
-	    int read = in.read(inBuffer);
-
-	    switch (read) {
-	    case -1:
+	if (outIndex >= outBuffered) {
+	    int read = CharStreamUtil.readTireless(in, inBuffer, 0, 4);
+	    if (read == -1) {
 		closed = true;
 		return -1;
-	    case 4:
-		// TODO: close in?
-		if (Base64.decode3Byte(inBuffer, outBuffer) < 3)
-		    closed = true;
-		index = 0;
-		break;
-	    default:
-		throw new IllegalStateException();
 	    }
+
+	    outIndex = 0;
+	    outBuffered = Base64.decode3Byte(inBuffer, outBuffer, settings);
 	}
 
-	return outBuffer[index++];
+	return outBuffer[outIndex++];
     }
 
     @Override
-    public int available() throws IOException {
-	return 3 - index;
+    public int read(byte[] b, int off, int len) throws IOException {
+	if (closed)
+	    return -1;
+	if (len == 0)
+	    return 0;
+
+	int result = 0;
+
+	int maxRead = Math.min(outBuffered - outIndex, len);
+	System.arraycopy(outBuffer, outIndex, b, off, maxRead);
+	outIndex += maxRead;
+	off += maxRead;
+	len -= maxRead;
+	result += maxRead;
+
+	while (len > 0) {
+	    int lenMultiple3 = len + (((len % 3) != 0) ? 3 : 0);
+	    int inLeft = (lenMultiple3 / 3) * 4;
+	    maxRead = Math.min(inBuffer.length, inLeft);
+	    int read = CharStreamUtil.readTireless(in, inBuffer, 0, maxRead);
+	    if (read == -1) {
+		closed = true;
+		return -1;
+	    }
+	    Base64.decodeChars(inBuffer, 0, read, b, off, settings);
+	    int decoded = settings.decodedSize(inBuffer);
+	    result += decoded;
+	    if (read < maxRead)
+		break;
+	    off += decoded;
+	    len -= decoded;
+	}
+
+	if (result == 0)
+	    return -1;
+	return result;
+    }
+
+    @Override
+    public int available() {
+	return outBuffered - outIndex;
     }
 
     @Override
