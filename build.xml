@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="make-jar" name="odf2html">
+<project basedir="." default="make-jar" name="commons">
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
 	<property name="jar" value="commons.jar" />
 	
 	<path id="commons.classpath">
 		<pathelement location="bin" />
-		<pathelement location="lib/commons.jar" />
 	</path>
 	
 	<target name="init">

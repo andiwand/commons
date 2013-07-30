@@ -25,6 +25,9 @@ public class ArrayUtil {
     public static final double[] EMPTY_DOUBLE_ARRAY = {};
     public static final Object[] EMPTY_OBJECT_ARRAY = {};
 
+    private static final char[] HEX_ARRAY = { '0', '1', '2', '3', '4', '5',
+	    '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
     public static <E> E getFirstNotNull(E... array) {
 	E element;
 
@@ -1558,6 +1561,25 @@ public class ArrayUtil {
 		* (1d / base));
 	newLength = (int) (length * Math.pow(base, addExponent));
 	return copyOf(array, newLength);
+    }
+
+    // TODO: implement all toString
+
+    public static String toStringHex(byte[] array) {
+	return toStringHex(array, 0, array.length);
+    }
+
+    public static String toStringHex(byte[] array, int off, int len) {
+	char[] result = new char[len << 1];
+	int end = off + len;
+
+	for (int i = off, b, j = 0; i < end; i++) {
+	    b = array[i] & 0xff;
+	    result[j++] = HEX_ARRAY[b >> 4];
+	    result[j++] = HEX_ARRAY[b & 0x0f];
+	}
+
+	return new String(result);
     }
 
     private ArrayUtil() {
