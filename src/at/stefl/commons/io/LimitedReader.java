@@ -6,23 +6,17 @@ import java.nio.CharBuffer;
 
 public class LimitedReader extends DelegationReader {
 
-    private final int limit;
-    private int left;
+    private long left;
 
-    public LimitedReader(Reader in, int limit) {
+    public LimitedReader(Reader in, long limit) {
 	super(in);
 
 	if (limit < 0)
 	    throw new IllegalArgumentException("limit < 0");
-	this.limit = limit;
 	this.left = limit;
     }
 
-    public int getLimit() {
-	return limit;
-    }
-
-    public int getLeft() {
+    public long left() {
 	return left;
     }
 
@@ -43,7 +37,7 @@ public class LimitedReader extends DelegationReader {
     public int read(char[] cbuf, int off, int len) throws IOException {
 	if (left <= 0)
 	    return -1;
-	int result = in.read(cbuf, off, Math.min(left, len));
+	int result = in.read(cbuf, off, (int) Math.min(left, len));
 	left -= result;
 	return result;
     }
@@ -53,7 +47,7 @@ public class LimitedReader extends DelegationReader {
 	if (left <= 0)
 	    return -1;
 	CharBuffer newTarget = target.duplicate();
-	target.limit(Math.min(target.position() + limit, target.limit()));
+	target.limit((int) Math.min(target.position() + left, target.limit()));
 	int result = in.read(newTarget);
 	target.position(target.position() + result);
 	left -= result;
@@ -62,7 +56,7 @@ public class LimitedReader extends DelegationReader {
 
     @Override
     public boolean ready() throws IOException {
-	return (limit > 0) && in.ready();
+	return (left > 0) && in.ready();
     }
 
 }

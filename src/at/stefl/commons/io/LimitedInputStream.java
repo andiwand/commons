@@ -5,23 +5,17 @@ import java.io.InputStream;
 
 public class LimitedInputStream extends DelegationInputStream {
 
-    private final int limit;
-    private int left;
+    private long left;
 
-    public LimitedInputStream(InputStream in, int limit) {
+    public LimitedInputStream(InputStream in, long limit) {
 	super(in);
 
 	if (limit < 0)
 	    throw new IllegalArgumentException("limit < 0");
-	this.limit = limit;
 	this.left = limit;
     }
 
-    public int getLimit() {
-	return limit;
-    }
-
-    public int getLeft() {
+    public long left() {
 	return left;
     }
 
@@ -42,14 +36,14 @@ public class LimitedInputStream extends DelegationInputStream {
     public int read(byte[] b, int off, int len) throws IOException {
 	if (left <= 0)
 	    return -1;
-	int result = in.read(b, off, Math.min(left, len));
+	int result = in.read(b, off, (int) Math.min(left, len));
 	left -= result;
 	return result;
     }
 
     @Override
     public int available() throws IOException {
-	return Math.min(left, in.available());
+	return (int) Math.min(left, in.available());
     }
 
 }
