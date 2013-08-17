@@ -2,35 +2,50 @@ package at.stefl.commons.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 
-import at.stefl.commons.util.ByteDataUtil;
 
 public class ByteDataOutputStream extends DelegationOutputStream {
 
-    private final byte[] maxDataUnit = new byte[8];
+    private final byte[] maxUnit = Endianness.getMaxUnitBuffer();
 
-    private Endian endian;
+    private Endianness endianness;
 
     public ByteDataOutputStream(OutputStream out) {
+	this(out, Endianness.getNative());
+    }
+
+    public ByteDataOutputStream(OutputStream out, Endianness endianness) {
 	super(out);
+
+	this.endianness = endianness;
     }
 
-    public ByteDataOutputStream(OutputStream out, Endian endian) {
-	super(out);
-
-	this.endian = endian;
+    public Endianness getEndianness() {
+	return endianness;
     }
 
-    public Endian getEndian() {
-	return endian;
+    public void setEndianness(Endianness endianness) {
+	this.endianness = endianness;
     }
 
-    public void setEndian(Endian endian) {
-	this.endian = endian;
+    // TODO: improve?
+    public void writeUnits(int unit, byte[] b) throws IOException {
+	b = b.clone();
+	Endianness.swap(unit, b);
+	write(b);
     }
 
-    private void writeDataUnit(int size) throws IOException {
-	out.write(maxDataUnit, 0, size);
+    // TODO: improve?
+    public void writeUnits(int unit, byte[] b, int off, int len)
+	    throws IOException {
+	b = Arrays.copyOfRange(b, off, off + len);
+	Endianness.swap(unit, b);
+	write(b);
+    }
+
+    private void writeUnit(int size) throws IOException {
+	out.write(maxUnit, 0, size);
     }
 
     public void writeBoolean(boolean v) throws IOException {
@@ -41,24 +56,36 @@ public class ByteDataOutputStream extends DelegationOutputStream {
 	out.write(v);
     }
 
+    public void writeUnsignedByte(short v) throws IOException {
+	writeByte((byte) v);
+    }
+
     public void writeChar(char v) throws IOException {
-	ByteDataUtil.getBytes(endian, v, maxDataUnit);
-	writeDataUnit(2);
+	endianness.getBytes(v, maxUnit);
+	writeUnit(2);
     }
 
     public void writeShort(short v) throws IOException {
-	ByteDataUtil.getBytes(endian, v, maxDataUnit);
-	writeDataUnit(2);
+	endianness.getBytes(v, maxUnit);
+	writeUnit(2);
+    }
+
+    public void writeUnsignedShort(int v) throws IOException {
+	writeShort((short) v);
     }
 
     public void writeInt(int v) throws IOException {
-	ByteDataUtil.getBytes(endian, v, maxDataUnit);
-	writeDataUnit(4);
+	endianness.getBytes(v, maxUnit);
+	writeUnit(4);
+    }
+
+    public void writeUnsignedInt(long v) throws IOException {
+	writeInt((int) v);
     }
 
     public void writeLong(long v) throws IOException {
-	ByteDataUtil.getBytes(endian, v, maxDataUnit);
-	writeDataUnit(8);
+	endianness.getBytes(v, maxUnit);
+	writeUnit(8);
     }
 
 }

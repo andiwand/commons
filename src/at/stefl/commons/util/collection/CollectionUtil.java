@@ -975,6 +975,8 @@ public class CollectionUtil {
 	}
     }
 
+    // TODO: implement key/value generator
+    // TODO: implement multiple put (put to multiple maps)
     public static <K, V> void putAll(Map<? super K, ? super V> map,
 	    ObjectTransformer<? super V, ? extends K> keyGenerator, V... values) {
 	V value;

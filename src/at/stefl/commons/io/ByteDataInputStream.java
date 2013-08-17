@@ -4,30 +4,29 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import at.stefl.commons.util.ByteDataUtil;
 
 public class ByteDataInputStream extends DelegationInputStream {
 
-    private final byte[] maxDataUnit = new byte[8];
+    private final byte[] maxUnit = Endianness.getMaxUnitBuffer();
 
-    private Endian endian;
+    private Endianness endianness;
 
     public ByteDataInputStream(InputStream in) {
+	this(in, Endianness.getNative());
+    }
+
+    public ByteDataInputStream(InputStream in, Endianness endianness) {
 	super(in);
+
+	this.endianness = endianness;
     }
 
-    public ByteDataInputStream(InputStream in, Endian endian) {
-	super(in);
-
-	this.endian = endian;
+    public Endianness getEndianness() {
+	return endianness;
     }
 
-    public Endian getEndian() {
-	return endian;
-    }
-
-    public void setEndian(Endian endian) {
-	this.endian = endian;
+    public void setEndianness(Endianness endianness) {
+	this.endianness = endianness;
     }
 
     public byte[] readFully(int len) throws IOException {
@@ -42,8 +41,25 @@ public class ByteDataInputStream extends DelegationInputStream {
 	ByteStreamUtil.readFully(in, b, off, len);
     }
 
-    private void readDataUnit(int size) throws IOException {
-	ByteStreamUtil.readFully(in, maxDataUnit, 0, size);
+    public byte[] readUnits(int unit, int len) throws IOException {
+	byte[] result = ByteStreamUtil.readFully(in, len);
+	Endianness.swap(unit, result);
+	return result;
+    }
+
+    public void readUnits(int unit, byte[] b) throws IOException {
+	ByteStreamUtil.readFully(in, b);
+	Endianness.swap(unit, b);
+    }
+
+    public void readUnits(int unit, byte[] b, int off, int len)
+	    throws IOException {
+	ByteStreamUtil.readFully(in, b, off, len);
+	Endianness.swap(unit, b, off, len);
+    }
+
+    private void readUnit(int size) throws IOException {
+	ByteStreamUtil.readFully(in, maxUnit, 0, size);
     }
 
     public boolean readBoolean() throws IOException {
@@ -60,24 +76,36 @@ public class ByteDataInputStream extends DelegationInputStream {
 	return (byte) read;
     }
 
+    public short readUnsignedByte() throws IOException {
+	return (short) (readByte() & 0xff);
+    }
+
     public char readChar() throws IOException {
-	readDataUnit(2);
-	return ByteDataUtil.getAsChar(endian, maxDataUnit);
+	readUnit(2);
+	return endianness.getAsChar(maxUnit);
     }
 
     public short readShort() throws IOException {
-	readDataUnit(2);
-	return ByteDataUtil.getAsShort(endian, maxDataUnit);
+	readUnit(2);
+	return endianness.getAsShort(maxUnit);
+    }
+
+    public int readUnsignedShort() throws IOException {
+	return readShort() & 0xffff;
     }
 
     public int readInt() throws IOException {
-	readDataUnit(4);
-	return ByteDataUtil.getAsInt(endian, maxDataUnit);
+	readUnit(4);
+	return endianness.getAsInt(maxUnit);
+    }
+
+    public long readUnsignedInt() throws IOException {
+	return readInt() & 0xffffffffl;
     }
 
     public long readLong() throws IOException {
-	readDataUnit(8);
-	return ByteDataUtil.getAsLong(endian, maxDataUnit);
+	readUnit(8);
+	return endianness.getAsLong(maxUnit);
     }
 
 }

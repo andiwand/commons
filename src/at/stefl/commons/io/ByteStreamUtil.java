@@ -116,7 +116,7 @@ public class ByteStreamUtil {
 	out.close();
 	return out.toByteArray();
     }
-
+    
     public static void writeBytewise(OutputStream out, byte[] b)
 	    throws IOException {
 	for (int i = 0; i < b.length; i++) {

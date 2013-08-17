@@ -1582,6 +1582,804 @@ public class ArrayUtil {
 	return new String(result);
     }
 
+    public static byte[] toByteArray(char[] array) {
+	return toByteArray(array, 0, array.length);
+    }
+
+    public static byte[] toByteArray(char[] array, int off, int len) {
+	return toByteArray(array, off, len, new byte[len], 0);
+    }
+
+    public static byte[] toByteArray(char[] from, int fromOff, int len,
+	    byte[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (byte) from[i];
+	}
+
+	return to;
+    }
+
+    public static byte[] toByteArray(short[] array) {
+	return toByteArray(array, 0, array.length);
+    }
+
+    public static byte[] toByteArray(short[] array, int off, int len) {
+	return toByteArray(array, off, len, new byte[len], 0);
+    }
+
+    public static byte[] toByteArray(short[] from, int fromOff, int len,
+	    byte[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (byte) from[i];
+	}
+
+	return to;
+    }
+
+    public static byte[] toByteArray(int[] array) {
+	return toByteArray(array, 0, array.length);
+    }
+
+    public static byte[] toByteArray(int[] array, int off, int len) {
+	return toByteArray(array, off, len, new byte[len], 0);
+    }
+
+    public static byte[] toByteArray(int[] from, int fromOff, int len,
+	    byte[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (byte) from[i];
+	}
+
+	return to;
+    }
+
+    public static byte[] toByteArray(long[] array) {
+	return toByteArray(array, 0, array.length);
+    }
+
+    public static byte[] toByteArray(long[] array, int off, int len) {
+	return toByteArray(array, off, len, new byte[len], 0);
+    }
+
+    public static byte[] toByteArray(long[] from, int fromOff, int len,
+	    byte[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (byte) from[i];
+	}
+
+	return to;
+    }
+
+    public static byte[] toByteArray(float[] array) {
+	return toByteArray(array, 0, array.length);
+    }
+
+    public static byte[] toByteArray(float[] array, int off, int len) {
+	return toByteArray(array, off, len, new byte[len], 0);
+    }
+
+    public static byte[] toByteArray(float[] from, int fromOff, int len,
+	    byte[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (byte) from[i];
+	}
+
+	return to;
+    }
+
+    public static byte[] toByteArray(double[] array) {
+	return toByteArray(array, 0, array.length);
+    }
+
+    public static byte[] toByteArray(double[] array, int off, int len) {
+	return toByteArray(array, off, len, new byte[len], 0);
+    }
+
+    public static byte[] toByteArray(double[] from, int fromOff, int len,
+	    byte[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (byte) from[i];
+	}
+
+	return to;
+    }
+
+    public static char[] toCharArray(byte[] array) {
+	return toCharArray(array, 0, array.length);
+    }
+
+    public static char[] toCharArray(byte[] array, int off, int len) {
+	return toCharArray(array, off, len, new char[len], 0);
+    }
+
+    public static char[] toCharArray(byte[] from, int fromOff, int len,
+	    char[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (char) from[i];
+	}
+
+	return to;
+    }
+
+    public static char[] toCharArray(short[] array) {
+	return toCharArray(array, 0, array.length);
+    }
+
+    public static char[] toCharArray(short[] array, int off, int len) {
+	return toCharArray(array, off, len, new char[len], 0);
+    }
+
+    public static char[] toCharArray(short[] from, int fromOff, int len,
+	    char[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (char) from[i];
+	}
+
+	return to;
+    }
+
+    public static char[] toCharArray(int[] array) {
+	return toCharArray(array, 0, array.length);
+    }
+
+    public static char[] toCharArray(int[] array, int off, int len) {
+	return toCharArray(array, off, len, new char[len], 0);
+    }
+
+    public static char[] toCharArray(int[] from, int fromOff, int len,
+	    char[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (char) from[i];
+	}
+
+	return to;
+    }
+
+    public static char[] toCharArray(long[] array) {
+	return toCharArray(array, 0, array.length);
+    }
+
+    public static char[] toCharArray(long[] array, int off, int len) {
+	return toCharArray(array, off, len, new char[len], 0);
+    }
+
+    public static char[] toCharArray(long[] from, int fromOff, int len,
+	    char[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (char) from[i];
+	}
+
+	return to;
+    }
+
+    public static char[] toCharArray(float[] array) {
+	return toCharArray(array, 0, array.length);
+    }
+
+    public static char[] toCharArray(float[] array, int off, int len) {
+	return toCharArray(array, off, len, new char[len], 0);
+    }
+
+    public static char[] toCharArray(float[] from, int fromOff, int len,
+	    char[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (char) from[i];
+	}
+
+	return to;
+    }
+
+    public static char[] toCharArray(double[] array) {
+	return toCharArray(array, 0, array.length);
+    }
+
+    public static char[] toCharArray(double[] array, int off, int len) {
+	return toCharArray(array, off, len, new char[len], 0);
+    }
+
+    public static char[] toCharArray(double[] from, int fromOff, int len,
+	    char[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (char) from[i];
+	}
+
+	return to;
+    }
+
+    public static short[] toShortArray(byte[] array) {
+	return toShortArray(array, 0, array.length);
+    }
+
+    public static short[] toShortArray(byte[] array, int off, int len) {
+	return toShortArray(array, off, len, new short[len], 0);
+    }
+
+    public static short[] toShortArray(byte[] from, int fromOff, int len,
+	    short[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (short) from[i];
+	}
+
+	return to;
+    }
+
+    public static short[] toShortArray(char[] array) {
+	return toShortArray(array, 0, array.length);
+    }
+
+    public static short[] toShortArray(char[] array, int off, int len) {
+	return toShortArray(array, off, len, new short[len], 0);
+    }
+
+    public static short[] toShortArray(char[] from, int fromOff, int len,
+	    short[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (short) from[i];
+	}
+
+	return to;
+    }
+
+    public static short[] toShortArray(int[] array) {
+	return toShortArray(array, 0, array.length);
+    }
+
+    public static short[] toShortArray(int[] array, int off, int len) {
+	return toShortArray(array, off, len, new short[len], 0);
+    }
+
+    public static short[] toShortArray(int[] from, int fromOff, int len,
+	    short[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (short) from[i];
+	}
+
+	return to;
+    }
+
+    public static short[] toShortArray(long[] array) {
+	return toShortArray(array, 0, array.length);
+    }
+
+    public static short[] toShortArray(long[] array, int off, int len) {
+	return toShortArray(array, off, len, new short[len], 0);
+    }
+
+    public static short[] toShortArray(long[] from, int fromOff, int len,
+	    short[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (short) from[i];
+	}
+
+	return to;
+    }
+
+    public static short[] toShortArray(float[] array) {
+	return toShortArray(array, 0, array.length);
+    }
+
+    public static short[] toShortArray(float[] array, int off, int len) {
+	return toShortArray(array, off, len, new short[len], 0);
+    }
+
+    public static short[] toShortArray(float[] from, int fromOff, int len,
+	    short[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (short) from[i];
+	}
+
+	return to;
+    }
+
+    public static short[] toShortArray(double[] array) {
+	return toShortArray(array, 0, array.length);
+    }
+
+    public static short[] toShortArray(double[] array, int off, int len) {
+	return toShortArray(array, off, len, new short[len], 0);
+    }
+
+    public static short[] toShortArray(double[] from, int fromOff, int len,
+	    short[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (short) from[i];
+	}
+
+	return to;
+    }
+
+    public static int[] toIntArray(byte[] array) {
+	return toIntArray(array, 0, array.length);
+    }
+
+    public static int[] toIntArray(byte[] array, int off, int len) {
+	return toIntArray(array, off, len, new int[len], 0);
+    }
+
+    public static int[] toIntArray(byte[] from, int fromOff, int len, int[] to,
+	    int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (int) from[i];
+	}
+
+	return to;
+    }
+
+    public static int[] toIntArray(char[] array) {
+	return toIntArray(array, 0, array.length);
+    }
+
+    public static int[] toIntArray(char[] array, int off, int len) {
+	return toIntArray(array, off, len, new int[len], 0);
+    }
+
+    public static int[] toIntArray(char[] from, int fromOff, int len, int[] to,
+	    int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (int) from[i];
+	}
+
+	return to;
+    }
+
+    public static int[] toIntArray(short[] array) {
+	return toIntArray(array, 0, array.length);
+    }
+
+    public static int[] toIntArray(short[] array, int off, int len) {
+	return toIntArray(array, off, len, new int[len], 0);
+    }
+
+    public static int[] toIntArray(short[] from, int fromOff, int len,
+	    int[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (int) from[i];
+	}
+
+	return to;
+    }
+
+    public static int[] toIntArray(long[] array) {
+	return toIntArray(array, 0, array.length);
+    }
+
+    public static int[] toIntArray(long[] array, int off, int len) {
+	return toIntArray(array, off, len, new int[len], 0);
+    }
+
+    public static int[] toIntArray(long[] from, int fromOff, int len, int[] to,
+	    int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (int) from[i];
+	}
+
+	return to;
+    }
+
+    public static int[] toIntArray(float[] array) {
+	return toIntArray(array, 0, array.length);
+    }
+
+    public static int[] toIntArray(float[] array, int off, int len) {
+	return toIntArray(array, off, len, new int[len], 0);
+    }
+
+    public static int[] toIntArray(float[] from, int fromOff, int len,
+	    int[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (int) from[i];
+	}
+
+	return to;
+    }
+
+    public static int[] toIntArray(double[] array) {
+	return toIntArray(array, 0, array.length);
+    }
+
+    public static int[] toIntArray(double[] array, int off, int len) {
+	return toIntArray(array, off, len, new int[len], 0);
+    }
+
+    public static int[] toIntArray(double[] from, int fromOff, int len,
+	    int[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (int) from[i];
+	}
+
+	return to;
+    }
+
+    public static long[] toLongArray(byte[] array) {
+	return toLongArray(array, 0, array.length);
+    }
+
+    public static long[] toLongArray(byte[] array, int off, int len) {
+	return toLongArray(array, off, len, new long[len], 0);
+    }
+
+    public static long[] toLongArray(byte[] from, int fromOff, int len,
+	    long[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (long) from[i];
+	}
+
+	return to;
+    }
+
+    public static long[] toLongArray(char[] array) {
+	return toLongArray(array, 0, array.length);
+    }
+
+    public static long[] toLongArray(char[] array, int off, int len) {
+	return toLongArray(array, off, len, new long[len], 0);
+    }
+
+    public static long[] toLongArray(char[] from, int fromOff, int len,
+	    long[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (long) from[i];
+	}
+
+	return to;
+    }
+
+    public static long[] toLongArray(short[] array) {
+	return toLongArray(array, 0, array.length);
+    }
+
+    public static long[] toLongArray(short[] array, int off, int len) {
+	return toLongArray(array, off, len, new long[len], 0);
+    }
+
+    public static long[] toLongArray(short[] from, int fromOff, int len,
+	    long[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (long) from[i];
+	}
+
+	return to;
+    }
+
+    public static long[] toLongArray(int[] array) {
+	return toLongArray(array, 0, array.length);
+    }
+
+    public static long[] toLongArray(int[] array, int off, int len) {
+	return toLongArray(array, off, len, new long[len], 0);
+    }
+
+    public static long[] toLongArray(int[] from, int fromOff, int len,
+	    long[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (long) from[i];
+	}
+
+	return to;
+    }
+
+    public static long[] toLongArray(float[] array) {
+	return toLongArray(array, 0, array.length);
+    }
+
+    public static long[] toLongArray(float[] array, int off, int len) {
+	return toLongArray(array, off, len, new long[len], 0);
+    }
+
+    public static long[] toLongArray(float[] from, int fromOff, int len,
+	    long[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (long) from[i];
+	}
+
+	return to;
+    }
+
+    public static long[] toLongArray(double[] array) {
+	return toLongArray(array, 0, array.length);
+    }
+
+    public static long[] toLongArray(double[] array, int off, int len) {
+	return toLongArray(array, off, len, new long[len], 0);
+    }
+
+    public static long[] toLongArray(double[] from, int fromOff, int len,
+	    long[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (long) from[i];
+	}
+
+	return to;
+    }
+
+    public static float[] toFloatArray(byte[] array) {
+	return toFloatArray(array, 0, array.length);
+    }
+
+    public static float[] toFloatArray(byte[] array, int off, int len) {
+	return toFloatArray(array, off, len, new float[len], 0);
+    }
+
+    public static float[] toFloatArray(byte[] from, int fromOff, int len,
+	    float[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (float) from[i];
+	}
+
+	return to;
+    }
+
+    public static float[] toFloatArray(char[] array) {
+	return toFloatArray(array, 0, array.length);
+    }
+
+    public static float[] toFloatArray(char[] array, int off, int len) {
+	return toFloatArray(array, off, len, new float[len], 0);
+    }
+
+    public static float[] toFloatArray(char[] from, int fromOff, int len,
+	    float[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (float) from[i];
+	}
+
+	return to;
+    }
+
+    public static float[] toFloatArray(short[] array) {
+	return toFloatArray(array, 0, array.length);
+    }
+
+    public static float[] toFloatArray(short[] array, int off, int len) {
+	return toFloatArray(array, off, len, new float[len], 0);
+    }
+
+    public static float[] toFloatArray(short[] from, int fromOff, int len,
+	    float[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (float) from[i];
+	}
+
+	return to;
+    }
+
+    public static float[] toFloatArray(int[] array) {
+	return toFloatArray(array, 0, array.length);
+    }
+
+    public static float[] toFloatArray(int[] array, int off, int len) {
+	return toFloatArray(array, off, len, new float[len], 0);
+    }
+
+    public static float[] toFloatArray(int[] from, int fromOff, int len,
+	    float[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (float) from[i];
+	}
+
+	return to;
+    }
+
+    public static float[] toFloatArray(long[] array) {
+	return toFloatArray(array, 0, array.length);
+    }
+
+    public static float[] toFloatArray(long[] array, int off, int len) {
+	return toFloatArray(array, off, len, new float[len], 0);
+    }
+
+    public static float[] toFloatArray(long[] from, int fromOff, int len,
+	    float[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (float) from[i];
+	}
+
+	return to;
+    }
+
+    public static float[] toFloatArray(double[] array) {
+	return toFloatArray(array, 0, array.length);
+    }
+
+    public static float[] toFloatArray(double[] array, int off, int len) {
+	return toFloatArray(array, off, len, new float[len], 0);
+    }
+
+    public static float[] toFloatArray(double[] from, int fromOff, int len,
+	    float[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (float) from[i];
+	}
+
+	return to;
+    }
+
+    public static double[] toDoubleArray(byte[] array) {
+	return toDoubleArray(array, 0, array.length);
+    }
+
+    public static double[] toDoubleArray(byte[] array, int off, int len) {
+	return toDoubleArray(array, off, len, new double[len], 0);
+    }
+
+    public static double[] toDoubleArray(byte[] from, int fromOff, int len,
+	    double[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (double) from[i];
+	}
+
+	return to;
+    }
+
+    public static double[] toDoubleArray(char[] array) {
+	return toDoubleArray(array, 0, array.length);
+    }
+
+    public static double[] toDoubleArray(char[] array, int off, int len) {
+	return toDoubleArray(array, off, len, new double[len], 0);
+    }
+
+    public static double[] toDoubleArray(char[] from, int fromOff, int len,
+	    double[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (double) from[i];
+	}
+
+	return to;
+    }
+
+    public static double[] toDoubleArray(short[] array) {
+	return toDoubleArray(array, 0, array.length);
+    }
+
+    public static double[] toDoubleArray(short[] array, int off, int len) {
+	return toDoubleArray(array, off, len, new double[len], 0);
+    }
+
+    public static double[] toDoubleArray(short[] from, int fromOff, int len,
+	    double[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (double) from[i];
+	}
+
+	return to;
+    }
+
+    public static double[] toDoubleArray(int[] array) {
+	return toDoubleArray(array, 0, array.length);
+    }
+
+    public static double[] toDoubleArray(int[] array, int off, int len) {
+	return toDoubleArray(array, off, len, new double[len], 0);
+    }
+
+    public static double[] toDoubleArray(int[] from, int fromOff, int len,
+	    double[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (double) from[i];
+	}
+
+	return to;
+    }
+
+    public static double[] toDoubleArray(long[] array) {
+	return toDoubleArray(array, 0, array.length);
+    }
+
+    public static double[] toDoubleArray(long[] array, int off, int len) {
+	return toDoubleArray(array, off, len, new double[len], 0);
+    }
+
+    public static double[] toDoubleArray(long[] from, int fromOff, int len,
+	    double[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (double) from[i];
+	}
+
+	return to;
+    }
+
+    public static double[] toDoubleArray(float[] array) {
+	return toDoubleArray(array, 0, array.length);
+    }
+
+    public static double[] toDoubleArray(float[] array, int off, int len) {
+	return toDoubleArray(array, off, len, new double[len], 0);
+    }
+
+    public static double[] toDoubleArray(float[] from, int fromOff, int len,
+	    double[] to, int toOff) {
+	int end = fromOff + len;
+
+	for (int i = fromOff, j = toOff; i < end; i++, j++) {
+	    to[j] = (double) from[i];
+	}
+
+	return to;
+    }
+
     private ArrayUtil() {
     }
 

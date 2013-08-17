@@ -1,7 +1,5 @@
 package at.stefl.commons.math.vector;
 
-import java.awt.Point;
-
 public class Vector2i {
 
     public static final Vector2i NULL = new Vector2i();
@@ -27,8 +25,12 @@ public class Vector2i {
 	this(xy.getX(), xy.getY());
     }
 
-    public Vector2i(Point xy) {
-	this(xy.x, xy.y);
+    public Vector2i(Vector2d xy) {
+	this((int) xy.getX(), (int) xy.getY());
+    }
+
+    public Vector2i(Vector3d xyz) {
+	this((int) xyz.getX(), (int) xyz.getY());
     }
 
     public String toString() {
@@ -222,6 +224,10 @@ public class Vector2i {
 
     public double dot(Vector2i b) {
 	return x * b.x + y * b.y;
+    }
+
+    public Vector2d getAsVector2d() {
+	return new Vector2d(this);
     }
 
 }

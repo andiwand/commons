@@ -6,7 +6,7 @@ public class NullWriter extends Writer {
 
     public static final NullWriter NULL = new NullWriter();
 
-    protected NullWriter() {
+    private NullWriter() {
     }
 
     @Override

@@ -16,6 +16,10 @@ public class RectangleD {
 	this.bottom = bottom;
     }
 
+    public RectangleD(RectangleI r) {
+	this(r.getLeft(), r.getTop(), r.getRight(), r.getBottom());
+    }
+
     @Override
     public int hashCode() {
 	final int prime = 31;
@@ -120,6 +124,10 @@ public class RectangleD {
 
     public Vector2d getSize() {
 	return new Vector2d(getWidth(), getHeight());
+    }
+
+    public RectangleI getAsRectangleI() {
+	return new RectangleI(this);
     }
 
 }

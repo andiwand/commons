@@ -3,11 +3,11 @@
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
 	<property name="jar" value="commons.jar" />
-	
+
 	<path id="commons.classpath">
 		<pathelement location="bin" />
 	</path>
-	
+
 	<target name="init">
 		<mkdir dir="bin" />
 		<copy includeemptydirs="false" todir="bin">
@@ -16,17 +16,18 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="clean">
 		<delete dir="bin" />
 	</target>
-	
+
 	<target name="make" depends="init">
-		<javac srcdir="src" destdir="bin" source="${source}" target="${target}" includeantruntime="true">
+		<javac srcdir="src" destdir="bin" source="${source}" target="${target}"
+			includeantruntime="true">
 			<classpath refid="commons.classpath" />
 		</javac>
 	</target>
-	
+
 	<target name="make-jar" depends="make">
 		<delete file="${jar}" />
 		<jar destfile="${jar}">

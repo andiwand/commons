@@ -15,17 +15,14 @@ public class Vector3d {
     private double z;
 
     public Vector3d() {
-	x = y = z = 0d;
     }
 
     public Vector3d(double all) {
-	x = y = z = all;
+	this(all, all, all);
     }
 
     public Vector3d(double x, double y) {
-	this.x = x;
-	this.y = y;
-	this.z = 0d;
+	this(x, y, 0);
     }
 
     public Vector3d(double x, double y, double z) {
@@ -67,10 +64,8 @@ public class Vector3d {
 	this.z = yz.getY();
     }
 
-    public Vector3d(Vector3d xyz) {
-	x = xyz.x;
-	y = xyz.y;
-	z = xyz.z;
+    public Vector3d(Vector3i xyz) {
+	this(xyz.getX(), xyz.getY(), xyz.getZ());
     }
 
     public String toString() {
@@ -456,6 +451,10 @@ public class Vector3d {
     public Vector3d cross(Vector3d b) {
 	return new Vector3d(y * b.z - z * b.y, z * b.x - x * b.z, x * b.y - y
 		* b.x);
+    }
+
+    public Vector3i getAsVector3i() {
+	return new Vector3i(this);
     }
 
 }

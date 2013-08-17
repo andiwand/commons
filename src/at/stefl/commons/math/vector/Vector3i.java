@@ -36,6 +36,10 @@ public class Vector3i {
 	this(x, yz.getX(), yz.getY());
     }
 
+    public Vector3i(Vector3d xyz) {
+	this((int) xyz.getX(), (int) xyz.getY(), (int) xyz.getZ());
+    }
+
     public String toString() {
 	return "(" + x + ", " + y + ", " + z + ")";
     }
@@ -323,6 +327,10 @@ public class Vector3i {
     public Vector3i cross(Vector3i b) {
 	return new Vector3i(y * b.z - z * b.y, z * b.x - x * b.z, x * b.y - y
 		* b.x);
+    }
+    
+    public Vector3d getAsVector3d() {
+	return new Vector3d(this);
     }
 
 }

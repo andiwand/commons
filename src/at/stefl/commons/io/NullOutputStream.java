@@ -6,7 +6,7 @@ public class NullOutputStream extends OutputStream {
 
     public static final NullOutputStream NULL = new NullOutputStream();
 
-    protected NullOutputStream() {
+    private NullOutputStream() {
     }
 
     @Override

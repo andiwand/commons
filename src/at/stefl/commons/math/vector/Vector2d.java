@@ -42,19 +42,20 @@ public class Vector2d {
 	}
     }
 
-    public Vector2d(Vector2d xy) {
-	x = xy.x;
-	y = xy.y;
+    public Vector2d(Vector3d xyz) {
+	this(xyz.getX(), xyz.getY());
     }
 
-    public Vector2d(Vector3d xyz) {
-	x = xyz.getX();
-	y = xyz.getY();
+    public Vector2d(Vector2i xy) {
+	this(xy.getX(), xy.getY());
+    }
+
+    public Vector2d(Vector3i xyz) {
+	this(xyz.getX(), xyz.getY());
     }
 
     public Vector2d(Point point) {
-	x = point.x;
-	y = point.y;
+	this(point.x, point.y);
     }
 
     public String toString() {
