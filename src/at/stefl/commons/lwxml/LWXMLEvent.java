@@ -4,6 +4,7 @@ import java.util.Set;
 
 import at.stefl.commons.util.array.ArrayUtil;
 
+// TODO: remove START_DOCUMENT, END_DOCUMENT
 public enum LWXMLEvent {
 
     START_DOCUMENT(false), END_DOCUMENT(false),

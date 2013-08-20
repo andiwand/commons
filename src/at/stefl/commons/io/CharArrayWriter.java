@@ -7,20 +7,96 @@ import java.io.Writer;
 import at.stefl.commons.util.array.ArrayUtil;
 import at.stefl.commons.util.collection.SingleLinkedNode;
 
-// TODO: implement close() ?
-// TODO: implement reader
 // TODO: implement with LinkedList
+// TODO: implement better solution (-> growable array)
 public class CharArrayWriter extends Writer {
 
     private static final int DEFAULT_INITIAL_SIZE = 16;
 
+    private class ConcatReader extends Reader {
+	private SingleLinkedNode<char[]> currentNode;
+	private char[] currentBuffer;
+	private int currentIndex;
+
+	private int position;
+
+	private int revision;
+
+	private ConcatReader() {
+	    this.currentNode = CharArrayWriter.this.headNode;
+	    this.currentBuffer = currentNode.getEntry();
+	    this.revision = CharArrayWriter.this.revision;
+	}
+
+	private void checkRevision() {
+	    if (revision != CharArrayWriter.this.revision)
+		throw new IllegalStateException("stream was reset");
+	}
+
+	private boolean ensureBuffer() {
+	    if (currentIndex >= currentBuffer.length) {
+		if (!currentNode.hasNext())
+		    return false;
+		currentNode = currentNode.getNext();
+		currentBuffer = currentNode.getEntry();
+		currentIndex = 0;
+	    }
+
+	    return true;
+	}
+
+	public boolean ready() {
+	    checkRevision();
+	    return position < CharArrayWriter.this.size;
+	}
+
+	@Override
+	public int read() throws IOException {
+	    checkRevision();
+	    if (!ensureBuffer())
+		return -1;
+	    return currentBuffer[currentIndex++];
+	}
+
+	@Override
+	public int read(char[] cbuf) throws IOException {
+	    return read(cbuf, 0, cbuf.length);
+	}
+
+	@Override
+	public int read(char[] cbuf, int off, int len) throws IOException {
+	    checkRevision();
+
+	    int read = 0;
+
+	    while (len > 0) {
+		if (!ensureBuffer())
+		    break;
+		int part = Math.min(currentBuffer.length - currentIndex, len);
+		System.arraycopy(currentBuffer, currentIndex, cbuf, off, part);
+
+		off += part;
+		len -= part;
+		currentIndex += part;
+		read += part;
+	    }
+
+	    return read;
+	}
+
+	@Override
+	public void close() {
+	}
+    }
+
     private SingleLinkedNode<char[]> headNode;
     private SingleLinkedNode<char[]> currentNode;
-
     private char[] currentBuffer;
     private int currentIndex;
 
     private int size;
+
+    private int revision;
 
     public CharArrayWriter() {
 	this(DEFAULT_INITIAL_SIZE);
@@ -52,21 +128,40 @@ public class CharArrayWriter extends Writer {
 	int index = 0;
 
 	for (char[] buffer : headNode) {
-	    if (buffer == currentBuffer)
-		break;
-	    System.arraycopy(buffer, 0, result, index, buffer.length);
+	    int len = (buffer == currentBuffer) ? currentIndex : buffer.length;
+	    System.arraycopy(buffer, 0, result, index, len);
 	    index += buffer.length;
 	}
-
-	System.arraycopy(currentBuffer, 0, result, index, currentIndex);
 
 	return result;
     }
 
+    public Reader getReader() {
+	return new ConcatReader();
+    }
+
+    private void ensureSpace(int space) {
+	if (currentIndex >= currentBuffer.length)
+	    getMoreSpace(space);
+    }
+
+    // TODO: improve buffer scaling
+    private void getMoreSpace(int space) {
+	if (currentNode.hasNext()) {
+	    currentNode = currentNode.getNext();
+	    currentBuffer = currentNode.getEntry();
+	} else {
+	    int newSize = Math.max(currentBuffer.length << 1, space);
+	    currentNode = currentNode.append(new SingleLinkedNode<char[]>());
+	    currentNode.setEntry(currentBuffer = new char[newSize]);
+	}
+
+	currentIndex = 0;
+    }
+
     @Override
     public void write(int c) {
-	if (currentIndex >= currentBuffer.length)
-	    getMoreSpace(1);
+	ensureSpace(1);
 	currentBuffer[currentIndex] = (char) c;
 	currentIndex++;
 	size++;
@@ -87,9 +182,7 @@ public class CharArrayWriter extends Writer {
 	size += len;
 
 	while (len > 0) {
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(len);
-
+	    ensureSpace(len);
 	    int part = Math.min(currentBuffer.length - currentIndex, len);
 	    System.arraycopy(cbuf, off, currentBuffer, currentIndex, part);
 
@@ -106,32 +199,20 @@ public class CharArrayWriter extends Writer {
 
     @Override
     public void write(String str, int off, int len) {
-	size += len;
+	if (str == null)
+	    throw new NullPointerException();
+	if ((off < 0) || (len < 0) || (len > (str.length() - off)))
+	    throw new IndexOutOfBoundsException();
 
 	while (len > 0) {
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(len);
-
+	    ensureSpace(len);
 	    int part = Math.min(currentBuffer.length - currentIndex, len);
 	    str.getChars(off, off + part, currentBuffer, currentIndex);
 
 	    off += part;
 	    len -= part;
 	    currentIndex += part;
-	}
-
-	if (str == null)
-	    throw new NullPointerException();
-	if ((off < 0) || (len < 0) || (len > (str.length() - off)))
-	    throw new IndexOutOfBoundsException();
-
-	size += len;
-
-	for (int i = 0; i < len; i++) {
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(len - i);
-	    currentBuffer[currentIndex] = str.charAt(off + i);
-	    currentIndex++;
+	    size += part;
 	}
     }
 
@@ -170,8 +251,7 @@ public class CharArrayWriter extends Writer {
 	    if (len > 0)
 		break;
 
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(currentBuffer.length);
+	    ensureSpace(currentBuffer.length);
 	}
 
 	return size - lastCount;
@@ -195,13 +275,11 @@ public class CharArrayWriter extends Writer {
 	if (csq == null)
 	    csq = "null";
 
-	size += end - start + 1;
-
 	for (int i = start; i <= end; i++) {
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(end - i + 1);
+	    ensureSpace(end - i + 1);
 	    currentBuffer[currentIndex] = csq.charAt(i);
 	    currentIndex++;
+	    size++;
 	}
 
 	return this;
@@ -210,24 +288,10 @@ public class CharArrayWriter extends Writer {
     public void writeTo(Writer out) throws IOException {
 	for (char[] buffer : headNode) {
 	    if (buffer == currentBuffer)
-		break;
-	    out.write(buffer);
+		out.write(currentBuffer, 0, currentIndex);
+	    else
+		out.write(buffer);
 	}
-
-	out.write(currentBuffer, 0, currentIndex);
-    }
-
-    private void getMoreSpace(int space) {
-	if (currentNode.hasNext()) {
-	    currentNode = currentNode.getNext();
-	    currentBuffer = currentNode.getEntry();
-	} else {
-	    int newSize = Math.max(currentBuffer.length << 1, space);
-	    currentNode = currentNode.append(new SingleLinkedNode<char[]>());
-	    currentNode.setEntry(currentBuffer = new char[newSize]);
-	}
-
-	currentIndex = 0;
     }
 
     public void reset() {
@@ -235,6 +299,8 @@ public class CharArrayWriter extends Writer {
 	currentBuffer = currentNode.getEntry();
 	currentIndex = 0;
 	size = 0;
+
+	revision++;
     }
 
     @Override

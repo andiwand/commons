@@ -8,6 +8,7 @@ import at.stefl.commons.io.CharArrayWriter;
 import at.stefl.commons.io.CharStreamUtil;
 import at.stefl.commons.lwxml.LWXMLEvent;
 
+// TODO: provide hasNext()
 // TODO: improve causing memory allocation
 // TODO: improve getCurrentEvent()
 // TODO: improve exception handling (reading on no-value event)

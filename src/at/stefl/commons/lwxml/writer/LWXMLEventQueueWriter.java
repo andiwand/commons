@@ -9,22 +9,23 @@ import at.stefl.commons.lwxml.reader.LWXMLReader;
 import at.stefl.commons.util.array.ArrayUtil;
 import at.stefl.commons.util.string.CharSequenceUtil;
 
-// TODO: remove and implement a better solution (-> GrowableArray)
+// TODO: implement better solution (-> growable array)
 public class LWXMLEventQueueWriter extends LWXMLWriter {
 
     private static final LWXMLEvent[] EVENT_ARRAY = LWXMLEvent.values();
 
-    private static final double CHAR_PER_EVENT = 4;
+    public static final int DEFAULT_INITIAL_EVENT_CAPACITY = 10;
+    public static final double DEFAULT_VALUES_ON_EVENT = 0.9;
+    public static final double DEFAULT_CHARS_ON_VALUE = 6;
 
-    public static final int INITIAL_EVENT_SIZE = 10;
-    public static final int INITIAL_VALUE_SIZE = 4;
-    public static final int INITIAL_CHAR_SIZE = (int) (INITIAL_VALUE_SIZE * CHAR_PER_EVENT);
+    private final double valuesOnEvent;
+    private final double charsOnValue;
 
-    private int[] eventArray = new int[INITIAL_EVENT_SIZE];
-    private int[] valueArray = new int[INITIAL_EVENT_SIZE];
-    private int[] offsetArray = new int[INITIAL_VALUE_SIZE];
-    private int[] lengthArray = new int[INITIAL_VALUE_SIZE];
-    private char[] charArray = new char[INITIAL_CHAR_SIZE];
+    private int[] eventArray;
+    private int[] valueArray;
+    private int[] offsetArray;
+    private int[] lengthArray;
+    private char[] charArray;
 
     private int eventCount;
     private int valueCount;
@@ -33,23 +34,44 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
     private LWXMLEvent lastEvent;
     private boolean eventWritten;
 
-    private void ensureEventSize(int usage) {
-	eventArray = (int[]) ArrayUtil.growGeometric(eventArray, eventCount
-		+ usage, 2);
-	valueArray = (int[]) ArrayUtil.growGeometric(valueArray, eventCount
-		+ usage, 2);
+    public LWXMLEventQueueWriter() {
+	this(DEFAULT_INITIAL_EVENT_CAPACITY, DEFAULT_CHARS_ON_VALUE,
+		DEFAULT_VALUES_ON_EVENT);
     }
 
-    private void ensureValueSize(int usage) {
-	offsetArray = (int[]) ArrayUtil.growGeometric(offsetArray, valueCount
-		+ usage, 2);
-	lengthArray = (int[]) ArrayUtil.growGeometric(lengthArray, valueCount
-		+ usage, 2);
+    public LWXMLEventQueueWriter(int initialEventCapacity,
+	    double valuesOnEvent, double charsOnValue) {
+	this.valuesOnEvent = valuesOnEvent;
+	this.charsOnValue = charsOnValue;
+
+	eventArray = new int[initialEventCapacity];
+	valueArray = new int[initialEventCapacity];
+
+	int initialValueCapacity = (int) (initialEventCapacity * valuesOnEvent);
+	offsetArray = new int[initialValueCapacity];
+	lengthArray = new int[initialValueCapacity];
+
+	int initialCharCapacity = (int) (initialValueCapacity * charsOnValue);
+	charArray = new char[initialCharCapacity];
     }
 
-    private void ensureCharSize(int usage) {
-	charArray = (char[]) ArrayUtil.growGeometric(charArray, charCount
-		+ usage, 2);
+    private void ensureEventCapacity(int need) {
+	int minSize = eventCount + need;
+	eventArray = (int[]) ArrayUtil.growGeometric(eventArray, minSize, 2);
+	valueArray = (int[]) ArrayUtil.growGeometric(valueArray, minSize, 2);
+    }
+
+    private void ensureValueCapacity(int need) {
+	int minSize = Math.max(valueCount + need,
+		(int) (eventCount * valuesOnEvent));
+	offsetArray = (int[]) ArrayUtil.growGeometric(offsetArray, minSize, 2);
+	lengthArray = (int[]) ArrayUtil.growGeometric(lengthArray, minSize, 2);
+    }
+
+    private void ensureCharCapacity(int need) {
+	int minSize = Math.max(charCount + need,
+		(int) (valueCount * charsOnValue));
+	charArray = (char[]) ArrayUtil.growGeometric(charArray, minSize, 2);
     }
 
     @Override
@@ -102,12 +124,12 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
 
 	finishLastEvent();
 
-	ensureEventSize(1);
+	ensureEventCapacity(1);
 	eventArray[eventCount] = event.ordinal();
 	valueArray[eventCount] = event.hasValue() ? valueCount : -1;
 
 	if (event.hasValue()) {
-	    ensureValueSize(1);
+	    ensureValueCapacity(1);
 	    offsetArray[valueCount] = charCount;
 	}
 
@@ -135,7 +157,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
 	if (eventWritten)
 	    throw new LWXMLWriterException("value is already written");
 
-	ensureCharSize(len);
+	ensureCharCapacity(len);
     }
 
     @Override

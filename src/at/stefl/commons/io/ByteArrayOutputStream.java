@@ -6,34 +6,104 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import at.stefl.commons.util.array.ArrayUtil;
+import at.stefl.commons.util.collection.SingleLinkedNode;
 
-// TODO: implement close() ?
-// TODO: implement input stream
 // TODO: implement with LinkedList
+// TODO: implement better solution (-> growable array)
 public class ByteArrayOutputStream extends OutputStream {
 
     private static final int DEFAULT_INITIAL_SIZE = 16;
 
-    private class BufferNode {
-	private byte[] buffer;
-	private BufferNode next;
+    private class ConcatInputStream extends InputStream {
+	private SingleLinkedNode<byte[]> currentNode;
+	private byte[] currentBuffer;
+	private int currentIndex;
+
+	private int position;
+
+	private int revision;
+
+	private ConcatInputStream() {
+	    this.currentNode = ByteArrayOutputStream.this.headNode;
+	    this.currentBuffer = currentNode.getEntry();
+	    this.revision = ByteArrayOutputStream.this.revision;
+	}
+
+	private void checkRevision() {
+	    if (revision != ByteArrayOutputStream.this.revision)
+		throw new IllegalStateException("stream was reset");
+	}
+
+	private boolean ensureBuffer() {
+	    if (currentIndex >= currentBuffer.length) {
+		if (!currentNode.hasNext())
+		    return false;
+		currentNode = currentNode.getNext();
+		currentBuffer = currentNode.getEntry();
+		currentIndex = 0;
+	    }
+
+	    return true;
+	}
+
+	@Override
+	public int available() throws IOException {
+	    checkRevision();
+	    return ByteArrayOutputStream.this.size - position;
+	}
+
+	@Override
+	public int read() throws IOException {
+	    checkRevision();
+	    if (!ensureBuffer())
+		return -1;
+	    position++;
+	    return currentBuffer[currentIndex++];
+	}
+
+	@Override
+	public int read(byte[] b) throws IOException {
+	    return read(b, 0, b.length);
+	}
+
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException {
+	    checkRevision();
+	    int read = 0;
+
+	    while (len > 0) {
+		if (!ensureBuffer())
+		    break;
+		int part = Math.min(currentBuffer.length - currentIndex, len);
+		System.arraycopy(currentBuffer, currentIndex, b, off, part);
+
+		off += part;
+		len -= part;
+		currentIndex += part;
+		read += part;
+		position += part;
+	    }
+
+	    return read;
+	}
     }
 
-    private BufferNode headNode;
-    private BufferNode currentNode;
-
+    private SingleLinkedNode<byte[]> headNode;
+    private SingleLinkedNode<byte[]> currentNode;
     private byte[] currentBuffer;
     private int currentIndex;
 
-    private int count;
+    private int size;
+
+    private int revision;
 
     public ByteArrayOutputStream() {
 	this(DEFAULT_INITIAL_SIZE);
     }
 
     public ByteArrayOutputStream(int initialSize) {
-	currentNode = headNode = new BufferNode();
-	currentBuffer = currentNode.buffer = new byte[initialSize];
+	currentNode = headNode = new SingleLinkedNode<byte[]>();
+	currentNode.setEntry(currentBuffer = new byte[initialSize]);
     }
 
     @Override
@@ -47,33 +117,54 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public int size() {
-	return count;
+	return size;
     }
 
     public byte[] toByteArray() {
-	if (count == 0)
+	if (size == 0)
 	    return ArrayUtil.EMPTY_BYTE_ARRAY;
 
-	byte[] result = new byte[count];
+	byte[] result = new byte[size];
 	int index = 0;
 
-	for (BufferNode node = headNode; node != currentNode; node = node.next) {
-	    System.arraycopy(node.buffer, 0, result, index, node.buffer.length);
-	    index += node.buffer.length;
+	for (byte[] buffer : headNode) {
+	    int len = (buffer == currentBuffer) ? currentIndex : buffer.length;
+	    System.arraycopy(buffer, 0, result, index, len);
+	    index += buffer.length;
 	}
-
-	System.arraycopy(currentBuffer, 0, result, index, currentIndex);
 
 	return result;
     }
 
+    public InputStream getInputStream() {
+	return new ConcatInputStream();
+    }
+
+    private void ensureSpace(int space) {
+	if (currentIndex >= currentBuffer.length)
+	    getMoreSpace(space);
+    }
+
+    // TODO: improve buffer scaling
+    private void getMoreSpace(int space) {
+	if (currentNode.hasNext()) {
+	    currentNode = currentNode.getNext();
+	    currentBuffer = currentNode.getEntry();
+	} else {
+	    int newSize = Math.max(currentBuffer.length << 1, space);
+	    currentNode = currentNode.append(new SingleLinkedNode<byte[]>());
+	    currentNode.setEntry(currentBuffer = new byte[newSize]);
+	}
+
+	currentIndex = 0;
+    }
+
     @Override
     public void write(int b) {
-	if (currentIndex >= currentBuffer.length)
-	    getMoreSpace(1);
+	ensureSpace(1);
 	currentBuffer[currentIndex] = (byte) b;
 	currentIndex++;
-	count++;
+	size++;
     }
 
     @Override
@@ -88,23 +179,21 @@ public class ByteArrayOutputStream extends OutputStream {
 	if ((off < 0) || (len < 0) || (len > (b.length - off)))
 	    throw new IndexOutOfBoundsException();
 
-	count += len;
-
 	while (len > 0) {
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(len);
-
+	    ensureSpace(len);
 	    int part = Math.min(currentBuffer.length - currentIndex, len);
 	    System.arraycopy(b, off, currentBuffer, currentIndex, part);
 
 	    off += part;
 	    len -= part;
 	    currentIndex += part;
+	    size += part;
 	}
     }
 
+    // TODO: improve buffer scaling
     public int write(InputStream in) throws IOException {
-	int lastCount = count;
+	int lastCount = size;
 
 	while (true) {
 	    int read = in.read(currentBuffer, currentIndex,
@@ -113,17 +202,17 @@ public class ByteArrayOutputStream extends OutputStream {
 		break;
 
 	    currentIndex += read;
-	    count += read;
+	    size += read;
 
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(currentBuffer.length);
+	    ensureSpace(currentBuffer.length);
 	}
 
-	return count - lastCount;
+	return size - lastCount;
     }
 
+    // TODO: improve buffer scaling
     public int write(InputStream in, int len) throws IOException {
-	int lastCount = count;
+	int lastCount = size;
 
 	while (true) {
 	    int part = Math.min(currentBuffer.length - currentIndex, len);
@@ -133,44 +222,33 @@ public class ByteArrayOutputStream extends OutputStream {
 
 	    len -= read;
 	    currentIndex += read;
-	    count += read;
+	    size += read;
 
 	    if (len > 0)
 		break;
 
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(currentBuffer.length);
+	    ensureSpace(currentBuffer.length);
 	}
 
-	return count - lastCount;
+	return size - lastCount;
     }
 
     public void writeTo(OutputStream out) throws IOException {
-	for (BufferNode node = headNode; node != currentNode; node = node.next) {
-	    out.write(node.buffer);
+	for (byte[] buffer : headNode) {
+	    if (buffer == currentBuffer)
+		out.write(currentBuffer, 0, currentIndex);
+	    else
+		out.write(buffer);
 	}
-
-	out.write(currentBuffer, 0, currentIndex);
-    }
-
-    private void getMoreSpace(int space) {
-	if (currentNode.next != null) {
-	    currentNode = currentNode.next;
-	    currentBuffer = currentNode.buffer;
-	} else {
-	    int newSize = Math.max(currentBuffer.length << 1, space);
-	    currentNode = currentNode.next = new BufferNode();
-	    currentBuffer = currentNode.buffer = new byte[newSize];
-	}
-
-	currentIndex = 0;
     }
 
     public void reset() {
 	currentNode = headNode;
-	currentBuffer = currentNode.buffer;
+	currentBuffer = currentNode.getEntry();
 	currentIndex = 0;
-	count = 0;
+	size = 0;
+
+	revision++;
     }
 
     @Override
