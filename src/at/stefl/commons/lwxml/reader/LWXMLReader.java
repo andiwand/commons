@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import at.stefl.commons.io.CharArrayWriter;
+import at.stefl.commons.io.DividedCharArrayWriter;
 import at.stefl.commons.io.CharStreamUtil;
 import at.stefl.commons.lwxml.LWXMLEvent;
 
@@ -14,7 +14,7 @@ import at.stefl.commons.lwxml.LWXMLEvent;
 // TODO: improve exception handling (reading on no-value event)
 public abstract class LWXMLReader extends Reader {
 
-    private CharArrayWriter tmpOut = new CharArrayWriter();
+    private DividedCharArrayWriter tmpOut = new DividedCharArrayWriter();
 
     public abstract LWXMLEvent getCurrentEvent();
 

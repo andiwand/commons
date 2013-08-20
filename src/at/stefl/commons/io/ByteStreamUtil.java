@@ -111,7 +111,7 @@ public class ByteStreamUtil {
     }
 
     public static byte[] readBytes(InputStream in) throws IOException {
-	ByteArrayOutputStream out = new ByteArrayOutputStream();
+	DividedByteArrayOutputStream out = new DividedByteArrayOutputStream();
 	out.write(in);
 	out.close();
 	return out.toByteArray();

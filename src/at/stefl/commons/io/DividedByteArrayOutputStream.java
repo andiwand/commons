@@ -1,35 +1,36 @@
 package at.stefl.commons.io;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import at.stefl.commons.util.array.ArrayUtil;
 import at.stefl.commons.util.collection.SingleLinkedNode;
 
-// TODO: implement with LinkedList
 // TODO: implement better solution (-> growable array)
-public class CharArrayWriter extends Writer {
+public class DividedByteArrayOutputStream extends OutputStream {
 
     private static final int DEFAULT_INITIAL_SIZE = 16;
 
-    private class ConcatReader extends Reader {
-	private SingleLinkedNode<char[]> currentNode;
-	private char[] currentBuffer;
+    private class ConcatInputStream extends InputStream {
+	private SingleLinkedNode<byte[]> currentNode;
+	private byte[] currentBuffer;
 	private int currentIndex;
 
 	private int position;
 
 	private int revision;
 
-	private ConcatReader() {
-	    this.currentNode = CharArrayWriter.this.headNode;
+	private ConcatInputStream() {
+	    this.currentNode = DividedByteArrayOutputStream.this.headNode;
 	    this.currentBuffer = currentNode.getEntry();
-	    this.revision = CharArrayWriter.this.revision;
+	    this.revision = DividedByteArrayOutputStream.this.revision;
 	}
 
 	private void checkRevision() {
-	    if (revision != CharArrayWriter.this.revision)
+	    if (revision != DividedByteArrayOutputStream.this.revision)
 		throw new IllegalStateException("stream was reset");
 	}
 
@@ -45,9 +46,10 @@ public class CharArrayWriter extends Writer {
 	    return true;
 	}
 
-	public boolean ready() {
+	@Override
+	public int available() throws IOException {
 	    checkRevision();
-	    return position < CharArrayWriter.this.size;
+	    return DividedByteArrayOutputStream.this.size - position;
 	}
 
 	@Override
@@ -55,79 +57,80 @@ public class CharArrayWriter extends Writer {
 	    checkRevision();
 	    if (!ensureBuffer())
 		return -1;
+	    position++;
 	    return currentBuffer[currentIndex++];
 	}
 
 	@Override
-	public int read(char[] cbuf) throws IOException {
-	    return read(cbuf, 0, cbuf.length);
+	public int read(byte[] b) throws IOException {
+	    return read(b, 0, b.length);
 	}
 
 	@Override
-	public int read(char[] cbuf, int off, int len) throws IOException {
+	public int read(byte[] b, int off, int len) throws IOException {
 	    checkRevision();
-
 	    int read = 0;
 
 	    while (len > 0) {
 		if (!ensureBuffer())
 		    break;
 		int part = Math.min(currentBuffer.length - currentIndex, len);
-		System.arraycopy(currentBuffer, currentIndex, cbuf, off, part);
+		System.arraycopy(currentBuffer, currentIndex, b, off, part);
 
 		off += part;
 		len -= part;
 		currentIndex += part;
 		read += part;
+		position += part;
 	    }
 
-	    return read;
-	}
-
-	@Override
-	public void close() {
+	    return (read == 0) ? -1 : read;
 	}
     }
 
-    private SingleLinkedNode<char[]> headNode;
-    private SingleLinkedNode<char[]> currentNode;
-    private char[] currentBuffer;
+    private SingleLinkedNode<byte[]> headNode;
+    private SingleLinkedNode<byte[]> currentNode;
+    private byte[] currentBuffer;
     private int currentIndex;
 
     private int size;
 
     private int revision;
 
-    public CharArrayWriter() {
+    public DividedByteArrayOutputStream() {
 	this(DEFAULT_INITIAL_SIZE);
     }
 
-    public CharArrayWriter(int initialSize) {
-	currentNode = headNode = new SingleLinkedNode<char[]>();
-	currentNode.setEntry(currentBuffer = new char[initialSize]);
+    public DividedByteArrayOutputStream(int initialSize) {
+	currentNode = headNode = new SingleLinkedNode<byte[]>();
+	currentNode.setEntry(currentBuffer = new byte[initialSize]);
     }
 
     @Override
     public String toString() {
-	return new String(toCharArray());
+	return new String(toByteArray());
     }
 
-    public boolean isEmpty() {
-	return size == 0;
+    public String toString(Charset charset) {
+	return new String(toByteArray(), charset);
+    }
+
+    public String toString(String charset) throws UnsupportedEncodingException {
+	return new String(toByteArray(), charset);
     }
 
     public int size() {
 	return size;
     }
 
-    public char[] toCharArray() {
+    public byte[] toByteArray() {
 	if (size == 0)
-	    return ArrayUtil.EMPTY_CHAR_ARRAY;
+	    return ArrayUtil.EMPTY_BYTE_ARRAY;
 
-	char[] result = new char[size];
+	byte[] result = new byte[size];
 	int index = 0;
 
-	for (char[] buffer : headNode) {
+	for (byte[] buffer : headNode) {
 	    int len = (buffer == currentBuffer) ? currentIndex : buffer.length;
 	    System.arraycopy(buffer, 0, result, index, len);
 	    index += buffer.length;
@@ -136,8 +139,8 @@ public class CharArrayWriter extends Writer {
 	return result;
     }
 
-    public Reader getReader() {
-	return new ConcatReader();
+    public InputStream getInputStream() {
+	return new ConcatInputStream();
     }
 
     private void ensureSpace(int space) {
@@ -152,62 +155,37 @@ public class CharArrayWriter extends Writer {
 	    currentBuffer = currentNode.getEntry();
 	} else {
 	    int newSize = Math.max(currentBuffer.length << 1, space);
-	    currentNode = currentNode.append(new SingleLinkedNode<char[]>());
-	    currentNode.setEntry(currentBuffer = new char[newSize]);
+	    currentNode = currentNode.append(new SingleLinkedNode<byte[]>());
+	    currentNode.setEntry(currentBuffer = new byte[newSize]);
 	}
 
 	currentIndex = 0;
     }
 
     @Override
-    public void write(int c) {
+    public void write(int b) {
 	ensureSpace(1);
-	currentBuffer[currentIndex] = (char) c;
+	currentBuffer[currentIndex] = (byte) b;
 	currentIndex++;
 	size++;
     }
 
     @Override
-    public void write(char[] cbuf) {
-	write(cbuf, 0, cbuf.length);
+    public void write(byte[] b) {
+	write(b, 0, b.length);
     }
 
     @Override
-    public void write(char[] cbuf, int off, int len) {
-	if (cbuf == null)
+    public void write(byte[] b, int off, int len) {
+	if (b == null)
 	    throw new NullPointerException();
-	if ((off < 0) || (len < 0) || (len > (cbuf.length - off)))
-	    throw new IndexOutOfBoundsException();
-
-	size += len;
-
-	while (len > 0) {
-	    ensureSpace(len);
-	    int part = Math.min(currentBuffer.length - currentIndex, len);
-	    System.arraycopy(cbuf, off, currentBuffer, currentIndex, part);
-
-	    off += part;
-	    len -= part;
-	    currentIndex += part;
-	}
-    }
-
-    @Override
-    public void write(String str) {
-	write(str, 0, str.length());
-    }
-
-    @Override
-    public void write(String str, int off, int len) {
-	if (str == null)
-	    throw new NullPointerException();
-	if ((off < 0) || (len < 0) || (len > (str.length() - off)))
+	if ((off < 0) || (len < 0) || (len > (b.length - off)))
 	    throw new IndexOutOfBoundsException();
 
 	while (len > 0) {
 	    ensureSpace(len);
 	    int part = Math.min(currentBuffer.length - currentIndex, len);
-	    str.getChars(off, off + part, currentBuffer, currentIndex);
+	    System.arraycopy(b, off, currentBuffer, currentIndex, part);
 
 	    off += part;
 	    len -= part;
@@ -216,7 +194,8 @@ public class CharArrayWriter extends Writer {
 	}
     }
 
-    public int write(Reader in) throws IOException {
+    // TODO: improve buffer scaling
+    public int write(InputStream in) throws IOException {
 	int lastCount = size;
 
 	while (true) {
@@ -228,14 +207,14 @@ public class CharArrayWriter extends Writer {
 	    currentIndex += read;
 	    size += read;
 
-	    if (currentIndex >= currentBuffer.length)
-		getMoreSpace(currentBuffer.length);
+	    ensureSpace(currentBuffer.length);
 	}
 
 	return size - lastCount;
     }
 
-    public int write(Reader in, int len) throws IOException {
+    // TODO: improve buffer scaling
+    public int write(InputStream in, int len) throws IOException {
 	int lastCount = size;
 
 	while (true) {
@@ -257,36 +236,8 @@ public class CharArrayWriter extends Writer {
 	return size - lastCount;
     }
 
-    @Override
-    public Writer append(char c) {
-	write(c);
-	return this;
-    }
-
-    @Override
-    public Writer append(CharSequence csq) {
-	return append(csq, 0, csq.length());
-    }
-
-    @Override
-    public Writer append(CharSequence csq, int start, int end) {
-	if ((start < 0) || (end < 0) || (start > end))
-	    throw new IndexOutOfBoundsException();
-	if (csq == null)
-	    csq = "null";
-
-	for (int i = start; i <= end; i++) {
-	    ensureSpace(end - i + 1);
-	    currentBuffer[currentIndex] = csq.charAt(i);
-	    currentIndex++;
-	    size++;
-	}
-
-	return this;
-    }
-
-    public void writeTo(Writer out) throws IOException {
-	for (char[] buffer : headNode) {
+    public void writeTo(OutputStream out) throws IOException {
+	for (byte[] buffer : headNode) {
 	    if (buffer == currentBuffer)
 		out.write(currentBuffer, 0, currentIndex);
 	    else

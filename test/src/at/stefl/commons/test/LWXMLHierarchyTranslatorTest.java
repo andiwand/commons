@@ -3,7 +3,7 @@ package at.stefl.commons.test;
 import java.io.IOException;
 import java.io.InputStream;
 
-import at.stefl.commons.io.CharArrayWriter;
+import at.stefl.commons.io.DividedCharArrayWriter;
 import at.stefl.commons.io.FluidInputStreamReader;
 import at.stefl.commons.lwxml.reader.LWXMLReader;
 import at.stefl.commons.lwxml.reader.LWXMLStreamReader;
@@ -19,7 +19,7 @@ public class LWXMLHierarchyTranslatorTest {
 	LWXMLReader in = new LWXMLStreamReader(new FluidInputStreamReader(
 		inputStream));
 
-	CharArrayWriter writer = new CharArrayWriter();
+	DividedCharArrayWriter writer = new DividedCharArrayWriter();
 	LWXMLWriter out = new LWXMLStreamWriter(writer);
 
 	LWXMLHierarchyTranslator<Object> lwxmlTranslator = new LWXMLHierarchyTranslator<Object>();

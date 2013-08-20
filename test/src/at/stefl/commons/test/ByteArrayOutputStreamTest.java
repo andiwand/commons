@@ -2,6 +2,8 @@ package at.stefl.commons.test;
 
 import java.io.ByteArrayOutputStream;
 
+import at.stefl.commons.io.DividedByteArrayOutputStream;
+
 public class ByteArrayOutputStreamTest {
 
     public static void main(String[] args) throws Throwable {
@@ -24,7 +26,7 @@ public class ByteArrayOutputStreamTest {
 
 	start = System.nanoTime();
 	{
-	    at.stefl.commons.io.ByteArrayOutputStream out = new at.stefl.commons.io.ByteArrayOutputStream();
+	    DividedByteArrayOutputStream out = new DividedByteArrayOutputStream();
 
 	    for (int i = 0; i < 100000000; i++) {
 		out.write(i);

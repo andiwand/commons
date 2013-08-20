@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import at.stefl.commons.io.CharArrayWriter;
+import at.stefl.commons.io.DividedCharArrayWriter;
 import at.stefl.commons.lwxml.LWXMLEvent;
 import at.stefl.commons.lwxml.LWXMLIllegalEventException;
 import at.stefl.commons.lwxml.reader.LWXMLReader;
@@ -19,7 +19,7 @@ public class LWXMLEventListWriter extends LWXMLWriter {
     // private Deque<String> valueList = new LinkedList<String>();
     private LinkedList<LWXMLEvent> eventList = new LinkedList<LWXMLEvent>();
     private LinkedList<String> valueList = new LinkedList<String>();
-    private CharArrayWriter valueWriter = new CharArrayWriter();
+    private DividedCharArrayWriter valueWriter = new DividedCharArrayWriter();
 
     private LWXMLEvent lastEvent;
     private boolean eventWritten;

@@ -163,14 +163,14 @@ public class CharStreamUtil {
     }
 
     public static char[] readBytes(Reader in) throws IOException {
-	CharArrayWriter out = new CharArrayWriter();
+	DividedCharArrayWriter out = new DividedCharArrayWriter();
 	out.write(in);
 	out.close();
 	return out.toCharArray();
     }
 
     public static String readString(Reader in) throws IOException {
-	CharArrayWriter out = new CharArrayWriter();
+	DividedCharArrayWriter out = new DividedCharArrayWriter();
 	out.write(in);
 	out.close();
 	return out.toString();
@@ -178,7 +178,7 @@ public class CharStreamUtil {
 
     public static String readLine(PushbackReader in) throws IOException {
 	@SuppressWarnings("resource")
-	CharArrayWriter out = new CharArrayWriter();
+	DividedCharArrayWriter out = new DividedCharArrayWriter();
 	int read;
 
 	while (true) {
@@ -198,7 +198,7 @@ public class CharStreamUtil {
 
     public static String readUntilChar(Reader in, char c) throws IOException {
 	@SuppressWarnings("resource")
-	CharArrayWriter out = new CharArrayWriter();
+	DividedCharArrayWriter out = new DividedCharArrayWriter();
 	int read;
 
 	while (true) {
@@ -215,7 +215,7 @@ public class CharStreamUtil {
     public static String readUntilChar(Reader in, Set<Character> chars)
 	    throws IOException {
 	@SuppressWarnings("resource")
-	CharArrayWriter out = new CharArrayWriter();
+	DividedCharArrayWriter out = new DividedCharArrayWriter();
 	int read;
 
 	while (true) {
