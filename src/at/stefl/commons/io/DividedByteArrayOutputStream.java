@@ -240,10 +240,12 @@ public class DividedByteArrayOutputStream extends OutputStream {
 
     public void writeTo(OutputStream out) throws IOException {
 	for (byte[] buffer : headNode) {
-	    if (buffer == currentBuffer)
+	    if (buffer == currentBuffer) {
 		out.write(currentBuffer, 0, currentIndex);
-	    else
+		break;
+	    } else {
 		out.write(buffer);
+	    }
 	}
     }
 

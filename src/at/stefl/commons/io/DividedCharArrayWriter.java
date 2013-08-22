@@ -288,10 +288,12 @@ public class DividedCharArrayWriter extends Writer {
 
     public void writeTo(Writer out) throws IOException {
 	for (char[] buffer : headNode) {
-	    if (buffer == currentBuffer)
+	    if (buffer == currentBuffer) {
 		out.write(currentBuffer, 0, currentIndex);
-	    else
+		break;
+	    } else {
 		out.write(buffer);
+	    }
 	}
     }
 
