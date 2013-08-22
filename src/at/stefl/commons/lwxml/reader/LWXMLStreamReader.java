@@ -20,6 +20,7 @@ import at.stefl.commons.util.InaccessibleSectionException;
 
 // TODO: improve code
 // TODO: improve malformed xml handling
+// TODO: use xml escaping decoder
 public class LWXMLStreamReader extends LWXMLReader {
 
     private static final int PUSHBACK_BUFFER_SIZE = 1;

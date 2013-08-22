@@ -131,7 +131,9 @@ public class DividedByteArrayOutputStream extends OutputStream {
 	int index = 0;
 
 	for (byte[] buffer : headNode) {
-	    int len = (buffer == currentBuffer) ? currentIndex : buffer.length;
+	    int len = Math.min(buffer.length, size - index);
+	    if (len <= 0)
+		break;
 	    System.arraycopy(buffer, 0, result, index, len);
 	    index += buffer.length;
 	}

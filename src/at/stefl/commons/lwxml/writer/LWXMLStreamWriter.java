@@ -9,6 +9,7 @@ import java.io.Writer;
 import at.stefl.commons.lwxml.LWXMLEvent;
 import at.stefl.commons.lwxml.LWXMLIllegalEventException;
 
+// TODO: use xml escaping encoder
 public class LWXMLStreamWriter extends LWXMLWriter {
 
     private boolean closed;

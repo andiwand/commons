@@ -127,7 +127,9 @@ public class DividedCharArrayWriter extends Writer {
 	int index = 0;
 
 	for (char[] buffer : headNode) {
-	    int len = (buffer == currentBuffer) ? currentIndex : buffer.length;
+	    int len = Math.min(buffer.length, size - index);
+	    if (len <= 0)
+		break;
 	    System.arraycopy(buffer, 0, result, index, len);
 	    index += buffer.length;
 	}
