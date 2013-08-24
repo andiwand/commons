@@ -22,44 +22,45 @@ import at.stefl.commons.util.InaccessibleSectionException;
 // TODO: improve malformed xml handling
 // TODO: use xml escaping decoder
 public class LWXMLStreamReader extends LWXMLReader {
-
+    
     private static final int PUSHBACK_BUFFER_SIZE = 1;
-
+    
     private static final CharFilter WHITESPACE_FILTER = new CharFilter() {
-	public boolean accept(char c) {
-	    return !LWXMLConstants.isWhitespace(c);
-	}
+        
+        public boolean accept(char c) {
+            return !LWXMLConstants.isWhitespace(c);
+        }
     };
-
+    
     private final CharFilter startElementFilter = new CharFilter() {
-	public boolean accept(char c) {
-	    if (LWXMLConstants.isWhitespace(c))
-		return false;
-
-	    switch (c) {
-	    case '/':
-	    case '>':
-		try {
-		    LWXMLStreamReader.this.in.unread(c);
-		    return false;
-		} catch (IOException e) {
-		    throw new InaccessibleSectionException();
-		}
-	    }
-
-	    return true;
-	}
+        
+        public boolean accept(char c) {
+            if (LWXMLConstants.isWhitespace(c)) return false;
+            
+            switch (c) {
+            case '/':
+            case '>':
+                try {
+                    LWXMLStreamReader.this.in.unread(c);
+                    return false;
+                } catch (IOException e) {
+                    throw new InaccessibleSectionException();
+                }
+            }
+            
+            return true;
+        }
     };
-
+    
     private static final char[] CDATA_CHARS = "[CDATA[".toCharArray();
     // TODO: remove
     private static final char[] DOCTYPE_CHARS = "DOCTYPE".toCharArray();
-
+    
     private boolean closed;
-
+    
     private final PushbackReader in;
     private final FullyReader fin;
-
+    
     private final UntilCharReader endElementIn;
     private final UntilCharSequenceReader commentIn;
     private final UntilCharSequenceReader cdataIn;
@@ -69,238 +70,230 @@ public class LWXMLStreamReader extends LWXMLReader {
     private final UntilCharReader attributeNameIn;
     private final UntilCharReader attributeValueIn;
     private final UntilCharReader characterIn;
-
+    
     private LWXMLEvent lastEvent;
-
+    
     private boolean handleAttributeList;
     private boolean handleEndEmptyElement;
-
+    
     private Reader eventReader;
-
+    
     // TODO: remove
     public LWXMLStreamReader(InputStream in) {
-	this(new BufferedReader(new InputStreamReader(in)));
+        this(new BufferedReader(new InputStreamReader(in)));
     }
-
+    
     public LWXMLStreamReader(Reader in) {
-	this.in = new PushbackReader(in, PUSHBACK_BUFFER_SIZE);
-	this.fin = new FullyReader(this.in);
-
-	endElementIn = new UntilCharReader(new ApplyFilterReader(fin,
-		WHITESPACE_FILTER), '>');
-	commentIn = new UntilCharSequenceReader(fin, "-->");
-	cdataIn = new UntilCharSequenceReader(fin, "]]>");
-	processingInstructionTargetIn = new UntilFilterReader(fin,
-		WHITESPACE_FILTER);
-	processingInstructionDataIn = new UntilCharSequenceReader(fin, "?>");
-	startElementIn = new UntilFilterReader(fin, startElementFilter);
-	attributeNameIn = new UntilCharReader(new ApplyFilterReader(fin,
-		WHITESPACE_FILTER), '=');
-	attributeValueIn = new UntilCharReader(fin, '"');
-	characterIn = new UntilCharReader(this.in, '<');
+        this.in = new PushbackReader(in, PUSHBACK_BUFFER_SIZE);
+        this.fin = new FullyReader(this.in);
+        
+        endElementIn = new UntilCharReader(new ApplyFilterReader(fin,
+                WHITESPACE_FILTER), '>');
+        commentIn = new UntilCharSequenceReader(fin, "-->");
+        cdataIn = new UntilCharSequenceReader(fin, "]]>");
+        processingInstructionTargetIn = new UntilFilterReader(fin,
+                WHITESPACE_FILTER);
+        processingInstructionDataIn = new UntilCharSequenceReader(fin, "?>");
+        startElementIn = new UntilFilterReader(fin, startElementFilter);
+        attributeNameIn = new UntilCharReader(new ApplyFilterReader(fin,
+                WHITESPACE_FILTER), '=');
+        attributeValueIn = new UntilCharReader(fin, '"');
+        characterIn = new UntilCharReader(this.in, '<');
     }
-
+    
     @Override
     public LWXMLEvent getCurrentEvent() {
-	return lastEvent;
+        return lastEvent;
     }
-
+    
     @Override
     public LWXMLEvent readEvent() throws IOException {
-	return lastEvent = readNextEventImpl();
+        return lastEvent = readNextEventImpl();
     }
-
+    
     private LWXMLEvent readNextEventImpl() throws IOException {
-	if (closed)
-	    return LWXMLEvent.END_DOCUMENT;
-	if (eventReader != null)
-	    CharStreamUtil.flushCharwise(eventReader);
-
-	if (lastEvent != null) {
-	    switch (lastEvent) {
-	    case PROCESSING_INSTRUCTION_TARGET:
-		handleProcessingInstructionData();
-		return LWXMLEvent.PROCESSING_INSTRUCTION_DATA;
-	    case ATTRIBUTE_NAME:
-		handleAttributeValue();
-		return LWXMLEvent.ATTRIBUTE_VALUE;
-	    case CHARACTERS:
-		return handleElement();
-	    default:
-		break;
-	    }
-	}
-
-	if (handleAttributeList)
-	    return handleAttributeList();
-	if (handleEndEmptyElement) {
-	    handleEndEmptyElement();
-	    return LWXMLEvent.END_EMPTY_ELEMENT;
-	}
-
-	int read = in.read();
-	switch (read) {
-	case -1:
-	    close();
-	    return LWXMLEvent.END_DOCUMENT;
-	case '<':
-	    return handleElement();
-	default:
-	    in.unread(read);
-	    handleCharacters();
-	    return LWXMLEvent.CHARACTERS;
-	}
+        if (closed) return LWXMLEvent.END_DOCUMENT;
+        if (eventReader != null) CharStreamUtil.flushCharwise(eventReader);
+        
+        if (lastEvent != null) {
+            switch (lastEvent) {
+            case PROCESSING_INSTRUCTION_TARGET:
+                handleProcessingInstructionData();
+                return LWXMLEvent.PROCESSING_INSTRUCTION_DATA;
+            case ATTRIBUTE_NAME:
+                handleAttributeValue();
+                return LWXMLEvent.ATTRIBUTE_VALUE;
+            case CHARACTERS:
+                return handleElement();
+            default:
+                break;
+            }
+        }
+        
+        if (handleAttributeList) return handleAttributeList();
+        if (handleEndEmptyElement) {
+            handleEndEmptyElement();
+            return LWXMLEvent.END_EMPTY_ELEMENT;
+        }
+        
+        int read = in.read();
+        switch (read) {
+        case -1:
+            close();
+            return LWXMLEvent.END_DOCUMENT;
+        case '<':
+            return handleElement();
+        default:
+            in.unread(read);
+            handleCharacters();
+            return LWXMLEvent.CHARACTERS;
+        }
     }
-
+    
     private LWXMLEvent handleElement() throws IOException {
-	int c = in.read();
-
-	switch (c) {
-	case -1:
-	    close();
-	    return LWXMLEvent.END_DOCUMENT;
-	case '/':
-	    handleEndElement();
-	    return LWXMLEvent.END_ELEMENT;
-	case '!':
-	    return handleCallsign();
-	case '?':
-	    handleProcessingInstructionTarget();
-	    return LWXMLEvent.PROCESSING_INSTRUCTION_TARGET;
-	default:
-	    in.unread(c);
-	    handleStartElement();
-	    return LWXMLEvent.START_ELEMENT;
-	}
+        int c = in.read();
+        
+        switch (c) {
+        case -1:
+            close();
+            return LWXMLEvent.END_DOCUMENT;
+        case '/':
+            handleEndElement();
+            return LWXMLEvent.END_ELEMENT;
+        case '!':
+            return handleCallsign();
+        case '?':
+            handleProcessingInstructionTarget();
+            return LWXMLEvent.PROCESSING_INSTRUCTION_TARGET;
+        default:
+            in.unread(c);
+            handleStartElement();
+            return LWXMLEvent.START_ELEMENT;
+        }
     }
-
+    
     // TODO: another way w/o new?
     private void handleEndElement() throws IOException {
-	endElementIn.reset();
-	eventReader = endElementIn;
+        endElementIn.reset();
+        eventReader = endElementIn;
     }
-
+    
     private void handleEndEmptyElement() throws IOException {
-	handleEndEmptyElement = false;
-	eventReader = null;
+        handleEndEmptyElement = false;
+        eventReader = null;
     }
-
+    
     // TODO: improve
     private LWXMLEvent handleCallsign() throws IOException {
-	int c = fin.read();
-
-	switch (c) {
-	case '-':
-	    if (fin.read() != '-')
-		throw new LWXMLReaderException(
-			"malformend tag: comment was expected");
-
-	    handleComment();
-	    return LWXMLEvent.COMMENT;
-	case '[':
-	    if (!CharStreamUtil.matchChars(in, CDATA_CHARS, 1))
-		throw new LWXMLReaderException(
-			"malformed tag: cdata was expected");
-
-	    handleCDATA();
-	    return LWXMLEvent.CDATA;
-	case 'D':
-	    // TODO: remove
-	    if (!CharStreamUtil.matchChars(in, DOCTYPE_CHARS, 1))
-		throw new LWXMLReaderException(
-			"malformed tag: doctype expected");
-
-	    // TODO: improve
-	    CharStreamUtil.flushUntilChar(fin, '>');
-	    return readEvent();
-	default:
-	    throw new LWXMLReaderException(
-		    "malformed tag: comment or cdata was expected");
-	}
+        int c = fin.read();
+        
+        switch (c) {
+        case '-':
+            if (fin.read() != '-') throw new LWXMLReaderException(
+                    "malformend tag: comment was expected");
+            
+            handleComment();
+            return LWXMLEvent.COMMENT;
+        case '[':
+            if (!CharStreamUtil.matchChars(in, CDATA_CHARS, 1)) throw new LWXMLReaderException(
+                    "malformed tag: cdata was expected");
+            
+            handleCDATA();
+            return LWXMLEvent.CDATA;
+        case 'D':
+            // TODO: remove
+            if (!CharStreamUtil.matchChars(in, DOCTYPE_CHARS, 1)) throw new LWXMLReaderException(
+                    "malformed tag: doctype expected");
+            
+            // TODO: improve
+            CharStreamUtil.flushUntilChar(fin, '>');
+            return readEvent();
+        default:
+            throw new LWXMLReaderException(
+                    "malformed tag: comment or cdata was expected");
+        }
     }
-
+    
     private void handleComment() throws IOException {
-	commentIn.reset();
-	eventReader = commentIn;
+        commentIn.reset();
+        eventReader = commentIn;
     }
-
+    
     private void handleCDATA() throws IOException {
-	cdataIn.reset();
-	eventReader = cdataIn;
+        cdataIn.reset();
+        eventReader = cdataIn;
     }
-
+    
     private void handleProcessingInstructionTarget() throws IOException {
-	processingInstructionTargetIn.reset();
-	eventReader = processingInstructionTargetIn;
+        processingInstructionTargetIn.reset();
+        eventReader = processingInstructionTargetIn;
     }
-
+    
     private void handleProcessingInstructionData() throws IOException {
-	CharStreamUtil.flushUntilFilter(in, WHITESPACE_FILTER);
-
-	processingInstructionDataIn.reset();
-	eventReader = processingInstructionDataIn;
+        CharStreamUtil.flushUntilFilter(in, WHITESPACE_FILTER);
+        
+        processingInstructionDataIn.reset();
+        eventReader = processingInstructionDataIn;
     }
-
+    
     private void handleStartElement() throws IOException {
-	handleAttributeList = true;
-	startElementIn.reset();
-	eventReader = startElementIn;
+        handleAttributeList = true;
+        startElementIn.reset();
+        eventReader = startElementIn;
     }
-
+    
     private LWXMLEvent handleAttributeList() throws IOException {
-	CharStreamUtil.flushUntilFilter(in, WHITESPACE_FILTER);
-	int c = fin.read();
-
-	switch (c) {
-	case '/':
-	    // TODO: flush whitespace?
-	    if (fin.read() != '>')
-		throw new LWXMLReaderException("malformed tag: expected '>'");
-	    handleEndEmptyElement = true;
-	case '>':
-	    handleAttributeList = false;
-	    eventReader = null;
-	    return LWXMLEvent.END_ATTRIBUTE_LIST;
-	default:
-	    in.unread(c);
-	    handleAttributeName();
-	    return LWXMLEvent.ATTRIBUTE_NAME;
-	}
+        CharStreamUtil.flushUntilFilter(in, WHITESPACE_FILTER);
+        int c = fin.read();
+        
+        switch (c) {
+        case '/':
+            // TODO: flush whitespace?
+            if (fin.read() != '>') throw new LWXMLReaderException(
+                    "malformed tag: expected '>'");
+            handleEndEmptyElement = true;
+        case '>':
+            handleAttributeList = false;
+            eventReader = null;
+            return LWXMLEvent.END_ATTRIBUTE_LIST;
+        default:
+            in.unread(c);
+            handleAttributeName();
+            return LWXMLEvent.ATTRIBUTE_NAME;
+        }
     }
-
+    
     private void handleAttributeName() throws IOException {
-	attributeNameIn.reset();
-	eventReader = attributeNameIn;
+        attributeNameIn.reset();
+        eventReader = attributeNameIn;
     }
-
+    
     // TODO: handle malformed xml
     private void handleAttributeValue() throws IOException {
-	CharStreamUtil.flushUntilChar(in, '"');
-
-	attributeValueIn.reset();
-	eventReader = attributeValueIn;
+        CharStreamUtil.flushUntilChar(in, '"');
+        
+        attributeValueIn.reset();
+        eventReader = attributeValueIn;
     }
-
+    
     private void handleCharacters() throws IOException {
-	characterIn.reset();
-	eventReader = characterIn;
+        characterIn.reset();
+        eventReader = characterIn;
     }
-
+    
     @Override
     public int read() throws IOException {
-	if (eventReader == null)
-	    return -1;
-	return eventReader.read();
+        if (eventReader == null) return -1;
+        return eventReader.read();
     }
-
+    
     public void close() throws IOException {
-	if (closed)
-	    return;
-
-	closed = true;
-	eventReader = null;
-
-	in.close();
+        if (closed) return;
+        
+        closed = true;
+        eventReader = null;
+        
+        in.close();
     }
-
+    
 }

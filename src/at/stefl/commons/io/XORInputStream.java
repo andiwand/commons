@@ -5,33 +5,32 @@ import java.io.InputStream;
 
 // TODO: improve
 public class XORInputStream extends BytewiseFilterInputStream {
-
+    
     private byte[] key;
     private int index;
-
+    
     public XORInputStream(InputStream in, byte[] key) {
-	super(in);
-
-	this.key = key;
+        super(in);
+        
+        this.key = key;
     }
-
+    
     public byte[] getKey() {
-	return key;
+        return key;
     }
-
+    
     public void setKey(byte[] key) {
-	this.key = key;
+        this.key = key;
     }
-
+    
     public int read() throws IOException {
-	int read = in.read();
-	if (read == -1)
-	    return -1;
-
-	int result = read ^ key[index];
-	index = (index + 1) % key.length;
-
-	return result;
+        int read = in.read();
+        if (read == -1) return -1;
+        
+        int result = read ^ key[index];
+        index = (index + 1) % key.length;
+        
+        return result;
     }
-
+    
 }

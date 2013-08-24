@@ -5,17 +5,15 @@ import java.awt.geom.Rectangle2D;
 import at.stefl.commons.math.vector.Vector2d;
 
 /**
- * 
  * Represents a rectangle with the center and the diagonal size.
  * 
  * @author Andreas Stefl
- * 
  */
 public class Rectangle {
-
+    
     private Vector2d center;
     private Vector2d size;
-
+    
     /**
      * Creates a new <code>Rectangle</code> object with the given size.
      * 
@@ -23,9 +21,9 @@ public class Rectangle {
      *            the diagonal size of the rectangle.
      */
     public Rectangle(Vector2d size) {
-	this(new Vector2d(), size);
+        this(new Vector2d(), size);
     }
-
+    
     /**
      * Creates a new <code>Rectangle</code> object with the given center and
      * size.
@@ -36,13 +34,13 @@ public class Rectangle {
      *            the diagonal size of the rectangle.
      */
     public Rectangle(Vector2d center, Vector2d size) {
-	if ((size.getX() < 0) || (size.getY() < 0))
-	    throw new IllegalArgumentException("The size cannot be negative.");
-
-	this.center = center;
-	this.size = size;
+        if ((size.getX() < 0) || (size.getY() < 0)) throw new IllegalArgumentException(
+                "The size cannot be negative.");
+        
+        this.center = center;
+        this.size = size;
     }
-
+    
     /**
      * Copies the given <code>Rectangle</code> object.
      * 
@@ -50,10 +48,10 @@ public class Rectangle {
      *            the <code>Rectangle</code> object to copy.
      */
     public Rectangle(Rectangle rectangle) {
-	center = rectangle.center;
-	size = rectangle.size;
+        center = rectangle.center;
+        size = rectangle.size;
     }
-
+    
     /**
      * Creates a new <code>Rectangle</code> object from the given
      * <code>Rectangle2D</code> object.
@@ -61,11 +59,11 @@ public class Rectangle {
      * @param rectangle
      */
     public Rectangle(Rectangle2D rectangle) {
-	center = new Vector2d();
-	size = new Vector2d(rectangle.getMaxX() - rectangle.getMinX(),
-		rectangle.getMaxY() - rectangle.getMinY());
+        center = new Vector2d();
+        size = new Vector2d(rectangle.getMaxX() - rectangle.getMinX(),
+                rectangle.getMaxY() - rectangle.getMinY());
     }
-
+    
     /**
      * Returns the center and the size of the rectangle as a string.
      * 
@@ -73,19 +71,19 @@ public class Rectangle {
      */
     @Override
     public String toString() {
-	StringBuilder builder = new StringBuilder();
-
-	builder.append("{");
-	builder.append("center: ");
-	builder.append(center);
-	builder.append(", ");
-	builder.append("size: ");
-	builder.append(size);
-	builder.append("}");
-
-	return builder.toString();
+        StringBuilder builder = new StringBuilder();
+        
+        builder.append("{");
+        builder.append("center: ");
+        builder.append(center);
+        builder.append(", ");
+        builder.append("size: ");
+        builder.append(size);
+        builder.append("}");
+        
+        return builder.toString();
     }
-
+    
     /**
      * Tests the equality of the given object.
      * 
@@ -95,18 +93,15 @@ public class Rectangle {
      */
     @Override
     public boolean equals(Object obj) {
-	if (obj == this)
-	    return true;
-	if (obj == null)
-	    return false;
-
-	if (!(obj instanceof Rectangle))
-	    return false;
-	Rectangle rectangle = (Rectangle) obj;
-
-	return center.equals(rectangle.center) && size.equals(rectangle.size);
+        if (obj == this) return true;
+        if (obj == null) return false;
+        
+        if (!(obj instanceof Rectangle)) return false;
+        Rectangle rectangle = (Rectangle) obj;
+        
+        return center.equals(rectangle.center) && size.equals(rectangle.size);
     }
-
+    
     /**
      * Returns the hash code of the object as an integer.
      * 
@@ -114,90 +109,90 @@ public class Rectangle {
      */
     @Override
     public int hashCode() {
-	return center.hashCode() * (center.hashCode() + size.hashCode());
+        return center.hashCode() * (center.hashCode() + size.hashCode());
     }
-
+    
     /**
      * Returns the center.
      * 
      * @return the center of the rectangle.
      */
     public Vector2d getCenter() {
-	return center;
+        return center;
     }
-
+    
     /**
      * Returns the diagonal size.
      * 
      * @return the diagonal size of the rectangle.
      */
     public Vector2d getSize() {
-	return size;
+        return size;
     }
-
+    
     /**
      * Returns the width.
      * 
      * @return the width of the rectangle.
      */
     public double getWidth() {
-	return size.getX();
+        return size.getX();
     }
-
+    
     /**
      * Returns the height.
      * 
      * @return the height of the rectangle.
      */
     public double getHeight() {
-	return size.getY();
+        return size.getY();
     }
-
+    
     /**
      * Returns the leftmost x value.
      * 
      * @return the leftmost x value of the rectangle.
      */
     public double left() {
-	return center.getX() - size.getX() / 2;
+        return center.getX() - size.getX() / 2;
     }
-
+    
     /**
      * Returns the rightmost x value.
      * 
      * @return the rightmost x value of the rectangle.
      */
     public double right() {
-	return center.getX() + size.getX() / 2;
+        return center.getX() + size.getX() / 2;
     }
-
+    
     /**
      * Returns the lowest y value.
      * 
      * @return the lowest y value of the rectangle.
      */
     public double top() {
-	return center.getY() - size.getY() / 2;
+        return center.getY() - size.getY() / 2;
     }
-
+    
     /**
      * Returns the highest y value.
      * 
      * @return the highest y value of the rectangle.
      */
     public double bottom() {
-	return center.getY() + size.getY() / 2;
+        return center.getY() + size.getY() / 2;
     }
-
+    
     /**
      * Returns a position vector to the left top.
      * 
      * @return a position vector to the left top of the rectangle.
      */
     public Vector2d leftTop() {
-	return center.sub(size.div(2));
+        return center.sub(size.div(2));
     }
-
+    
     /**
      * Intersects the given point with the rectangle. If the point intersects
      * the rectangle <code>true</code> is returned, otherwise <code>false</code>
@@ -209,9 +204,9 @@ public class Rectangle {
      *         Otherwise <code>false</code> is returned.
      */
     public boolean intersects(Vector2d point) {
-	return point.sub(center).abs().lessThanOrEqual(size.div(2)).all();
+        return point.sub(center).abs().lessThanOrEqual(size.div(2)).all();
     }
-
+    
     /**
      * Intersects the given rectangle with this rectangle. If there is an
      * intersection <code>true</code> is returned, otherwise <code>false</code>.
@@ -222,10 +217,10 @@ public class Rectangle {
      *         rectangle. Otherwise <code>false</code> is returned.
      */
     public boolean intersects(Rectangle rectangle) {
-	Vector2d absDistance = center.sub(rectangle.center).abs();
-	Vector2d maxDistance = size.add(rectangle.size).div(2);
-
-	return absDistance.lessThanOrEqual(maxDistance).all();
+        Vector2d absDistance = center.sub(rectangle.center).abs();
+        Vector2d maxDistance = size.add(rectangle.size).div(2);
+        
+        return absDistance.lessThanOrEqual(maxDistance).all();
     }
-
+    
 }

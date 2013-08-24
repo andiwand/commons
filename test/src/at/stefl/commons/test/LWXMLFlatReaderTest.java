@@ -10,28 +10,27 @@ import at.stefl.commons.lwxml.reader.LWXMLReader;
 import at.stefl.commons.lwxml.reader.LWXMLStreamReader;
 
 public class LWXMLFlatReaderTest {
-
+    
     public static void main(String[] args) throws IOException {
-	InputStream inputStream = LWXMLFlatReaderTest.class
-		.getResourceAsStream("test.xml");
-	LWXMLReader lwxmlReader = new LWXMLStreamReader(
-		new FluidInputStreamReader(inputStream));
-	LWXMLFlatReader in = new LWXMLFlatReader(lwxmlReader);
-
-	lwxmlReader.readEvent();
-
-	while (true) {
-	    LWXMLEvent event = in.readEvent();
-	    if (event == LWXMLEvent.END_DOCUMENT)
-		break;
-
-	    System.out.println(event);
-	    if (event.hasValue())
-		System.out.println("value: " + in.readValue());
-	    System.out.println();
-	}
-
-	in.close();
+        InputStream inputStream = LWXMLFlatReaderTest.class
+                .getResourceAsStream("test.xml");
+        LWXMLReader lwxmlReader = new LWXMLStreamReader(
+                new FluidInputStreamReader(inputStream));
+        LWXMLFlatReader in = new LWXMLFlatReader(lwxmlReader);
+        
+        lwxmlReader.readEvent();
+        
+        while (true) {
+            LWXMLEvent event = in.readEvent();
+            if (event == LWXMLEvent.END_DOCUMENT) break;
+            
+            System.out.println(event);
+            if (event.hasValue()) System.out
+                    .println("value: " + in.readValue());
+            System.out.println();
+        }
+        
+        in.close();
     }
-
+    
 }

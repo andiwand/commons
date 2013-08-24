@@ -1,11 +1,11 @@
 package at.stefl.commons.util.collection.primitive;
 
 public abstract class AbstractPrimitiveBooleanIterator implements
-	PrimitiveBooleanIterator {
-
+        PrimitiveBooleanIterator {
+    
     @Override
     public Boolean next() {
-	return nextPrimitive();
+        return nextPrimitive();
     }
-
+    
 }

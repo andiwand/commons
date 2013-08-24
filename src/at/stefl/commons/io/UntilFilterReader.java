@@ -6,35 +6,34 @@ import java.io.Reader;
 import at.stefl.commons.util.StateMachine;
 
 public class UntilFilterReader extends CharwiseFilterReader implements
-	StateMachine {
-
+        StateMachine {
+    
     private boolean found;
-
+    
     private final CharFilter filter;
-
+    
     public UntilFilterReader(Reader in, CharFilter filter) {
-	super(in);
-
-	this.filter = filter;
+        super(in);
+        
+        this.filter = filter;
     }
-
+    
     @Override
     public int read() throws IOException {
-	if (found)
-	    return -1;
-
-	int read = in.read();
-
-	if ((read == -1) || !filter.accept((char) read)) {
-	    found = true;
-	    return -1;
-	}
-
-	return read;
+        if (found) return -1;
+        
+        int read = in.read();
+        
+        if ((read == -1) || !filter.accept((char) read)) {
+            found = true;
+            return -1;
+        }
+        
+        return read;
     }
-
+    
     public void reset() {
-	found = false;
+        found = false;
     }
-
+    
 }

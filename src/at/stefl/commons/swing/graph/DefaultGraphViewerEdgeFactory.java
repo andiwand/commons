@@ -5,16 +5,16 @@ import java.util.Set;
 import at.stefl.commons.math.graph.Edge;
 
 public class DefaultGraphViewerEdgeFactory extends
-	GenericGraphViewerEdgeFactory<Edge, DefaultGraphViewerEdge> {
-
+        GenericGraphViewerEdgeFactory<Edge, DefaultGraphViewerEdge> {
+    
     public DefaultGraphViewerEdgeFactory() {
-	super(Edge.class, DefaultGraphViewerEdge.class);
+        super(Edge.class, DefaultGraphViewerEdge.class);
     }
-
+    
     @Override
     protected DefaultGraphViewerEdge buildEdgeGeneric(Edge edge,
-	    Set<GraphViewerVertex> vertices) {
-	return new DefaultGraphViewerEdge(edge, vertices);
+            Set<GraphViewerVertex> vertices) {
+        return new DefaultGraphViewerEdge(edge, vertices);
     }
-
+    
 }
