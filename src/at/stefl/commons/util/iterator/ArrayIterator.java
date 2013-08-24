@@ -8,7 +8,11 @@ public class ArrayIterator<E> extends AbstractIterator<E> {
     private final int length;
     private int index;
 
+    // TODO: type safe
     public ArrayIterator(Object array) {
+	if (!array.getClass().isArray())
+	    throw new IllegalArgumentException("not an array");
+
 	this.array = array;
 	this.length = Array.getLength(array);
     }

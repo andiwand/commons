@@ -4,7 +4,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import at.stefl.commons.math.MathUtil;
@@ -25,8 +27,30 @@ public class ArrayUtil {
     public static final double[] EMPTY_DOUBLE_ARRAY = {};
     public static final Object[] EMPTY_OBJECT_ARRAY = {};
 
+    private static final Map<Class<?>, Object> EMPTY_ARRAY_MAP = new HashMap<Class<?>, Object>();
+
     private static final char[] HEX_ARRAY = { '0', '1', '2', '3', '4', '5',
 	    '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+    static {
+	EMPTY_ARRAY_MAP.put(boolean.class, EMPTY_BOOLEAN_ARRAY);
+	EMPTY_ARRAY_MAP.put(byte.class, EMPTY_BYTE_ARRAY);
+	EMPTY_ARRAY_MAP.put(char.class, EMPTY_CHAR_ARRAY);
+	EMPTY_ARRAY_MAP.put(short.class, EMPTY_SHORT_ARRAY);
+	EMPTY_ARRAY_MAP.put(int.class, EMPTY_INT_ARRAY);
+	EMPTY_ARRAY_MAP.put(long.class, EMPTY_LONG_ARRAY);
+	EMPTY_ARRAY_MAP.put(float.class, EMPTY_FLOAT_ARRAY);
+	EMPTY_ARRAY_MAP.put(double.class, EMPTY_DOUBLE_ARRAY);
+	EMPTY_ARRAY_MAP.put(Object.class, EMPTY_OBJECT_ARRAY);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, E> T getEmptyArray(Class<E> clazz) {
+	Object result = EMPTY_ARRAY_MAP.get(clazz);
+	if (result == null)
+	    Array.newInstance(clazz, 0);
+	return (T) result;
+    }
 
     public static <E> E getFirstNotNull(E... array) {
 	E element;
@@ -1500,22 +1524,27 @@ public class ArrayUtil {
 	}
     }
 
-    public static Object newInstance(Class<?> arrayClass, int length) {
-	return Array.newInstance(arrayClass.getComponentType(), length);
+    @SuppressWarnings("unchecked")
+    public static <T> T newInstance(Class<T> arrayClass, int length) {
+	if (!arrayClass.isArray())
+	    throw new IllegalArgumentException("not an array");
+	return (T) Array.newInstance(arrayClass.getComponentType(), length);
     }
 
-    public static Object copyOf(Object array, int newLength) {
+    @SuppressWarnings("unchecked")
+    public static <T> T copyOf(T array, int newLength) {
 	if (newLength < 0)
 	    throw new NegativeArraySizeException();
 
 	int length = Array.getLength(array);
-	Object newArray = newInstance(array.getClass(), newLength);
+	T newArray = newInstance((Class<T>) array.getClass(), newLength);
 	System.arraycopy(array, 0, newArray, 0, Math.min(length, newLength));
 
 	return newArray;
     }
 
-    public static Object copyOfRange(Object array, int from, int to) {
+    @SuppressWarnings("unchecked")
+    public static <T> T copyOfRange(T array, int from, int to) {
 	if (from < 0)
 	    throw new ArrayIndexOutOfBoundsException(from);
 
@@ -1527,13 +1556,13 @@ public class ArrayUtil {
 	if (newLength < 0)
 	    throw new IllegalArgumentException();
 
-	Object newArray = newInstance(array.getClass(), newLength);
+	T newArray = newInstance((Class<T>) array.getClass(), newLength);
 	System.arraycopy(array, from, newArray, 0, Math.min(length, newLength));
 
 	return newArray;
     }
 
-    public static Object growDirect(Object array, int newLength) {
+    public static <T> T growDirect(T array, int newLength) {
 	int length = Array.getLength(array);
 	if (length >= newLength)
 	    return array;
@@ -1541,8 +1570,7 @@ public class ArrayUtil {
 	return copyOf(array, newLength);
     }
 
-    public static Object growArithmetic(Object array, int newLength,
-	    int stepSize) {
+    public static <T> T growArithmetic(T array, int newLength, int stepSize) {
 	int length = Array.getLength(array);
 	if (length >= newLength)
 	    return array;
@@ -1552,7 +1580,7 @@ public class ArrayUtil {
 	return copyOf(array, newLength);
     }
 
-    public static Object growGeometric(Object array, int newLength, int base) {
+    public static <T> T growGeometric(T array, int newLength, int base) {
 	int length = Array.getLength(array);
 	if (length >= newLength)
 	    return array;
