@@ -47,7 +47,12 @@ public class ArrayUtil {
     @SuppressWarnings("unchecked")
     public static <T, E> T getEmptyArray(Class<E> clazz) {
         Object result = EMPTY_ARRAY_MAP.get(clazz);
-        if (result == null) Array.newInstance(clazz, 0);
+        
+        if (result == null) {
+            result = Array.newInstance(clazz, 0);
+            EMPTY_ARRAY_MAP.put(clazz, result);
+        }
+        
         return (T) result;
     }
     
