@@ -1474,7 +1474,7 @@ public class ArrayUtil {
     
     // TODO: implement all toString
     
-    public static String toStringHex(byte[] array) {
+    public static String toHexString(byte[] array) {
         return toStringHex(array, 0, array.length);
     }
     
