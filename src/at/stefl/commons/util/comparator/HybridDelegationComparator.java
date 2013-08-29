@@ -11,6 +11,7 @@ public abstract class HybridDelegationComparator<T1, T2> extends
         super(comparator);
     }
     
+    @Override
     public abstract int compare(T2 o1, T2 o2);
     
 }

@@ -40,6 +40,7 @@ public class CloseableTabbedPane extends JTabbedPane {
             
             addMouseListener(new MouseAdapter() {
                 
+                @Override
                 public void mouseEntered(MouseEvent e) {
                     Component component = e.getComponent();
                     if (component instanceof AbstractButton) {
@@ -48,6 +49,7 @@ public class CloseableTabbedPane extends JTabbedPane {
                     }
                 }
                 
+                @Override
                 public void mouseExited(MouseEvent e) {
                     Component component = e.getComponent();
                     if (component instanceof AbstractButton) {
@@ -58,6 +60,7 @@ public class CloseableTabbedPane extends JTabbedPane {
             });
         }
         
+        @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g.create();
@@ -98,6 +101,7 @@ public class CloseableTabbedPane extends JTabbedPane {
             close.addActionListener(this);
         }
         
+        @Override
         public void actionPerformed(ActionEvent e) {
             int index = indexOfTabComponent(this);
             if (index != -1) CloseableTabbedPane.this.remove(index);

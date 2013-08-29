@@ -23,6 +23,7 @@ public class XOROutputStream extends BytewiseFilterOutputStream {
         this.key = key;
     }
     
+    @Override
     public void write(int b) throws IOException {
         out.write(b ^ key[index]);
         

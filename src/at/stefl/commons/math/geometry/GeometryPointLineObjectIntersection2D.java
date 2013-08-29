@@ -12,10 +12,12 @@ public abstract class GeometryPointLineObjectIntersection2D<G1 extends GeometryP
         super(geometryPointObject, geometryLineObject);
     }
     
+    @Override
     protected final Set<GeometryLineObject2D> calcIntersectionLinesImpl() {
         return new HashSet<GeometryLineObject2D>();
     }
     
+    @Override
     protected final Set<GeometryAreaObject2D> calcIntersectionAreasImpl() {
         return new HashSet<GeometryAreaObject2D>();
     }

@@ -18,6 +18,7 @@ public class GeometryLineIntersection2D
         super(line1, line2);
     }
     
+    @Override
     protected boolean testIntersectionImpl() {
         Vector2d a1 = geometryObject1.pointA;
         Vector2d b1 = geometryObject1.pointB;
@@ -92,11 +93,13 @@ public class GeometryLineIntersection2D
         return new GeometryLine2D(linePoints.get(0), linePoints.get(1));
     }
     
+    @Override
     protected Set<GeometryPoint2D> calcIntersectionPointsImpl() {
         testIntersection();
         return intersectionPoints;
     }
     
+    @Override
     protected Set<GeometryLine2D> calcIntersectionLinesImpl() {
         testIntersection();
         return intersectionLines;

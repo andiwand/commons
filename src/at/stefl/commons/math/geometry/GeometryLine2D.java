@@ -18,11 +18,13 @@ public class GeometryLine2D extends GeometryLineObject2D {
         normal = vectorAB.turnLeft().normalize();
     }
     
+    @Override
     public String toString() {
         return GeometryLine2D.class.getCanonicalName() + "[" + pointA + ", "
                 + pointB + "]";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
@@ -35,6 +37,7 @@ public class GeometryLine2D extends GeometryLineObject2D {
                         .equals(geometryLine2D.pointA));
     }
     
+    @Override
     public int hashCode() {
         return pointA.hashCode() * pointB.hashCode();
     }
@@ -55,6 +58,7 @@ public class GeometryLine2D extends GeometryLineObject2D {
         return vectorAB.negate();
     }
     
+    @Override
     public GeometryLine2D transform(Matrix3d transform) {
         Vector2d pointA = transform.mul(this.pointA);
         Vector2d pointB = transform.mul(this.pointB);

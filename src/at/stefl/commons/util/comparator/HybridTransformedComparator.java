@@ -21,6 +21,7 @@ public class HybridTransformedComparator<T1, T2> extends
         this.transformer = transformer;
     }
     
+    @Override
     public int compare(T2 o1, T2 o2) {
         return ComperatorUtil.hybridCompare(transformer.transform(o1),
                 transformer.transform(o2), comparator);

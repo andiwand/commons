@@ -34,6 +34,7 @@ public class GridGraphLayoutTest {
         
         graphViewer.addVertexMouseListener(new MouseAdapter() {
             
+            @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println(e);
             }

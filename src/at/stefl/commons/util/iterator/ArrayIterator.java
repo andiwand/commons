@@ -22,6 +22,7 @@ public class ArrayIterator<E> extends AbstractIterator<E> {
         return index < length;
     }
     
+    @Override
     @SuppressWarnings("unchecked")
     public E next() {
         return (E) Array.get(array, index++);

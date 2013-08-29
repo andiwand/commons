@@ -17,6 +17,7 @@ public abstract class BytewiseFilterInputStream extends FilterInputStream {
         return ByteStreamUtil.readBytewise(this, b, 0, b.length);
     }
     
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
         return ByteStreamUtil.readBytewise(this, b, off, len);
     }

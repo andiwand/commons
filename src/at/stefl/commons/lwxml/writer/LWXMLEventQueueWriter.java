@@ -57,21 +57,21 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
     
     private void ensureEventCapacity(int need) {
         int minSize = eventCount + need;
-        eventArray = (int[]) ArrayUtil.growGeometric(eventArray, minSize, 2);
-        valueArray = (int[]) ArrayUtil.growGeometric(valueArray, minSize, 2);
+        eventArray = ArrayUtil.growGeometric(eventArray, minSize, 2);
+        valueArray = ArrayUtil.growGeometric(valueArray, minSize, 2);
     }
     
     private void ensureValueCapacity(int need) {
         int minSize = Math.max(valueCount + need,
                 (int) (eventCount * valuesOnEvent));
-        offsetArray = (int[]) ArrayUtil.growGeometric(offsetArray, minSize, 2);
-        lengthArray = (int[]) ArrayUtil.growGeometric(lengthArray, minSize, 2);
+        offsetArray = ArrayUtil.growGeometric(offsetArray, minSize, 2);
+        lengthArray = ArrayUtil.growGeometric(lengthArray, minSize, 2);
     }
     
     private void ensureCharCapacity(int need) {
         int minSize = Math.max(charCount + need,
                 (int) (valueCount * charsOnValue));
-        charArray = (char[]) ArrayUtil.growGeometric(charArray, minSize, 2);
+        charArray = ArrayUtil.growGeometric(charArray, minSize, 2);
     }
     
     @Override

@@ -65,10 +65,12 @@ public class Vector3b {
         z = xyz.z;
     }
     
+    @Override
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;

@@ -23,6 +23,7 @@ public class XORInputStream extends BytewiseFilterInputStream {
         this.key = key;
     }
     
+    @Override
     public int read() throws IOException {
         int read = in.read();
         if (read == -1) return -1;

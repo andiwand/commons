@@ -11,6 +11,7 @@ public abstract class SimpleHybridDelegationComparator<T> extends
         super(comparator);
     }
     
+    @Override
     public int compare(T o1, T o2) {
         return ComperatorUtil.hybridCompare(o1, o2, comparator);
     }

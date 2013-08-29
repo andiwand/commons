@@ -5,10 +5,13 @@ import java.util.Set;
 
 public interface Graph<V, E extends Edge> {
     
+    @Override
     public String toString();
     
+    @Override
     public boolean equals(Object obj);
     
+    @Override
     public int hashCode();
     
     public int getVertexCount();

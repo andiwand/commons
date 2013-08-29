@@ -43,10 +43,12 @@ public class Vector2b {
         y = xyz.getY();
     }
     
+    @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;

@@ -6,6 +6,7 @@ public abstract class GeometryLineObject2D extends GeometryObject2D {
     
     public GeometryLineObject2D() {}
     
+    @Override
     public abstract GeometryLineObject2D transform(Matrix3d transform);
     
 }

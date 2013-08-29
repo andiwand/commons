@@ -44,6 +44,7 @@ public class DividedCharArrayWriter extends Writer {
             return true;
         }
         
+        @Override
         public boolean ready() {
             checkRevision();
             return position < DividedCharArrayWriter.this.size;

@@ -58,10 +58,12 @@ public class Vector2d {
         this(point.x, point.y);
     }
     
+    @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
@@ -71,6 +73,7 @@ public class Vector2d {
         return (x == vector.x) && (y == vector.y);
     }
     
+    @Override
     public int hashCode() {
         long bits = java.lang.Double.doubleToLongBits(x);
         bits += java.lang.Double.doubleToLongBits(y) * 37;

@@ -32,6 +32,7 @@ public class UntilFilterReader extends CharwiseFilterReader implements
         return read;
     }
     
+    @Override
     public void reset() {
         found = false;
     }

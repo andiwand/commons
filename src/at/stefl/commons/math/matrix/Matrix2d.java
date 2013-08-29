@@ -108,11 +108,13 @@ public class Matrix2d {
         this.m11 = matrix3.getM11();
     }
     
+    @Override
     public String toString() {
         return "[" + m00 + ", " + m01 + "]" + StringUtil.NEW_LINE + "[" + m10
                 + ", " + m11 + "]";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
@@ -123,6 +125,7 @@ public class Matrix2d {
                 && (m01 == matrix.m01) && (m11 == matrix.m11);
     }
     
+    @Override
     public int hashCode() {
         long bits = java.lang.Double.doubleToLongBits(m00);
         bits += java.lang.Double.doubleToLongBits(m10) * 37;

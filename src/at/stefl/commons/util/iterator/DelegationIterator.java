@@ -18,6 +18,7 @@ public abstract class DelegationIterator<E1, E2> extends AbstractIterator<E2> {
     @Override
     public abstract E2 next();
     
+    @Override
     public void remove() {
         iterator.remove();
     }

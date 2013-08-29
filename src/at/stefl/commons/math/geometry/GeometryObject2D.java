@@ -6,8 +6,10 @@ public abstract class GeometryObject2D {
     
     public GeometryObject2D() {}
     
+    @Override
     public abstract boolean equals(Object obj);
     
+    @Override
     public abstract int hashCode();
     
     public abstract GeometryObject2D transform(Matrix3d transform);

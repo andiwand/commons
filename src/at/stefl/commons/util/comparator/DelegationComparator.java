@@ -14,6 +14,7 @@ public abstract class DelegationComparator<T1, T2> implements Comparator<T2> {
         this.comparator = comparator;
     }
     
+    @Override
     public abstract int compare(T2 o1, T2 o2);
     
 }

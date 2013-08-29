@@ -12,6 +12,7 @@ public class InputStreamPipe {
     
     private Thread pipeThread = new Thread() {
         
+        @Override
         public void run() {
             try {
                 int read;

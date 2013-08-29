@@ -11,18 +11,22 @@ public class HashUndirectedGraphTest {
         HashUndirectedGraph<String, SimpleUndirectedEdge> graph = new HashUndirectedGraph<String, SimpleUndirectedEdge>();
         graph.addListener(new GraphAdapter() {
             
+            @Override
             public void vertexAdded(Object vertex) {
                 System.out.println("a " + vertex);
             }
             
+            @Override
             public void edgeAdded(Edge edge) {
                 System.out.println("a " + edge);
             }
             
+            @Override
             public void vertexRemoved(Object vertex) {
                 System.out.println("r " + vertex);
             }
             
+            @Override
             public void edgeRemoved(Edge edge) {
                 System.out.println("r " + edge);
             }

@@ -89,10 +89,12 @@ public abstract class AbstractGraph<V, E extends AbstractEdge> implements
         return result;
     }
     
+    @Override
     public boolean containsVertex(V vertex) {
         return getVertices().contains(vertex);
     }
     
+    @Override
     public boolean containsEdge(E edge) {
         return getEdges().contains(edge);
     }

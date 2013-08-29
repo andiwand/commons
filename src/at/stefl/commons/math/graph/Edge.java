@@ -4,10 +4,13 @@ import java.util.Collection;
 
 public interface Edge {
     
+    @Override
     public String toString();
     
+    @Override
     public boolean equals(Object obj);
     
+    @Override
     public int hashCode();
     
     public int getVertexCount();

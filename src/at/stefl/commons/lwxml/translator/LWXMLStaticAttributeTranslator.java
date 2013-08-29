@@ -1,9 +1,12 @@
 package at.stefl.commons.lwxml.translator;
 
+import java.io.IOException;
+
 import at.stefl.commons.lwxml.LWXMLAttribute;
+import at.stefl.commons.lwxml.writer.LWXMLWriter;
 
 public class LWXMLStaticAttributeTranslator<C> implements
-        LWXMLAttributeTranslator<C> {
+        LWXMLSimpleAttributeTranslator<C> {
     
     private final String newAttributeName;
     
@@ -14,8 +17,9 @@ public class LWXMLStaticAttributeTranslator<C> implements
     }
     
     @Override
-    public LWXMLAttribute translate(String name, String value, Object context) {
-        return new LWXMLAttribute(newAttributeName, value);
+    public void translate(LWXMLAttribute in, LWXMLWriter out, C context)
+            throws IOException {
+        out.writeAttribute(newAttributeName, in.getValue());
     }
     
 }

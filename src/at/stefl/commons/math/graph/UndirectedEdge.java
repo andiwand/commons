@@ -8,6 +8,7 @@ public interface UndirectedEdge extends Edge {
     
     public Object getVertexB();
     
+    @Override
     public Multiset<? extends Object> getVertices();
     
     public boolean isLoop();

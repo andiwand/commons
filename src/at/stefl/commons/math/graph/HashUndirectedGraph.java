@@ -38,6 +38,7 @@ public class HashUndirectedGraph<V, E extends AbstractUndirectedEdge> extends
         return edges.size();
     }
     
+    @Override
     public synchronized int getEdgeCount(E edge) {
         return edges.uniqueCount(edge);
     }
@@ -52,10 +53,12 @@ public class HashUndirectedGraph<V, E extends AbstractUndirectedEdge> extends
         return new HashMultiset<E>(edges);
     }
     
+    @Override
     public boolean containsVertex(V vertex) {
         return vertices.contains(vertex);
     }
     
+    @Override
     public boolean containsEdge(E edge) {
         return edges.contains(edge);
     }

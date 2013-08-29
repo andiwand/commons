@@ -10,6 +10,7 @@ public class ReverseComparator<T> extends SimpleHybridDelegationComparator<T> {
         super(comparator);
     }
     
+    @Override
     public int compare(T o1, T o2) {
         return -super.compare(o1, o2);
     }

@@ -27,6 +27,7 @@ public class LWXMLStreamReader extends LWXMLReader {
     
     private static final CharFilter WHITESPACE_FILTER = new CharFilter() {
         
+        @Override
         public boolean accept(char c) {
             return !LWXMLConstants.isWhitespace(c);
         }
@@ -34,6 +35,7 @@ public class LWXMLStreamReader extends LWXMLReader {
     
     private final CharFilter startElementFilter = new CharFilter() {
         
+        @Override
         public boolean accept(char c) {
             if (LWXMLConstants.isWhitespace(c)) return false;
             
@@ -287,6 +289,7 @@ public class LWXMLStreamReader extends LWXMLReader {
         return eventReader.read();
     }
     
+    @Override
     public void close() throws IOException {
         if (closed) return;
         

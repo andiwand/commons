@@ -18,7 +18,8 @@ import at.stefl.commons.util.collection.OrderedPair;
 public abstract class LWXMLElementTranslator<C> extends
         LWXMLTranslator<LWXMLPushbackReader, LWXMLWriter, C> {
     
-    private final StreamableStringMap<LWXMLAttributeTranslator<? super C>> attributeTranslatorMap = new StreamableStringMap<LWXMLAttributeTranslator<? super C>>();
+    private final StreamableStringMap<LWXMLSimpleAttributeTranslator<? super C>> attributeTranslatorMap = new StreamableStringMap<LWXMLSimpleAttributeTranslator<? super C>>();
+    private final Map<LWXMLComplexAttributeTranslator<? super C>, String[]> complexAttributeTranslatorMap = new HashMap<LWXMLComplexAttributeTranslator<? super C>, String[]>();
     
     private final Set<String> parseAttributes = new HashSet<String>();
     private final Map<String, String> currentParsedAttributes = new HashMap<String, String>();
@@ -39,12 +40,21 @@ public abstract class LWXMLElementTranslator<C> extends
     }
     
     public boolean addAttributeTranslator(String attribute,
-            LWXMLAttributeTranslator<? super C> translator) {
+            LWXMLSimpleAttributeTranslator<? super C> translator) {
         if (attribute == null) throw new NullPointerException();
         if (translator == null) throw new NullPointerException();
         
         attributeTranslatorMap.put(attribute, translator);
         return true;
+    }
+    
+    public void addComplexAttributeTranslator(
+            LWXMLComplexAttributeTranslator<? super C> translator,
+            String... attributes) {
+        complexAttributeTranslatorMap.put(translator, attributes.clone());
+        
+        for (String attribute : attributes)
+            addParseAttribute(attribute);
     }
     
     public void addParseAttribute(String attribute) {
@@ -102,11 +112,11 @@ public abstract class LWXMLElementTranslator<C> extends
     public abstract void translateStartElement(LWXMLPushbackReader in,
             LWXMLWriter out, C context) throws IOException;
     
-    public LWXMLAttribute translateAttribute(LWXMLPushbackReader in,
-            LWXMLWriter out, C context) throws IOException {
-        OrderedPair<String, LWXMLAttributeTranslator<? super C>> match = attributeTranslatorMap
+    public void translateAttribute(LWXMLPushbackReader in, LWXMLWriter out,
+            C context) throws IOException {
+        OrderedPair<String, LWXMLSimpleAttributeTranslator<? super C>> match = attributeTranslatorMap
                 .match(in);
-        if (match == null) return null;
+        if (match == null) return;
         
         String attributeName = match.getElement1();
         String attributeValue = in.readFollowingValue();
@@ -114,18 +124,17 @@ public abstract class LWXMLElementTranslator<C> extends
         if (parseAttributes.contains(attributeName)) currentParsedAttributes
                 .put(attributeName, attributeValue);
         
-        LWXMLAttributeTranslator<? super C> attributeTranslator = match
+        LWXMLSimpleAttributeTranslator<? super C> attributeTranslator = match
                 .getElement2();
-        if (attributeTranslator == null) return null;
-        return attributeTranslator.translate(attributeName, attributeValue,
-                context);
+        if (attributeTranslator == null) return;
+        attributeTranslator.translate(new LWXMLAttribute(attributeName,
+                attributeValue), out, context);
     }
     
     public void translateAttributeList(LWXMLPushbackReader in, LWXMLWriter out,
             C context) throws IOException {
-        for (Map.Entry<String, String> attribute : newAttributes.entrySet()) {
+        for (Map.Entry<String, String> attribute : newAttributes.entrySet())
             out.writeAttribute(attribute.getKey(), attribute.getValue());
-        }
         
         loop:
         while (true) {
@@ -133,8 +142,7 @@ public abstract class LWXMLElementTranslator<C> extends
             
             switch (event) {
             case ATTRIBUTE_NAME:
-                LWXMLAttribute attribute = translateAttribute(in, out, context);
-                if (attribute != null) out.writeAttribute(attribute);
+                translateAttribute(in, out, context);
             case ATTRIBUTE_VALUE:
                 break;
             case END_ATTRIBUTE_LIST:
@@ -142,6 +150,20 @@ public abstract class LWXMLElementTranslator<C> extends
             default:
                 throw new LWXMLIllegalEventException(event);
             }
+        }
+        
+        for (Map.Entry<LWXMLComplexAttributeTranslator<? super C>, String[]> entry : complexAttributeTranslatorMap
+                .entrySet()) {
+            Map<String, String> attributes = new HashMap<String, String>(
+                    entry.getValue().length);
+            
+            for (String name : entry.getValue()) {
+                String value = currentParsedAttributes.get(name);
+                if (value == null) continue;
+                attributes.put(name, value);
+            }
+            
+            entry.getKey().translate(attributes, out, context);
         }
     }
     

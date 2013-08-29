@@ -11,10 +11,12 @@ public class GeometryPoint2D extends GeometryPointObject2D {
         this.point = point;
     }
     
+    @Override
     public String toString() {
         return GeometryPoint2D.class.getCanonicalName() + point;
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
@@ -24,6 +26,7 @@ public class GeometryPoint2D extends GeometryPointObject2D {
         return point.equals(geometryPoint2D.point);
     }
     
+    @Override
     public int hashCode() {
         return point.hashCode();
     }
@@ -32,6 +35,7 @@ public class GeometryPoint2D extends GeometryPointObject2D {
         return point;
     }
     
+    @Override
     public GeometryPoint2D transform(Matrix3d transform) {
         Vector2d point = transform.mul(this.point);
         

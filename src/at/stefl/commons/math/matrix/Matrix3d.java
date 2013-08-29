@@ -262,6 +262,7 @@ public class Matrix3d {
         this.m22 = 1d;
     }
     
+    @Override
     public String toString() {
         return "[" + m00 + ", " + m01 + ", " + m02 + "]" + StringUtil.NEW_LINE
                 + "[" + m10 + ", " + m11 + ", " + m12 + "]"
@@ -269,6 +270,7 @@ public class Matrix3d {
                 + "]";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
@@ -282,6 +284,7 @@ public class Matrix3d {
                 && (m22 == matrix.m22);
     }
     
+    @Override
     public int hashCode() {
         long bits = java.lang.Double.doubleToLongBits(m00);
         bits += java.lang.Double.doubleToLongBits(m10) * 37;

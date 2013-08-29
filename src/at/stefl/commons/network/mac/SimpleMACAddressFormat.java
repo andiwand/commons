@@ -26,6 +26,7 @@ public class SimpleMACAddressFormat extends MACAddressFormat {
         this.pattern = pattern;
     }
     
+    @Override
     public StringBuffer format(MACAddress address, StringBuffer toAppendTo,
             FieldPosition pos) {
         String hexValue = Long.toHexString(address.toLong());

@@ -1732,7 +1732,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (short) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -1846,7 +1846,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (int) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -1865,7 +1865,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (int) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -1884,7 +1884,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (int) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -1960,7 +1960,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (long) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -1979,7 +1979,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (long) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -1998,7 +1998,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (long) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2017,7 +2017,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (long) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2074,7 +2074,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (float) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2093,7 +2093,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (float) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2112,7 +2112,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (float) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2131,7 +2131,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (float) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2150,7 +2150,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (float) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2188,7 +2188,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (double) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2207,7 +2207,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (double) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2226,7 +2226,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (double) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2245,7 +2245,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (double) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2264,7 +2264,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (double) from[i];
+            to[j] = from[i];
         }
         
         return to;
@@ -2283,7 +2283,7 @@ public class ArrayUtil {
         int end = fromOff + len;
         
         for (int i = fromOff, j = toOff; i < end; i++, j++) {
-            to[j] = (double) from[i];
+            to[j] = from[i];
         }
         
         return to;

@@ -78,6 +78,7 @@ public class LWXMLEventListWriter extends LWXMLWriter {
         eventWritten = !event.hasValue();
     }
     
+    @Override
     public void writeEvent(LWXMLEvent event, String value) {
         if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
         if (value == null) throw new NullPointerException();

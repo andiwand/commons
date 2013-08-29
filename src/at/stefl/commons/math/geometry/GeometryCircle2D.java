@@ -13,11 +13,13 @@ public class GeometryCircle2D extends GeometryLineObject2D {
         this.radius = radius;
     }
     
+    @Override
     public String toString() {
         return GeometryCircle2D.class.getCanonicalName() + "[" + center + ", "
                 + radius + "]";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
@@ -28,6 +30,7 @@ public class GeometryCircle2D extends GeometryLineObject2D {
                 && (radius == geometryCircle2D.radius);
     }
     
+    @Override
     public int hashCode() {
         long bits = java.lang.Double.doubleToLongBits(radius);
         return center.hashCode() * (((int) bits) ^ ((int) (bits >> 32)));
@@ -41,6 +44,7 @@ public class GeometryCircle2D extends GeometryLineObject2D {
         return radius;
     }
     
+    @Override
     public GeometryCircle2D transform(Matrix3d transform) {
         Vector2d center = transform.mul(this.center);
         

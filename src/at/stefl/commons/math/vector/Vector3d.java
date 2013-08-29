@@ -67,10 +67,12 @@ public class Vector3d {
         this(xyz.getX(), xyz.getY(), xyz.getZ());
     }
     
+    @Override
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")";
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
@@ -80,6 +82,7 @@ public class Vector3d {
         return (x == vector.x) && (y == vector.y) && (z == vector.z);
     }
     
+    @Override
     public int hashCode() {
         long bits = java.lang.Double.doubleToLongBits(x);
         bits += java.lang.Double.doubleToLongBits(y) * 37;

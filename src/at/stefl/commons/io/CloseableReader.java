@@ -34,6 +34,7 @@ public class CloseableReader extends FilterReader {
         return in.read(target);
     }
     
+    @Override
     public int read(char[] cbuf, int off, int len) throws IOException {
         if (closed) throw new StreamClosedException();
         return in.read(cbuf, off, len);

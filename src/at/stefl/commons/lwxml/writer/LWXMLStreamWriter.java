@@ -72,6 +72,7 @@ public class LWXMLStreamWriter extends LWXMLWriter {
         eventWritten = true;
     }
     
+    @Override
     public void writeEvent(LWXMLEvent event) throws IOException {
         if (closed) throw new LWXMLWriterException("already closed");
         

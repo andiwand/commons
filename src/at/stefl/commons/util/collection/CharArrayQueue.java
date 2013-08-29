@@ -156,14 +156,17 @@ public class CharArrayQueue extends AbstractQueue<Character> implements
             
             private int i;
             
+            @Override
             public boolean hasNext() {
                 return i < size;
             }
             
+            @Override
             public Character next() {
                 return buffer[index(i++)];
             }
             
+            @Override
             public void remove() {
                 throw new UnsupportedOperationException("remove not supported");
             }

@@ -6,6 +6,7 @@ public abstract class GeometryAreaObject2D extends GeometryObject2D {
     
     public GeometryAreaObject2D() {}
     
+    @Override
     public abstract GeometryAreaObject2D transform(Matrix3d transform);
     
 }

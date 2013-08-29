@@ -35,18 +35,22 @@ public class GraphViewer extends JComponent {
     
     private class UpdateHandler extends GraphAdapter {
         
+        @Override
         public void vertexAdded(Object vertex) {
             addVertex(vertex);
         }
         
+        @Override
         public void edgeAdded(Edge edge) {
             addEdge(edge);
         }
         
+        @Override
         public void vertexRemoved(Object vertex) {
             removeVertex(vertex);
         }
         
+        @Override
         public void edgeRemoved(Edge edge) {
             removeEdge(edge);
         }
@@ -58,6 +62,7 @@ public class GraphViewer extends JComponent {
         private int movingDx;
         private int movingDy;
         
+        @Override
         public void mousePressed(MouseEvent e) {
             if (e.getButton() != MouseEvent.BUTTON1) return;
             
@@ -74,6 +79,7 @@ public class GraphViewer extends JComponent {
             }
         }
         
+        @Override
         public void mouseDragged(MouseEvent e) {
             if (movingVertex == null) return;
             
@@ -83,6 +89,7 @@ public class GraphViewer extends JComponent {
             repaint();
         }
         
+        @Override
         public void mouseReleased(MouseEvent e) {
             if (e.getButton() != MouseEvent.BUTTON1) return;
             
@@ -92,14 +99,17 @@ public class GraphViewer extends JComponent {
     
     private class MouseListenerHandler extends MouseAdapter {
         
+        @Override
         public void mousePressed(MouseEvent e) {
             handleMouseEvent(e);
         }
         
+        @Override
         public void mouseClicked(MouseEvent e) {
             handleMouseEvent(e);
         }
         
+        @Override
         public void mouseReleased(MouseEvent e) {
             handleMouseEvent(e);
         }
