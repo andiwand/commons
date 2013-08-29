@@ -204,7 +204,6 @@ public class LWXMLStreamWriter extends LWXMLWriter {
     public void flush() throws IOException {
         if (closed) return;
         
-        finishLastEvent();
         out.flush();
     }
     
@@ -213,7 +212,8 @@ public class LWXMLStreamWriter extends LWXMLWriter {
         if (closed) return;
         
         try {
-            flush();
+            finishLastEvent();
+            out.flush();
             out.close();
         } finally {
             closed = true;
