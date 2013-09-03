@@ -154,6 +154,7 @@ public abstract class LWXMLElementTranslator<C> extends
         
         for (Map.Entry<LWXMLComplexAttributeTranslator<? super C>, String[]> entry : complexAttributeTranslatorMap
                 .entrySet()) {
+            // TODO: improve? read only?
             Map<String, String> attributes = new HashMap<String, String>(
                     entry.getValue().length);
             

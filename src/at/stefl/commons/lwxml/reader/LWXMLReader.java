@@ -12,6 +12,7 @@ import at.stefl.commons.lwxml.LWXMLEvent;
 // TODO: improve causing memory allocation
 // TODO: improve getCurrentEvent()
 // TODO: improve exception handling (reading on no-value event)
+// TODO: do not extend Reader, just provide a value reader
 public abstract class LWXMLReader extends Reader {
     
     private DividedCharArrayWriter tmpOut = new DividedCharArrayWriter();

@@ -13,14 +13,13 @@ public class DividedCharArrayWriter extends Writer {
     private static final int DEFAULT_INITIAL_SIZE = 16;
     
     private class ConcatReader extends Reader {
-        
         private SingleLinkedNode<char[]> currentNode;
         private char[] currentBuffer;
         private int currentIndex;
         
         private int position;
         
-        private int revision;
+        private final int revision;
         
         private ConcatReader() {
             this.currentNode = DividedCharArrayWriter.this.headNode;

@@ -1,6 +1,9 @@
 package at.stefl.commons.lwxml.writer;
 
+import java.io.CharArrayReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.CharBuffer;
 
 import at.stefl.commons.io.CharStreamUtil;
 import at.stefl.commons.lwxml.LWXMLEvent;
@@ -13,6 +16,77 @@ import at.stefl.commons.util.string.CharSequenceUtil;
 public class LWXMLEventQueueWriter extends LWXMLWriter {
     
     private static final LWXMLEvent[] EVENT_ARRAY = LWXMLEvent.values();
+    
+    private class EventQueueReader extends LWXMLReader {
+        private int position;
+        private LWXMLEvent event;
+        private Reader reader;
+        
+        private final int revision;
+        
+        public EventQueueReader() {
+            this.revision = LWXMLEventQueueWriter.this.revision;
+        }
+        
+        private void checkRevision() {
+            if (revision != LWXMLEventQueueWriter.this.revision) throw new IllegalStateException(
+                    "stream was reset");
+        }
+        
+        @Override
+        public LWXMLEvent getCurrentEvent() {
+            return event;
+        }
+        
+        @Override
+        public LWXMLEvent readEvent() throws IOException {
+            checkRevision();
+            
+            if (position >= LWXMLEventQueueWriter.this.eventCount) return LWXMLEvent.END_DOCUMENT;
+            position++;
+            
+            event = EVENT_ARRAY[eventArray[position]];
+            int value = LWXMLEventQueueWriter.this.valueArray[position];
+            if (value != -1) {
+                int offset = LWXMLEventQueueWriter.this.offsetArray[value];
+                int length = LWXMLEventQueueWriter.this.lengthArray[value];
+                reader = new CharArrayReader(
+                        LWXMLEventQueueWriter.this.charArray, offset, length);
+            } else {
+                reader = null;
+            }
+            
+            return event;
+        }
+        
+        @Override
+        public int read() throws IOException {
+            checkRevision();
+            if (reader == null) return -1;
+            return reader.read();
+        }
+        
+        @Override
+        public int read(char[] cbuf) throws IOException {
+            checkRevision();
+            if (reader == null) return -1;
+            return reader.read(cbuf);
+        }
+        
+        @Override
+        public int read(char[] cbuf, int off, int len) throws IOException {
+            checkRevision();
+            if (reader == null) return -1;
+            return reader.read(cbuf, off, len);
+        }
+        
+        @Override
+        public int read(CharBuffer target) throws IOException {
+            checkRevision();
+            if (reader == null) return -1;
+            return reader.read(target);
+        }
+    }
     
     public static final int DEFAULT_INITIAL_EVENT_CAPACITY = 10;
     public static final double DEFAULT_VALUES_ON_EVENT = 0.9;
@@ -33,6 +107,8 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
     
     private LWXMLEvent lastEvent;
     private boolean eventWritten;
+    
+    private int revision;
     
     public LWXMLEventQueueWriter() {
         this(DEFAULT_INITIAL_EVENT_CAPACITY, DEFAULT_CHARS_ON_VALUE,
@@ -94,6 +170,10 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
     
     public int getCharCount() {
         return charCount;
+    }
+    
+    public LWXMLReader getReader() {
+        return new EventQueueReader();
     }
     
     private void finishLastEvent() {
@@ -239,6 +319,8 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
         
         lastEvent = null;
         eventWritten = false;
+        
+        revision++;
     }
     
     @Override

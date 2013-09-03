@@ -15,14 +15,13 @@ public class DividedByteArrayOutputStream extends OutputStream {
     private static final int DEFAULT_INITIAL_SIZE = 16;
     
     private class ConcatInputStream extends InputStream {
-        
         private SingleLinkedNode<byte[]> currentNode;
         private byte[] currentBuffer;
         private int currentIndex;
         
         private int position;
         
-        private int revision;
+        private final int revision;
         
         private ConcatInputStream() {
             this.currentNode = DividedByteArrayOutputStream.this.headNode;
