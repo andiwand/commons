@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import at.stefl.commons.io.CharStreamUtil;
 import at.stefl.commons.io.DividedCharArrayWriter;
 import at.stefl.commons.lwxml.LWXMLEvent;
-import at.stefl.commons.lwxml.LWXMLIllegalEventException;
 import at.stefl.commons.lwxml.reader.LWXMLReader;
 
 // TODO: implement reader
@@ -78,17 +78,6 @@ public class LWXMLEventListWriter extends LWXMLWriter {
         eventWritten = !event.hasValue();
     }
     
-    @Override
-    public void writeEvent(LWXMLEvent event, String value) {
-        if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
-        if (value == null) throw new NullPointerException();
-        
-        writeEvent(event);
-        valueList.addLast(value);
-        
-        eventWritten = true;
-    }
-    
     private void checkWrite() {
         if (lastEvent == null) throw new LWXMLWriterException(
                 "no current event");
@@ -154,7 +143,7 @@ public class LWXMLEventListWriter extends LWXMLWriter {
             LWXMLEvent event = in.readEvent();
             if (event == LWXMLEvent.END_DOCUMENT) return;
             
-            writeEvent(event, in.readValue());
+            CharStreamUtil.writeStreamBuffered(in, this);
         }
     }
     

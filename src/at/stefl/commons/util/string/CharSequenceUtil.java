@@ -26,6 +26,35 @@ public class CharSequenceUtil {
         return true;
     }
     
+    public static boolean equals(CharSequence a, int aOff, CharSequence b,
+            int bOff, int len) {
+        for (int i = 0; i < len; i++) {
+            if (a.charAt(aOff + i) != b.charAt(bOff + i)) return false;
+        }
+        
+        return true;
+    }
+    
+    public static boolean equals(CharSequence a, char[] b) {
+        int len = a.length();
+        if (len != b.length) return false;
+        
+        for (int i = 0; i < len; i++) {
+            if (a.charAt(i) != b[i]) return false;
+        }
+        
+        return true;
+    }
+    
+    public static boolean equals(CharSequence a, int aOff, char[] b, int bOff,
+            int len) {
+        for (int i = 0; i < len; i++) {
+            if (a.charAt(aOff + i) != b[bOff + i]) return false;
+        }
+        
+        return true;
+    }
+    
     public static String toString(CharSequence charSequence) {
         return new String(getAsCharArray(charSequence));
     }

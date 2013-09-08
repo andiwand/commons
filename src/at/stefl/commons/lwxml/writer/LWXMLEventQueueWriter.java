@@ -7,7 +7,6 @@ import java.nio.CharBuffer;
 
 import at.stefl.commons.io.CharStreamUtil;
 import at.stefl.commons.lwxml.LWXMLEvent;
-import at.stefl.commons.lwxml.LWXMLIllegalEventException;
 import at.stefl.commons.lwxml.reader.LWXMLReader;
 import at.stefl.commons.util.array.ArrayUtil;
 import at.stefl.commons.util.string.CharSequenceUtil;
@@ -212,16 +211,6 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
         
         lastEvent = event;
         eventWritten = false;
-    }
-    
-    @Override
-    public void writeEvent(LWXMLEvent event, String value) {
-        if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
-        if (value == null) throw new NullPointerException();
-        
-        writeEvent(event);
-        write(value);
-        finishLastEvent();
     }
     
     private void checkWrite(int len) {

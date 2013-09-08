@@ -128,16 +128,6 @@ public class LWXMLStreamWriter extends LWXMLWriter {
         lastEvent = event;
     }
     
-    @Override
-    public void writeEvent(LWXMLEvent event, String value) throws IOException {
-        if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
-        if (value == null) throw new NullPointerException();
-        
-        writeEvent(event);
-        out.write(value);
-        finishLastEvent();
-    }
-    
     private void checkWrite() {
         if (closed) throw new LWXMLWriterException("already closed");
         if (lastEvent == null) throw new LWXMLWriterException(

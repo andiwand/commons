@@ -19,9 +19,6 @@ public abstract class LWXMLWriter extends Writer {
     
     public abstract void writeEvent(LWXMLEvent event) throws IOException;
     
-    public abstract void writeEvent(LWXMLEvent event, String value)
-            throws IOException;
-    
     private void checkEndAttributeList() throws IOException {
         if (getCurrentEvent() == null) return;
         

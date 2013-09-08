@@ -31,6 +31,7 @@ public abstract class LWXMLReader extends Reader {
         return result;
     }
     
+    // TODO: throw exception
     public String readFollowingValue() throws IOException {
         if (!LWXMLEvent.hasFollowingValue(getCurrentEvent())) return null;
         readEvent();

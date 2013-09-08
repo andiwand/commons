@@ -26,11 +26,6 @@ public class LWXMLNullWriter extends LWXMLWriter {
     }
     
     @Override
-    public void writeEvent(LWXMLEvent event, String value) {
-        currentEvent = event;
-    }
-    
-    @Override
     public void write(int c) {}
     
     @Override

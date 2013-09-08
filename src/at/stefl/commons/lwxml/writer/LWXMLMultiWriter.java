@@ -42,13 +42,6 @@ public class LWXMLMultiWriter extends LWXMLWriter implements
     }
     
     @Override
-    public void writeEvent(LWXMLEvent event, String value) throws IOException {
-        for (int i = 0; i < outs.length; i++) {
-            outs[i].writeEvent(event, value);
-        }
-    }
-    
-    @Override
     public void write(int c) throws IOException {
         for (int i = 0; i < outs.length; i++) {
             outs[i].write(c);

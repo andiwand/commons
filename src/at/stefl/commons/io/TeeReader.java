@@ -50,4 +50,8 @@ public class TeeReader extends FilterReader {
         return read;
     }
     
+    // TODO: implement
+    // @Override
+    // public int read(CharBuffer target) throws IOException {}
+    
 }
