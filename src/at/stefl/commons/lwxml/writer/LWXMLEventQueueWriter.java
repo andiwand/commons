@@ -19,6 +19,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
     private class EventQueueReader extends LWXMLReader {
         private int position;
         private LWXMLEvent event;
+        private long eventNumber = -1;
         private Reader reader;
         
         private final int revision;
@@ -38,6 +39,11 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
         }
         
         @Override
+        public long getCurrentEventNumber() {
+            return eventNumber;
+        }
+        
+        @Override
         public LWXMLEvent readEvent() throws IOException {
             checkRevision();
             
@@ -54,6 +60,8 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
             } else {
                 reader = null;
             }
+            
+            eventNumber++;
             
             return event;
         }
@@ -105,6 +113,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
     private int charCount;
     
     private LWXMLEvent lastEvent;
+    private long eventNumber = -1;
     private boolean eventWritten;
     
     private int revision;
@@ -152,6 +161,11 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
     @Override
     public LWXMLEvent getCurrentEvent() {
         return lastEvent;
+    }
+    
+    @Override
+    public long getCurrentEventNumber() {
+        return eventNumber;
     }
     
     @Override
@@ -210,6 +224,7 @@ public class LWXMLEventQueueWriter extends LWXMLWriter {
         }
         
         lastEvent = event;
+        eventNumber++;
         eventWritten = false;
     }
     

@@ -74,6 +74,7 @@ public class LWXMLStreamReader extends LWXMLReader {
     private final UntilCharReader characterIn;
     
     private LWXMLEvent lastEvent;
+    private long eventNumber = -1;
     
     private boolean handleAttributeList;
     private boolean handleEndEmptyElement;
@@ -109,6 +110,11 @@ public class LWXMLStreamReader extends LWXMLReader {
     }
     
     @Override
+    public long getCurrentEventNumber() {
+        return eventNumber;
+    }
+    
+    @Override
     public LWXMLEvent readEvent() throws IOException {
         return lastEvent = readNextEventImpl();
     }
@@ -116,6 +122,8 @@ public class LWXMLStreamReader extends LWXMLReader {
     private LWXMLEvent readNextEventImpl() throws IOException {
         if (closed) return LWXMLEvent.END_DOCUMENT;
         if (eventReader != null) CharStreamUtil.flushCharwise(eventReader);
+        
+        eventNumber++;
         
         if (lastEvent != null) {
             switch (lastEvent) {

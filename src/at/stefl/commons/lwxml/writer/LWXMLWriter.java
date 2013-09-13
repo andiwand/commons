@@ -15,6 +15,8 @@ public abstract class LWXMLWriter extends Writer {
     
     public abstract LWXMLEvent getCurrentEvent();
     
+    public abstract long getCurrentEventNumber();
+    
     public abstract boolean isCurrentEventWritten();
     
     public abstract void writeEvent(LWXMLEvent event) throws IOException;

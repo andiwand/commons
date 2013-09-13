@@ -22,11 +22,17 @@ public class LWXMLEventListWriter extends LWXMLWriter {
     private DividedCharArrayWriter valueWriter = new DividedCharArrayWriter();
     
     private LWXMLEvent lastEvent;
+    private long eventNumber;
     private boolean eventWritten;
     
     @Override
     public LWXMLEvent getCurrentEvent() {
         return lastEvent;
+    }
+    
+    @Override
+    public long getCurrentEventNumber() {
+        return eventNumber;
     }
     
     @Override
@@ -75,6 +81,7 @@ public class LWXMLEventListWriter extends LWXMLWriter {
         eventList.addLast(event);
         
         lastEvent = event;
+        eventNumber++;
         eventWritten = !event.hasValue();
     }
     

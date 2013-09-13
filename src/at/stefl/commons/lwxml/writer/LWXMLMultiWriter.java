@@ -30,6 +30,11 @@ public class LWXMLMultiWriter extends LWXMLWriter implements
     }
     
     @Override
+    public long getCurrentEventNumber() {
+        return outs[0].getCurrentEventNumber();
+    }
+    
+    @Override
     public boolean isCurrentEventWritten() {
         return outs[0].isCurrentEventWritten();
     }

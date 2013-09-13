@@ -16,6 +16,7 @@ public class LWXMLStreamWriter extends LWXMLWriter {
     private Writer out;
     
     private LWXMLEvent lastEvent;
+    private long eventNumber = -1;
     private boolean eventWritten;
     
     public LWXMLStreamWriter(OutputStream out) {
@@ -29,6 +30,11 @@ public class LWXMLStreamWriter extends LWXMLWriter {
     @Override
     public LWXMLEvent getCurrentEvent() {
         return lastEvent;
+    }
+    
+    @Override
+    public long getCurrentEventNumber() {
+        return eventNumber;
     }
     
     @Override
@@ -126,6 +132,7 @@ public class LWXMLStreamWriter extends LWXMLWriter {
         }
         
         lastEvent = event;
+        eventNumber++;
     }
     
     private void checkWrite() {

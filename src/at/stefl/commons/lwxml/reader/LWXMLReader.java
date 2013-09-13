@@ -19,6 +19,9 @@ public abstract class LWXMLReader extends Reader {
     
     public abstract LWXMLEvent getCurrentEvent();
     
+    // TODO: improve concept
+    public abstract long getCurrentEventNumber();
+    
     public abstract LWXMLEvent readEvent() throws IOException;
     
     // TODO: replace String

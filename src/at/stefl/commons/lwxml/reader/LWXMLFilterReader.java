@@ -21,6 +21,11 @@ public abstract class LWXMLFilterReader extends LWXMLReader {
     }
     
     @Override
+    public long getCurrentEventNumber() {
+        return in.getCurrentEventNumber();
+    }
+    
+    @Override
     public boolean ready() throws IOException {
         return in.ready();
     }

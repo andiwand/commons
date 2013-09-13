@@ -20,6 +20,11 @@ public abstract class LWXMLFilterWriter extends LWXMLWriter {
     }
     
     @Override
+    public long getCurrentEventNumber() {
+        return out.getCurrentEventNumber();
+    }
+    
+    @Override
     public boolean isCurrentEventWritten() {
         return out.isCurrentEventWritten();
     }
