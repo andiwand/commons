@@ -18,16 +18,24 @@ public class LWXMLTeeReader extends LWXMLFilterReader {
     @Override
     public LWXMLEvent readEvent() throws IOException {
         LWXMLEvent result = in.readEvent();
-        tee.writeEvent(result);
-        tee.flush();
+        
+        if (result != LWXMLEvent.END_DOCUMENT) {
+            tee.writeEvent(result);
+            tee.flush();
+        }
+        
         return result;
     }
     
     @Override
     public String readValue() throws IOException {
         String result = in.readValue();
-        tee.write(result);
-        tee.flush();
+        
+        if (result != null) {
+            tee.write(result);
+            tee.flush();
+        }
+        
         return result;
     }
     

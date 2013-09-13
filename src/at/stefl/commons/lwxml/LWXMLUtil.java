@@ -87,6 +87,90 @@ public class LWXMLUtil {
         }
     }
     
+    public static void flushUntilEventNumber(LWXMLReader in, long eventNumber)
+            throws IOException {
+        while (true) {
+            LWXMLEvent event = in.readEvent();
+            if (event == LWXMLEvent.END_DOCUMENT) throw new EOFException();
+            
+            if (in.getCurrentEventNumber() >= eventNumber) return;
+        }
+    }
+    
+    public static void flushEmptyElement(LWXMLReader in) throws IOException {
+        LWXMLEvent event = in.readEvent();
+        if (event == LWXMLEvent.START_ELEMENT) event = in.readEvent();
+        
+        while (true) {
+            switch (event) {
+            case ATTRIBUTE_NAME:
+            case ATTRIBUTE_VALUE:
+            case END_ATTRIBUTE_LIST:
+                break;
+            case END_EMPTY_ELEMENT:
+            case END_ELEMENT:
+                return;
+            default:
+                throw new LWXMLIllegalEventException(event);
+            }
+            
+            event = in.readEvent();
+        }
+    }
+    
+    public static void flushStartElement(LWXMLReader in) throws IOException {
+        LWXMLEvent event = in.readEvent();
+        if (event == LWXMLEvent.START_ELEMENT) event = in.readEvent();
+        
+        while (true) {
+            switch (event) {
+            case ATTRIBUTE_NAME:
+            case ATTRIBUTE_VALUE:
+                break;
+            case END_ATTRIBUTE_LIST:
+                return;
+            default:
+                throw new LWXMLIllegalEventException(event);
+            }
+            
+            event = in.readEvent();
+        }
+    }
+    
+    public static void flushUntilEvent(LWXMLReader in, LWXMLEvent event)
+            throws IOException {
+        if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
+        
+        while (true) {
+            LWXMLEvent currentEvent = in.readEvent();
+            if (currentEvent == LWXMLEvent.END_DOCUMENT) throw new EOFException();
+            
+            if (currentEvent == event) return;
+        }
+    }
+    
+    public static void flushUntilEventValue(LWXMLReader in, LWXMLEvent event,
+            String value) throws IOException {
+        if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
+        
+        while (true) {
+            LWXMLEvent currentEvent = in.readEvent();
+            if (currentEvent == LWXMLEvent.END_DOCUMENT) throw new EOFException();
+            
+            if ((currentEvent == event) && in.readValue().equals(value)) return;
+        }
+    }
+    
+    public static void flushUntilStartElement(LWXMLReader in,
+            String startElement) throws IOException {
+        flushUntilEventValue(in, LWXMLEvent.START_ELEMENT, startElement);
+    }
+    
+    public static void flushUntilEndElement(LWXMLReader in, String endElement)
+            throws IOException {
+        flushUntilEventValue(in, LWXMLEvent.END_ELEMENT, endElement);
+    }
+    
     public static LWXMLBranchReader getBranchReader(InputStream in,
             LWXMLPath path) throws IOException {
         return getBranchReader(new LWXMLStreamReader(in), path);
@@ -286,68 +370,6 @@ public class LWXMLUtil {
                 throw new LWXMLIllegalEventException(event);
             }
         }
-    }
-    
-    public static void flushEmptyElement(LWXMLReader in) throws IOException {
-        LWXMLEvent event = in.readEvent();
-        if (event == LWXMLEvent.START_ELEMENT) event = in.readEvent();
-        
-        while (true) {
-            switch (event) {
-            case ATTRIBUTE_NAME:
-            case ATTRIBUTE_VALUE:
-            case END_ATTRIBUTE_LIST:
-                break;
-            case END_EMPTY_ELEMENT:
-            case END_ELEMENT:
-                return;
-            default:
-                throw new LWXMLIllegalEventException(event);
-            }
-            
-            event = in.readEvent();
-        }
-    }
-    
-    public static void flushStartElement(LWXMLReader in) throws IOException {
-        LWXMLEvent event = in.readEvent();
-        if (event == LWXMLEvent.START_ELEMENT) event = in.readEvent();
-        
-        while (true) {
-            switch (event) {
-            case ATTRIBUTE_NAME:
-            case ATTRIBUTE_VALUE:
-                break;
-            case END_ATTRIBUTE_LIST:
-                return;
-            default:
-                throw new LWXMLIllegalEventException(event);
-            }
-            
-            event = in.readEvent();
-        }
-    }
-    
-    public static void flushUntilEventValue(LWXMLReader in, LWXMLEvent event,
-            String value) throws IOException {
-        if (!event.hasValue()) throw new LWXMLIllegalEventException(event);
-        
-        while (true) {
-            LWXMLEvent currentEvent = in.readEvent();
-            if (currentEvent == LWXMLEvent.END_DOCUMENT) throw new EOFException();
-            
-            if ((currentEvent == event) && in.readValue().equals(value)) return;
-        }
-    }
-    
-    public static void flushUntilStartElement(LWXMLReader in,
-            String startElement) throws IOException {
-        flushUntilEventValue(in, LWXMLEvent.START_ELEMENT, startElement);
-    }
-    
-    public static void flushUntilEndElement(LWXMLReader in, String endElement)
-            throws IOException {
-        flushUntilEventValue(in, LWXMLEvent.END_ELEMENT, endElement);
     }
     
     public static boolean isEmptyElement(LWXMLReader in) throws IOException {
