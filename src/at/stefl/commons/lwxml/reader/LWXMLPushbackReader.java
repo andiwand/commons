@@ -21,7 +21,6 @@ public class LWXMLPushbackReader extends LWXMLFilterReader {
     private LinkedList<String> valueStack = new LinkedList<String>();
     
     private LWXMLEvent currentEvent;
-    private long eventNumberDifference;
     private String currentValue;
     private Reader valueReader;
     private CountingReader countingReader;
@@ -35,11 +34,6 @@ public class LWXMLPushbackReader extends LWXMLFilterReader {
     @Override
     public LWXMLEvent getCurrentEvent() {
         return currentEvent;
-    }
-    
-    @Override
-    public long getCurrentEventNumber() {
-        return in.getCurrentEventNumber() + eventNumberDifference;
     }
     
     @Override
@@ -73,8 +67,6 @@ public class LWXMLPushbackReader extends LWXMLFilterReader {
             } else {
                 valueReader = ClosedReader.CLOSED_READER;
             }
-            
-            eventNumberDifference++;
         }
         
         return currentEvent;
@@ -105,8 +97,6 @@ public class LWXMLPushbackReader extends LWXMLFilterReader {
     private void unreadEventImpl(LWXMLEvent event, String value) {
         eventStack.addFirst(event);
         if (event.hasValue()) valueStack.addFirst(value);
-        
-        eventNumberDifference--;
     }
     
     // TODO: implement in LWXMLReader
