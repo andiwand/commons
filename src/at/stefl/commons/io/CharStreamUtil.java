@@ -538,6 +538,7 @@ public class CharStreamUtil {
         return true;
     }
     
+    // TODO: buffered version
     public static boolean matchChars(Reader in, char[] array)
             throws IOException {
         int read;
@@ -545,12 +546,13 @@ public class CharStreamUtil {
         for (int i = 0; i < array.length; i++) {
             read = in.read();
             if (read != array[i]) return false;
-            if (read == -1) throw new EOFException();
+            if (read == -1) return false;
         }
         
         return true;
     }
     
+    // TODO: buffered version
     public static boolean matchChars(Reader in, char[] array, int off)
             throws IOException {
         int read;
@@ -558,12 +560,13 @@ public class CharStreamUtil {
         for (int i = off; i < array.length; i++) {
             read = in.read();
             if (read != array[i]) return false;
-            if (read == -1) throw new EOFException();
+            if (read == -1) return false;
         }
         
         return true;
     }
     
+    // TODO: buffered version
     public static boolean matchChars(Reader in, char[] array, int off, int len)
             throws IOException {
         int end = off + len;
@@ -572,12 +575,13 @@ public class CharStreamUtil {
         for (int i = off; i < end; i++) {
             read = in.read();
             if (read != array[i]) return false;
-            if (read == -1) throw new EOFException();
+            if (read == -1) return false;
         }
         
         return true;
     }
     
+    // TODO: buffered version
     public static boolean matchChars(Reader in, CharSequence charSequence)
             throws IOException {
         int length = charSequence.length();
@@ -586,12 +590,13 @@ public class CharStreamUtil {
         for (int i = 0; i < length; i++) {
             read = in.read();
             if (read != charSequence.charAt(i)) return false;
-            if (read == -1) throw new EOFException();
+            if (read == -1) return false;
         }
         
         return true;
     }
     
+    // TODO: buffered version
     public static boolean matchChars(Reader in, CharSequence charSequence,
             int start, int end) throws IOException {
         int read;
@@ -599,7 +604,7 @@ public class CharStreamUtil {
         for (int i = start; i < end; i++) {
             read = in.read();
             if (read != charSequence.charAt(i)) return false;
-            if (read == -1) throw new EOFException();
+            if (read == -1) return false;
         }
         
         return true;

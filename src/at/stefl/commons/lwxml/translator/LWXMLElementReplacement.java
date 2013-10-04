@@ -5,7 +5,7 @@ import java.io.IOException;
 import at.stefl.commons.lwxml.reader.LWXMLPushbackReader;
 import at.stefl.commons.lwxml.writer.LWXMLWriter;
 
-public class LWXMLElementReplacement<C> extends LWXMLElementTranslator<C> {
+public class LWXMLElementReplacement<C> extends LWXMLDefaultElementTranslator<C> {
     
     protected final String elementName;
     

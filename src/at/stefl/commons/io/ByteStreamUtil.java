@@ -225,6 +225,7 @@ public class ByteStreamUtil {
         return true;
     }
     
+    // TODO: buffered version
     public static boolean matchBytes(InputStream in, byte[] array)
             throws IOException {
         int read;
@@ -232,12 +233,13 @@ public class ByteStreamUtil {
         for (int i = 0; i < array.length; i++) {
             read = in.read();
             if (read != array[i]) return false;
-            if (read == -1) throw new EOFException();
+            if (read == -1) return false;
         }
         
         return true;
     }
     
+    // TODO: buffered version
     public static boolean matchBytes(InputStream in, byte[] array, int off,
             int len) throws IOException {
         int end = off + len;
@@ -246,7 +248,7 @@ public class ByteStreamUtil {
         for (int i = off; i < end; i++) {
             read = in.read();
             if (read != array[i]) return false;
-            if (read == -1) throw new EOFException();
+            if (read == -1) return false;
         }
         
         return true;
