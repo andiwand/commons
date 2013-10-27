@@ -56,6 +56,8 @@ public class LWXMLHierarchyTranslator<C> implements
             case END_ELEMENT:
                 translatorMatch = elementTranslators.match(pin);
             case END_EMPTY_ELEMENT:
+                if (translatorMatch == null) break;
+                
                 switch (event) {
                 case START_ELEMENT:
                     translatorStack.push((translatorMatch == null) ? null
@@ -68,8 +70,6 @@ public class LWXMLHierarchyTranslator<C> implements
                 default:
                     break;
                 }
-                
-                if (translatorMatch == null) break;
                 
                 String elementName = translatorMatch.getElement1();
                 LWXMLElementTranslator<? super LWXMLPushbackReader, ? super LWXMLWriter, ? super C> translator = translatorMatch
