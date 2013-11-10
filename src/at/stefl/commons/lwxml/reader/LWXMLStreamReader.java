@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 
 import at.stefl.commons.io.ApplyFilterReader;
 import at.stefl.commons.io.CharFilter;
@@ -23,10 +24,11 @@ import at.stefl.commons.util.InaccessibleSectionException;
 // TODO: use xml escaping decoder
 public class LWXMLStreamReader extends LWXMLReader {
     
+    private static final String DEFAULT_CHARSET = "UTF-8";
+    
     private static final int PUSHBACK_BUFFER_SIZE = 1;
     
     private static final CharFilter WHITESPACE_FILTER = new CharFilter() {
-        
         @Override
         public boolean accept(char c) {
             return !LWXMLConstants.isWhitespace(c);
@@ -34,7 +36,6 @@ public class LWXMLStreamReader extends LWXMLReader {
     };
     
     private final CharFilter startElementFilter = new CharFilter() {
-        
         @Override
         public boolean accept(char c) {
             if (LWXMLConstants.isWhitespace(c)) return false;
@@ -83,7 +84,12 @@ public class LWXMLStreamReader extends LWXMLReader {
     
     // TODO: remove
     public LWXMLStreamReader(InputStream in) {
-        this(new BufferedReader(new InputStreamReader(in)));
+        this(in, Charset.forName(DEFAULT_CHARSET));
+    }
+    
+    // TODO: remove
+    public LWXMLStreamReader(InputStream in, Charset charset) {
+        this(new BufferedReader(new InputStreamReader(in, charset)));
     }
     
     public LWXMLStreamReader(Reader in) {
