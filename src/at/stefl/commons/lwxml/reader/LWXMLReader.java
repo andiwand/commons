@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import at.stefl.commons.io.DividedCharArrayWriter;
 import at.stefl.commons.io.CharStreamUtil;
+import at.stefl.commons.io.DividedCharArrayWriter;
 import at.stefl.commons.lwxml.LWXMLEvent;
 
 // TODO: provide hasNext()

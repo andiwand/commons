@@ -24,6 +24,7 @@ import at.stefl.commons.util.InaccessibleSectionException;
 // TODO: use xml escaping decoder
 public class LWXMLStreamReader extends LWXMLReader {
     
+    // TODO: remove
     private static final String DEFAULT_CHARSET = "UTF-8";
     
     private static final int PUSHBACK_BUFFER_SIZE = 1;

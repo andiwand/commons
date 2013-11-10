@@ -5,12 +5,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 import at.stefl.commons.lwxml.LWXMLEvent;
 import at.stefl.commons.lwxml.LWXMLIllegalEventException;
 
 // TODO: use xml escaping encoder
 public class LWXMLStreamWriter extends LWXMLWriter {
+    
+    // TODO: remove
+    private static final String DEFAULT_CHARSET = "UTF-8";
     
     private boolean closed;
     private Writer out;
@@ -19,8 +23,14 @@ public class LWXMLStreamWriter extends LWXMLWriter {
     private long eventNumber = -1;
     private boolean eventWritten;
     
+    // TODO: remove
     public LWXMLStreamWriter(OutputStream out) {
-        this(new BufferedWriter(new OutputStreamWriter(out)));
+        this(out, Charset.forName(DEFAULT_CHARSET));
+    }
+    
+    // TODO: remove
+    public LWXMLStreamWriter(OutputStream out, Charset charset) {
+        this(new BufferedWriter(new OutputStreamWriter(out, charset)));
     }
     
     public LWXMLStreamWriter(Writer out) {
