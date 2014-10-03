@@ -8,7 +8,6 @@ import at.stefl.commons.util.array.ArrayUtil;
 public enum Endianness {
     
     LITTLE(ByteOrder.LITTLE_ENDIAN) {
-        
         @Override
         public char getAsChar(byte[] b) {
             return (char) ((b[0] & 0xff) | ((b[1] & 0xff) << 8));
@@ -147,7 +146,6 @@ public enum Endianness {
         }
     },
     BIG(ByteOrder.BIG_ENDIAN) {
-        
         @Override
         public char getAsChar(byte[] b) {
             return (char) (((b[0] & 0xff) << 8) | (b[1] & 0xff));
@@ -292,6 +290,22 @@ public enum Endianness {
         return new byte[MAX_UNIT_SIZE];
     }
     
+    public static short swap(short v) {
+		return (short) (((v & 0x00ff) << 8) | ((v & 0xff00) >> 8));
+	}
+    
+	public static int swap(int v) {
+		return ((v & 0x000000ff) << 24) | ((v & 0x0000ff00) << 8)
+				| ((v & 0x00ff0000) >>> 8) | ((v & 0xff000000) >>> 24);
+	}
+	
+	public static long swap(long v) {
+		return ((v & 0x00000000000000ffl) << 56) | ((v & 0x000000000000ff00l) << 40)
+				| ((v & 0x0000000000ff0000l) << 24) | ((v & 0x00000000ff000000l) << 8)
+				| ((v & 0x000000ff00000000l) >>> 8) | ((v & 0x0000ff0000000000l) >>> 24)
+				| ((v & 0x00ff000000000000l) >>> 40) | ((v & 0xff00000000000000l) >>> 56);
+	}
+	
     public static void swap(byte[] b) {
         swap(b, 0, b.length);
     }
