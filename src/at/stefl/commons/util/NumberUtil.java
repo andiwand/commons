@@ -61,12 +61,28 @@ public class NumberUtil {
 		System.arraycopy(bytes, 0, b, off, Math.min(bytes.length, len));
 	}
 	
-	public static double mapIntegerToDouble(byte[] b) {
-		BigInteger maxPositive = BigInteger.ZERO.setBit(b.length << 2)
+	public static double mapIntegerToDouble(byte[] i) {
+		BigInteger maxPositive = BigInteger.ZERO.setBit(i.length << 2)
 				.subtract(BigInteger.ONE);
-		BigInteger value = new BigInteger(b);
+		BigInteger value = new BigInteger(i);
 		return new BigDecimal(value).divide(new BigDecimal(maxPositive),
 				MathContext.DECIMAL64).doubleValue();
+	}
+	
+	public static double mapIntegerToDouble(byte i) {
+		return (double) i / Byte.MAX_VALUE;
+	}
+	
+	public static double mapIntegerToDouble(short i) {
+		return (double) i / Short.MAX_VALUE;
+	}
+	
+	public static double mapIntegerToDouble(int i) {
+		return (double) i / Integer.MAX_VALUE;
+	}
+	
+	public static double mapIntegerToDouble(long i) {
+		return (double) i / Long.MAX_VALUE;
 	}
     
     private NumberUtil() {}
