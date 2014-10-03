@@ -1437,7 +1437,7 @@ public class ArrayUtil {
         int length = Array.getLength(array);
         if (from > length) throw new ArrayIndexOutOfBoundsException(from);
         
-        int newLength = from - to;
+        int newLength = to - from;
         if (newLength < 0) throw new IllegalArgumentException();
         
         T newArray = newInstance((Class<T>) array.getClass(), newLength);
