@@ -3,7 +3,6 @@ package at.stefl.commons.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.util.Arrays;
 
 public class NumberUtil {
     
@@ -68,7 +67,6 @@ public class NumberUtil {
 				.multiply(new BigDecimal(maxPositive)).toBigInteger();
 		byte[] bytes = value.toByteArray();
 		System.arraycopy(bytes, 0, b, off, Math.min(bytes.length, len));
-		System.out.println(Arrays.toString(b));
 	}
 	
 	public static double mapIntegerToDouble(byte[] i) {
