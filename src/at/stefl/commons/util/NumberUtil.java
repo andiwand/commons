@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
+import at.stefl.commons.io.Endianness;
+
 public class NumberUtil {
     
     public static byte parseByte(String value, byte nullValue) {
@@ -70,10 +72,21 @@ public class NumberUtil {
 	}
 	
 	public static double mapIntegerToDouble(byte[] i) {
-		BigInteger maxPositive = BigInteger.ZERO.setBit((i.length << 3) - 1);
-		BigInteger value = new BigInteger(i);
-		return new BigDecimal(value).divide(new BigDecimal(maxPositive),
-				MathContext.DECIMAL64).doubleValue();
+		switch (i.length) {
+		case 1:
+			return mapIntegerToDouble(i[0]);
+		case 2:
+			return mapIntegerToDouble(Endianness.BIG.getAsShort(i));
+		case 4:
+			return mapIntegerToDouble(Endianness.BIG.getAsInt(i));
+		case 8:
+			return mapIntegerToDouble(Endianness.BIG.getAsLong(i));
+		default:
+			BigInteger maxPositive = BigInteger.ZERO.setBit((i.length << 3) - 1);
+			BigInteger value = new BigInteger(i);
+			return new BigDecimal(value).divide(new BigDecimal(maxPositive),
+					MathContext.DECIMAL64).doubleValue();
+		}
 	}
 	
 	public static double mapIntegerToDouble(byte i) {
