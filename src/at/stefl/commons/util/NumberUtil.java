@@ -3,6 +3,7 @@ package at.stefl.commons.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.Arrays;
 
 public class NumberUtil {
     
@@ -42,8 +43,12 @@ public class NumberUtil {
         return (value & 0xffffffff00000000l) == 0;
     }
     
-    public static boolean isPowerOf2(int i) {
-		return (i != 0) && ((i & (i - 1)) == 0);
+    public static boolean isPowerOf2(int v) {
+		return (v != 0) && ((v & (v - 1)) == 0);
+	}
+    
+    public static boolean isPowerOf2(long v) {
+		return (v != 0) && ((v & (v - 1)) == 0);
 	}
     
     public static byte[] mapDoubleToInteger(double d, int len) {
@@ -52,18 +57,22 @@ public class NumberUtil {
 		return result;
 	}
     
+    public static void mapDoubleToInteger(double d, byte[] b) {
+    	mapDoubleToInteger(d, b, 0, b.length);
+    }
+    
+    // TODO: maybe fix positive mapping
 	public static void mapDoubleToInteger(double d, byte[] b, int off, int len) {
-		BigInteger maxPositive = BigInteger.ZERO.setBit(len << 2).subtract(
-				BigInteger.ONE);
+		BigInteger maxPositive = BigInteger.ZERO.setBit((b.length << 3) - 1);
 		BigInteger value = BigDecimal.valueOf(d)
 				.multiply(new BigDecimal(maxPositive)).toBigInteger();
 		byte[] bytes = value.toByteArray();
 		System.arraycopy(bytes, 0, b, off, Math.min(bytes.length, len));
+		System.out.println(Arrays.toString(b));
 	}
 	
 	public static double mapIntegerToDouble(byte[] i) {
-		BigInteger maxPositive = BigInteger.ZERO.setBit(i.length << 2)
-				.subtract(BigInteger.ONE);
+		BigInteger maxPositive = BigInteger.ZERO.setBit((i.length << 3) - 1);
 		BigInteger value = new BigInteger(i);
 		return new BigDecimal(value).divide(new BigDecimal(maxPositive),
 				MathContext.DECIMAL64).doubleValue();

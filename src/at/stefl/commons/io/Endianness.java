@@ -10,144 +10,6 @@ public enum Endianness {
     LITTLE(ByteOrder.LITTLE_ENDIAN) {
         @Override
         public char getAsChar(byte[] b) {
-            return (char) ((b[0] & 0xff) | ((b[1] & 0xff) << 8));
-        }
-        
-        @Override
-        public char getAsChar(byte[] b, int off) {
-            return (char) ((b[off++] & 0xff) | ((b[off] & 0xff) << 8));
-        }
-        
-        @Override
-        public char getAsChar(byte b1, byte b2) {
-            return (char) ((b1 & 0xff) | ((b2 & 0xff) << 8));
-        }
-        
-        @Override
-        public short getAsShort(byte[] b) {
-            return (short) ((b[0] & 0xff) | ((b[1] & 0xff) << 8));
-        }
-        
-        @Override
-        public short getAsShort(byte[] b, int off) {
-            return (short) ((b[off++] & 0xff) | ((b[off] & 0xff) << 8));
-        }
-        
-        @Override
-        public short getAsShort(byte b1, byte b2) {
-            return (short) ((b1 & 0xff) | ((b2 & 0xff) << 8));
-        }
-        
-        @Override
-        public int getAsInt(byte[] b) {
-            return (b[0] & 0xff) | ((b[1] & 0xff) << 8) | ((b[2] & 0xff) << 16)
-                    | ((b[3] & 0xff) << 24);
-        }
-        
-        @Override
-        public int getAsInt(byte[] b, int off) {
-            return (b[off++] & 0xff) | ((b[off++] & 0xff) << 8)
-                    | ((b[off++] & 0xff) << 16) | ((b[off] & 0xff) << 24);
-        }
-        
-        @Override
-        public int getAsInt(byte b1, byte b2, byte b3, byte b4) {
-            return (b1 & 0xff) | ((b2 & 0xff) << 8) | ((b3 & 0xff) << 16)
-                    | ((b4 & 0xff) << 24);
-        }
-        
-        @Override
-        public long getAsLong(byte[] b) {
-            return (b[0] & 0xffl) | ((b[1] & 0xffl) << 8)
-                    | ((b[2] & 0xffl) << 16) | ((b[3] & 0xffl) << 24)
-                    | ((b[4] & 0xffl) << 32) | ((b[5] & 0xffl) << 40)
-                    | ((b[6] & 0xffl) << 48) | ((b[7] & 0xffl) << 56);
-        }
-        
-        @Override
-        public long getAsLong(byte[] b, int off) {
-            return (b[off++] & 0xffl) | ((b[off++] & 0xffl) << 8)
-                    | ((b[off++] & 0xffl) << 16) | ((b[off++] & 0xffl) << 24)
-                    | ((b[off++] & 0xffl) << 32) | ((b[off++] & 0xffl) << 40)
-                    | ((b[off++] & 0xffl) << 48) | ((b[off] & 0xffl) << 56);
-        }
-        
-        @Override
-        public long getAsLong(byte b1, byte b2, byte b3, byte b4, byte b5,
-                byte b6, byte b7, byte b8) {
-            return (b1 & 0xffl) | ((b2 & 0xffl) << 8) | ((b3 & 0xffl) << 16)
-                    | ((b4 & 0xffl) << 24) | ((b5 & 0xffl) << 32)
-                    | ((b6 & 0xffl) << 40) | ((b7 & 0xffl) << 48)
-                    | ((b8 & 0xffl) << 56);
-        }
-        
-        @Override
-        public void getBytes(char v, byte[] b) {
-            b[0] = (byte) v;
-            b[1] = (byte) (v >> 8);
-        }
-        
-        @Override
-        public void getBytes(char v, byte[] b, int off) {
-            b[off++] = (byte) v;
-            b[off] = (byte) (v >> 8);
-        }
-        
-        @Override
-        public void getBytes(short v, byte[] b) {
-            b[0] = (byte) v;
-            b[1] = (byte) (v >> 8);
-        }
-        
-        @Override
-        public void getBytes(short v, byte[] b, int off) {
-            b[off++] = (byte) v;
-            b[off] = (byte) (v >> 8);
-        }
-        
-        @Override
-        public void getBytes(int v, byte[] b) {
-            b[0] = (byte) v;
-            b[1] = (byte) (v >> 8);
-            b[2] = (byte) (v >> 16);
-            b[3] = (byte) (v >> 24);
-        }
-        
-        @Override
-        public void getBytes(int v, byte[] b, int off) {
-            b[off++] = (byte) v;
-            b[off++] = (byte) (v >> 8);
-            b[off++] = (byte) (v >> 16);
-            b[off] = (byte) (v >> 24);
-        }
-        
-        @Override
-        public void getBytes(long v, byte[] b) {
-            b[0] = (byte) v;
-            b[1] = (byte) (v >> 8);
-            b[2] = (byte) (v >> 16);
-            b[3] = (byte) (v >> 24);
-            b[4] = (byte) (v >> 32);
-            b[5] = (byte) (v >> 40);
-            b[6] = (byte) (v >> 48);
-            b[7] = (byte) (v >> 56);
-        }
-        
-        @Override
-        public void getBytes(long v, byte[] b, int off) {
-            b[off++] = (byte) v;
-            b[off++] = (byte) (v >> 8);
-            b[off++] = (byte) (v >> 16);
-            b[off++] = (byte) (v >> 24);
-            b[off++] = (byte) (v >> 32);
-            b[off++] = (byte) (v >> 40);
-            b[off++] = (byte) (v >> 48);
-            b[off] = (byte) (v >> 56);
-        }
-    },
-    BIG(ByteOrder.BIG_ENDIAN) {
-        @Override
-        public char getAsChar(byte[] b) {
             return (char) (((b[0] & 0xff) << 8) | (b[1] & 0xff));
         }
         
@@ -281,6 +143,144 @@ public enum Endianness {
             b[off++] = (byte) (v >> 16);
             b[off++] = (byte) (v >> 8);
             b[off] = (byte) v;
+        }
+    },
+    BIG(ByteOrder.BIG_ENDIAN) {
+    	@Override
+        public char getAsChar(byte[] b) {
+            return (char) ((b[0] & 0xff) | ((b[1] & 0xff) << 8));
+        }
+        
+        @Override
+        public char getAsChar(byte[] b, int off) {
+            return (char) ((b[off++] & 0xff) | ((b[off] & 0xff) << 8));
+        }
+        
+        @Override
+        public char getAsChar(byte b1, byte b2) {
+            return (char) ((b1 & 0xff) | ((b2 & 0xff) << 8));
+        }
+        
+        @Override
+        public short getAsShort(byte[] b) {
+            return (short) ((b[0] & 0xff) | ((b[1] & 0xff) << 8));
+        }
+        
+        @Override
+        public short getAsShort(byte[] b, int off) {
+            return (short) ((b[off++] & 0xff) | ((b[off] & 0xff) << 8));
+        }
+        
+        @Override
+        public short getAsShort(byte b1, byte b2) {
+            return (short) ((b1 & 0xff) | ((b2 & 0xff) << 8));
+        }
+        
+        @Override
+        public int getAsInt(byte[] b) {
+            return (b[0] & 0xff) | ((b[1] & 0xff) << 8) | ((b[2] & 0xff) << 16)
+                    | ((b[3] & 0xff) << 24);
+        }
+        
+        @Override
+        public int getAsInt(byte[] b, int off) {
+            return (b[off++] & 0xff) | ((b[off++] & 0xff) << 8)
+                    | ((b[off++] & 0xff) << 16) | ((b[off] & 0xff) << 24);
+        }
+        
+        @Override
+        public int getAsInt(byte b1, byte b2, byte b3, byte b4) {
+            return (b1 & 0xff) | ((b2 & 0xff) << 8) | ((b3 & 0xff) << 16)
+                    | ((b4 & 0xff) << 24);
+        }
+        
+        @Override
+        public long getAsLong(byte[] b) {
+            return (b[0] & 0xffl) | ((b[1] & 0xffl) << 8)
+                    | ((b[2] & 0xffl) << 16) | ((b[3] & 0xffl) << 24)
+                    | ((b[4] & 0xffl) << 32) | ((b[5] & 0xffl) << 40)
+                    | ((b[6] & 0xffl) << 48) | ((b[7] & 0xffl) << 56);
+        }
+        
+        @Override
+        public long getAsLong(byte[] b, int off) {
+            return (b[off++] & 0xffl) | ((b[off++] & 0xffl) << 8)
+                    | ((b[off++] & 0xffl) << 16) | ((b[off++] & 0xffl) << 24)
+                    | ((b[off++] & 0xffl) << 32) | ((b[off++] & 0xffl) << 40)
+                    | ((b[off++] & 0xffl) << 48) | ((b[off] & 0xffl) << 56);
+        }
+        
+        @Override
+        public long getAsLong(byte b1, byte b2, byte b3, byte b4, byte b5,
+                byte b6, byte b7, byte b8) {
+            return (b1 & 0xffl) | ((b2 & 0xffl) << 8) | ((b3 & 0xffl) << 16)
+                    | ((b4 & 0xffl) << 24) | ((b5 & 0xffl) << 32)
+                    | ((b6 & 0xffl) << 40) | ((b7 & 0xffl) << 48)
+                    | ((b8 & 0xffl) << 56);
+        }
+        
+        @Override
+        public void getBytes(char v, byte[] b) {
+            b[0] = (byte) v;
+            b[1] = (byte) (v >> 8);
+        }
+        
+        @Override
+        public void getBytes(char v, byte[] b, int off) {
+            b[off++] = (byte) v;
+            b[off] = (byte) (v >> 8);
+        }
+        
+        @Override
+        public void getBytes(short v, byte[] b) {
+            b[0] = (byte) v;
+            b[1] = (byte) (v >> 8);
+        }
+        
+        @Override
+        public void getBytes(short v, byte[] b, int off) {
+            b[off++] = (byte) v;
+            b[off] = (byte) (v >> 8);
+        }
+        
+        @Override
+        public void getBytes(int v, byte[] b) {
+            b[0] = (byte) v;
+            b[1] = (byte) (v >> 8);
+            b[2] = (byte) (v >> 16);
+            b[3] = (byte) (v >> 24);
+        }
+        
+        @Override
+        public void getBytes(int v, byte[] b, int off) {
+            b[off++] = (byte) v;
+            b[off++] = (byte) (v >> 8);
+            b[off++] = (byte) (v >> 16);
+            b[off] = (byte) (v >> 24);
+        }
+        
+        @Override
+        public void getBytes(long v, byte[] b) {
+            b[0] = (byte) v;
+            b[1] = (byte) (v >> 8);
+            b[2] = (byte) (v >> 16);
+            b[3] = (byte) (v >> 24);
+            b[4] = (byte) (v >> 32);
+            b[5] = (byte) (v >> 40);
+            b[6] = (byte) (v >> 48);
+            b[7] = (byte) (v >> 56);
+        }
+        
+        @Override
+        public void getBytes(long v, byte[] b, int off) {
+            b[off++] = (byte) v;
+            b[off++] = (byte) (v >> 8);
+            b[off++] = (byte) (v >> 16);
+            b[off++] = (byte) (v >> 24);
+            b[off++] = (byte) (v >> 32);
+            b[off++] = (byte) (v >> 40);
+            b[off++] = (byte) (v >> 48);
+            b[off] = (byte) (v >> 56);
         }
     };
     
