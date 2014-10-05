@@ -1223,7 +1223,7 @@ public class ArrayUtil {
         array[j] = tmp;
     }
     
-    public static void swapAll(Object[] array) {
+    public static void turn(Object[] array) {
         Object tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1233,7 +1233,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(boolean[] array) {
+    public static void turn(boolean[] array) {
         boolean tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1243,7 +1243,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(byte[] array) {
+    public static void turn(byte[] array) {
         byte tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1253,7 +1253,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(char[] array) {
+    public static void turn(char[] array) {
         char tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1263,7 +1263,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(short[] array) {
+    public static void turn(short[] array) {
         short tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1273,7 +1273,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(int[] array) {
+    public static void turn(int[] array) {
         int tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1283,7 +1283,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(long[] array) {
+    public static void turn(long[] array) {
         long tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1293,7 +1293,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(float[] array) {
+    public static void turn(float[] array) {
         float tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1303,7 +1303,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(double[] array) {
+    public static void turn(double[] array) {
         double tmp;
         
         for (int i = 0, j = array.length - 1; i < j; i++, j--) {
@@ -1313,7 +1313,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(Object[] array, int off, int len) {
+    public static void turn(Object[] array, int off, int len) {
         int last = off + len - 1;
         Object tmp;
         
@@ -1324,7 +1324,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(boolean[] array, int off, int len) {
+    public static void turn(boolean[] array, int off, int len) {
         int last = off + len - 1;
         boolean tmp;
         
@@ -1335,7 +1335,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(byte[] array, int off, int len) {
+    public static void turn(byte[] array, int off, int len) {
         int last = off + len - 1;
         byte tmp;
         
@@ -1346,7 +1346,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(char[] array, int off, int len) {
+    public static void turn(char[] array, int off, int len) {
         int last = off + len - 1;
         char tmp;
         
@@ -1357,7 +1357,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(short[] array, int off, int len) {
+    public static void turn(short[] array, int off, int len) {
         int last = off + len - 1;
         short tmp;
         
@@ -1368,7 +1368,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(int[] array, int off, int len) {
+    public static void turn(int[] array, int off, int len) {
         int last = off + len - 1;
         int tmp;
         
@@ -1379,7 +1379,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(long[] array, int off, int len) {
+    public static void turn(long[] array, int off, int len) {
         int last = off + len - 1;
         long tmp;
         
@@ -1390,7 +1390,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(float[] array, int off, int len) {
+    public static void turn(float[] array, int off, int len) {
         int last = off + len - 1;
         float tmp;
         
@@ -1401,7 +1401,7 @@ public class ArrayUtil {
         }
     }
     
-    public static void swapAll(double[] array, int off, int len) {
+    public static void turn(double[] array, int off, int len) {
         int last = off + len - 1;
         double tmp;
         

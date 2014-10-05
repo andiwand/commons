@@ -62,47 +62,68 @@ public class NumberUtil {
     	mapDoubleToInteger(d, b, 0, b.length);
     }
     
-    // TODO: maybe fix positive mapping
 	public static void mapDoubleToInteger(double d, byte[] b, int off, int len) {
-		BigInteger maxPositive = BigInteger.ZERO.setBit((b.length << 3) - 1);
+		BigInteger max = BigInteger.ZERO.setBit(len * 8 - 1);
+		
+		if (d > 0) {
+			max = max.subtract(BigInteger.ONE);
+		}
+		
 		BigInteger value = BigDecimal.valueOf(d)
-				.multiply(new BigDecimal(maxPositive)).toBigInteger();
+				.multiply(new BigDecimal(max)).toBigInteger();
 		byte[] bytes = value.toByteArray();
-		System.arraycopy(bytes, 0, b, off, Math.min(bytes.length, len));
+		int from = off + bytes.length;
+		int to = off + len;
+		for (int i = 0; i < to; i++) {
+			if (i < from) {
+				b[i] = bytes[from - i - 1];
+			} else {
+				b[i] = (d < 0) ? (byte) 0xff : 0;
+			}
+		}
 	}
 	
 	public static double mapIntegerToDouble(byte[] i) {
 		switch (i.length) {
 		case 1:
-			return mapIntegerToDouble(i[0]);
+			return mapByteToDouble(i[0]);
 		case 2:
-			return mapIntegerToDouble(Endianness.BIG.getAsShort(i));
+			return mapShortToDouble(Endianness.BIG.getAsShort(i));
 		case 4:
-			return mapIntegerToDouble(Endianness.BIG.getAsInt(i));
+			return mapIntToDouble(Endianness.BIG.getAsInt(i));
 		case 8:
-			return mapIntegerToDouble(Endianness.BIG.getAsLong(i));
+			return mapLongToDouble(Endianness.BIG.getAsLong(i));
 		default:
-			BigInteger maxPositive = BigInteger.ZERO.setBit((i.length << 3) - 1);
+			BigInteger max = BigInteger.ZERO.setBit(i.length * 8 - 1);
 			BigInteger value = new BigInteger(i);
-			return new BigDecimal(value).divide(new BigDecimal(maxPositive),
+			
+			if (value.signum() == 1) {
+				max = max.subtract(BigInteger.ONE);
+			}
+			
+			return new BigDecimal(value).divide(new BigDecimal(max),
 					MathContext.DECIMAL64).doubleValue();
 		}
 	}
 	
-	public static double mapIntegerToDouble(byte i) {
-		return (double) i / Byte.MAX_VALUE;
+	public static double mapByteToDouble(byte i) {
+		double max = (i > 0) ? Byte.MAX_VALUE : -Byte.MIN_VALUE;
+		return i / max;
 	}
 	
-	public static double mapIntegerToDouble(short i) {
-		return (double) i / Short.MAX_VALUE;
+	public static double mapShortToDouble(short i) {
+		double max = (i > 0) ? Short.MAX_VALUE : -Short.MIN_VALUE;
+		return i / max;
 	}
 	
-	public static double mapIntegerToDouble(int i) {
-		return (double) i / Integer.MAX_VALUE;
+	public static double mapIntToDouble(int i) {
+		double max = (i > 0) ? Integer.MAX_VALUE : -Integer.MIN_VALUE;
+		return i / max;
 	}
 	
-	public static double mapIntegerToDouble(long i) {
-		return (double) i / Long.MAX_VALUE;
+	public static double mapLongToDouble(long i) {
+		double max = (i > 0) ? Long.MAX_VALUE : -Long.MIN_VALUE;
+		return i / max;
 	}
     
     private NumberUtil() {}
