@@ -15,9 +15,9 @@ import at.stefl.commons.util.string.CharSequenceUtil;
 
 // TODO: kill StringBuilder
 public class CharStreamUtil {
-
+	
 	public static final int DEFAULT_BUFFER_SIZE = 8192;
-
+	
 	public static int readTireless(Reader in, char[] cbuf) throws IOException {
 		if (cbuf.length == 0)
 			return 0;
@@ -33,7 +33,7 @@ public class CharStreamUtil {
 
 		return (result == 0) ? -1 : result;
 	}
-
+	
 	public static int readTireless(Reader in, char[] cbuf, int off, int len)
 			throws IOException {
 		if (cbuf.length == 0)

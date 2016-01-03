@@ -44,6 +44,20 @@ public class ArrayUtil {
         EMPTY_ARRAY_MAP.put(Object.class, EMPTY_OBJECT_ARRAY);
     }
     
+    public static boolean validateArguments(int size, int off, int len) {
+    	if (off < 0) return false;
+    	if (len < 0) return false;
+    	if ((off + len) > size) return false;
+    	return true;
+    }
+    
+    public static void checkArguments(int size, int off, int len) {
+    	if (off < 0) throw new IllegalArgumentException("off < 0");
+    	if (len < 0) throw new IllegalArgumentException("len < 0");
+    	if (off >= size) throw new IllegalArgumentException("off out of bounds: " + off);
+    	if (off + len > size) throw new IllegalArgumentException("off+len out of bounds: " + (off + len));
+    }
+    
     @SuppressWarnings("unchecked")
     public static <T, E> T getEmptyArray(Class<E> clazz) {
         Object result = EMPTY_ARRAY_MAP.get(clazz);
@@ -79,6 +93,7 @@ public class ArrayUtil {
         return null;
     }
     
+    // TODO: fix types
     public static int getEqualCount(Object object, Object... array) {
         int result = 0;
         
