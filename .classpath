@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="at/andiwand/library/component/GraphViewer2.java|at/andiwand/library/component/DefaultGraphViewerVertex2.java|at/andiwand/library/component/GraphViewerVertex2.java|at/andiwand/common/component/DefaultGraphViewerVertex2.java|at/andiwand/common/component/GraphViewer2.java|at/andiwand/common/component/GraphViewerVertex2.java|at/andiwand/common/swing/DefaultGraphViewerVertex2.java|at/andiwand/common/swing/GraphViewer2.java|at/andiwand/common/swing/GraphViewerVertex2.java|at/andiwand/commons/swing/DefaultGraphViewerVertex2.java|at/andiwand/commons/swing/GraphViewer2.java|at/andiwand/commons/swing/GraphViewerVertex2.java" kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
